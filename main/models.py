@@ -2,13 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Product(models.Model):
+
+	def __unicode__(self):
+		return self.name
+
 	description = models.CharField(max_length=256, blank=True)
 	name = models.CharField(max_length=64)
 	sale_price_int = models.FloatField()
 	sale_price_ext = models.FloatField()
 	volume_liter = models.FloatField(null=True)
 	alcohol_percent = models.FloatField(null=True)
-	image = models.ImageField(upload_to='uploads')
+	image = models.ImageField(upload_to='uploads', blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 	updated = models.DateTimeField(auto_now=True)
 	active = models.BooleanField(default=True)
@@ -36,4 +40,4 @@ class Transaction(models.Model):
 class UserProfile(models.Model):
 	user = models.ForeignKey(User, unique=True)
 	balance = models.FloatField()
-	image = models.ImageField(upload_to='uploads')
+	image = models.ImageField(upload_to='uploads', blank=True)
