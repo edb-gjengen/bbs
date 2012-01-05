@@ -4,7 +4,9 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', 'main.views.home', name='home'),
-    url(r'^bbs/', include('main.urls')),
+    url(r'', include('main.urls')),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    url(r'^logout/$', 'main.views.logout'),
 
     url(r'^admin/', include(admin.site.urls)),
     # Uncomment the admin/doc line below to enable admin documentation:
