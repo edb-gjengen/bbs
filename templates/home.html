@@ -4,5 +4,21 @@
 {%endblock%}
 
 {%block content%}
-
+<section id="register">
+<div id="user">
+Selg til:
+{% for user in users %}
+    <button id="{{ user }}">{{ user }}</button>
+{% endfor %}
+</div>
+<div id="products">
+Vi selger:<br />
+{% for product in products %}
+    <button id="{{ product.id }}">+ {{ product.name }}</button>
+    <button id="{{ product.id }}">- {{ product.name }}</button>
+{% endfor %}
+</div>
+<div id="total">Totalt: <span class="total_text"></span></div>
+    <button id="submit">Kjøp</button>
+</section>
 {%endblock%}
