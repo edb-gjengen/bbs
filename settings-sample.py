@@ -150,3 +150,5 @@ LOGGING = {
     }
 }
 
+# User profile
+AUTH_PROFILE_MODULE = 'main.UserProfile'
