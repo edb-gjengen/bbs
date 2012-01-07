@@ -1,6 +1,5 @@
 from django.conf.urls.defaults import patterns, include, url
 
-urlpatterns = patterns('',
-    url(r'^$', 'bbs.main.views.home', name='home'),
-    url(r'^register/$', 'bbs.main.views.register', name='register'),
+urlpatterns = patterns('bbs.main.views',
+    url(r'^register/$', 'register', name='register'),
 )

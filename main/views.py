@@ -6,8 +6,11 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.forms.formsets import formset_factory
 
 from models import *
+
+from forms import *
 
 def home(request):
     if request.method == "POST":
@@ -25,8 +28,18 @@ def home(request):
 
 @login_required
 def register(request):
+    if request.method == "POST":
+        # TODO: Form processing is not working at all
+        form = OrderLineForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect( reverse('bbs.main.views.register') )
     products = Product.objects.all()
     users = User.objects.all()
+    # Formset for orderlines
+    # FIXME: Like this?
+    #OrderLineFormSet = formset_factory(OrderLineForm, extra=products.count())
+    #formset = OrderLineFormSet()
     return render_to_response('register.html', locals(), context_instance=RequestContext(request))
 
 def logout(request):

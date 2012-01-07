@@ -13,3 +13,6 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
 )
+
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns # for dev
+urlpatterns += staticfiles_urlpatterns()

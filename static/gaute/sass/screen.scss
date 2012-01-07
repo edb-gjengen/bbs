@@ -11,3 +11,66 @@
 @import "partials/page";
 @import "partials/form";
 @import "partials/two_col";
+
+@import "compass";
+
+body {
+    background-color: $blueprint-background-color;
+
+    #header {
+        nav {
+            margin:2em;
+
+            ul {
+                @include inline-block-list;
+            }
+        }
+    }
+
+    #register {
+        #customer {
+            ul {
+                @include inline-block-list;
+                
+                li {
+                    img { }
+                    padding: 1em;
+                    text-align: center;
+                    width: 100px;
+
+                    &:hover {
+                        background-color: darken($blueprint-background-color, 20%);
+                    }
+                    &.selected {
+                        background-color: darken($blueprint-background-color, 20%);
+                    }
+                }
+            }
+        }
+        #products {
+            ul {
+                @include inline-block-list;
+                
+                li {
+                    padding: 1.5em;
+                    text-align: center;
+
+                    &:hover {
+                        background-color: darken($blueprint-background-color, 20%);
+                    }
+                }
+            }
+        }
+    }
+    input[type=submit] {
+        padding: 1em;
+        padding-left: 1.5em;
+        padding-right: 1.5em;
+        position:relative;
+        left: 100px;
+            
+    }
+    section {
+        margin-bottom:2em;
+    }
+}
