@@ -1,5 +1,5 @@
 from django.contrib import admin
-from bbs.main.models import *
+from main.models import *
 
 class ProductAdmin(admin.ModelAdmin):
     pass

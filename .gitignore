@@ -3,4 +3,4 @@
 settings.py
 dev.db
 static/gaute/.sass-cache
-uploads
+uploads/[^.]*

@@ -21,7 +21,7 @@ def home(request):
     else:
         if request.user.is_authenticated():
             # Redirect to the register
-            return HttpResponseRedirect( reverse('bbs.main.views.register') )
+            return HttpResponseRedirect( reverse('main.views.register') )
         else:
             form = AuthenticationForm(request)
     return render_to_response('home.html', locals(), context_instance=RequestContext(request))
@@ -33,7 +33,7 @@ def register(request):
         form = OrderLineForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect( reverse('bbs.main.views.register') )
+            return HttpResponseRedirect( reverse('main.views.register') )
     products = Product.objects.all()
     users = User.objects.all()
     # Formset for orderlines
