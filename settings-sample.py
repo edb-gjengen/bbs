@@ -153,10 +153,15 @@ LOGGING = {
 # User profile
 AUTH_PROFILE_MODULE = 'main.UserProfile'
 
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 # LDAP server URI and BIND_DN, same as db-settings
-AUTH_LDAP_SERVER_URI = DATABASES['ldap']['NAME']
-AUTH_LDAP_BIND_DN = DATABASES['ldap']['USER']
-AUTH_LDAP_BIND_PASSWORD = DATABASES['ldap']['PASSWORD']
+AUTH_LDAP_SERVER_URI = '' 
+AUTH_LDAP_BIND_DN = ''
+AUTH_LDAP_BIND_PASSWORD = ''
 
 import ldap
 from django_auth_ldap.config import LDAPSearch, PosixGroupType
