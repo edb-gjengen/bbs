@@ -23,12 +23,6 @@ DATABASES = {
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     },
-    'ldap': {
-        'ENGINE': 'ldapdb.backends.ldap',
-        'NAME': 'ldap://localhost/',
-        'USER': 'uid=admin,ou=People,dc=neuf,dc=no',
-        'PASSWORD': '',
-    },
 }
 
 # Local time zone for this installation. Choices can be found here:
