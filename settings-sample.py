@@ -22,7 +22,13 @@ DATABASES = {
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
+    },
+    'ldap': {
+        'ENGINE': 'ldapdb.backends.ldap',
+        'NAME': 'ldap://localhost/',
+        'USER': 'uid=admin,ou=People,dc=neuf,dc=no',
+        'PASSWORD': '',
+    },
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -152,3 +158,52 @@ LOGGING = {
 
 # User profile
 AUTH_PROFILE_MODULE = 'main.UserProfile'
+
+# LDAP server URI and BIND_DN, same as db-settings
+AUTH_LDAP_SERVER_URI = DATABASES['ldap']['NAME']
+AUTH_LDAP_BIND_DN = DATABASES['ldap']['USER']
+AUTH_LDAP_BIND_PASSWORD = DATABASES['ldap']['PASSWORD']
+
+import ldap
+from django_auth_ldap.config import LDAPSearch, PosixGroupType
+
+# Basic user auth
+AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=People,dc=neuf,dc=no",
+    ldap.SCOPE_ONELEVEL, "(uid=%(user)s)")
+AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=People,dc=neuf,dc=no"
+# Basic groups
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=Groups,dc=neuf,dc=no",
+    ldap.SCOPE_ONELEVEL, "(objectClass=posixGroup)"
+)
+AUTH_LDAP_GROUP_TYPE = PosixGroupType()
+# Mirror groups on each auth
+AUTH_LDAP_MIRROR_GROUPS = True
+# Group to user flag mappings
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    "is_active": "cn=dns-alle,ou=Groups,dc=neuf,dc=no",
+    "is_staff": "cn=edb,ou=Groups,dc=neuf,dc=no",
+    "is_superuser": "cn=edbadmin,ou=Groups,dc=neuf,dc=no"
+}
+# Group to profile flag mappings, not used.
+AUTH_LDAP_PROFILE_FLAGS_BY_GROUP = {
+    #"is_edb": "cn=edb,ou=Groups,dc=neuf,dc=no"
+}
+# User attribute mappings
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail",
+}
+# User profile attribute mappings
+AUTH_LDAP_PROFILE_ATTR_MAP = {
+    "home_directory": "homeDirectory"
+}
+# Allways update the django user object on authentication.
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+
+# Debug logging
+import logging
+logger = logging.getLogger('django_auth_ldap')
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.DEBUG)
+
