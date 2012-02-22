@@ -57,5 +57,12 @@ $(document).ready(function() {
         $("span.total_text").html("");
         enable_all_customers();
     });
+    /* Hide alert messages */
+    $("a[data-dismiss=alert]").click(function(){
+        $(this).parent().hide()
+    });
+    setTimeout( function() {
+        $("a[data-dismiss=alert]").parent().slideUp();
+    }, 5000);
 
 });

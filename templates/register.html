@@ -5,6 +5,13 @@
 
 {% block content %}
 <section id="register" class="row-fluid">
+    <section class="row-fluid">
+        <div class="span4">
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}<a class="close" data-dismiss="alert">×</a></div>
+            {% endfor %}
+        </div>
+    </section>
     <form id="order" method="post" autocomplete="off">
         <fieldset>
             {% csrf_token %}

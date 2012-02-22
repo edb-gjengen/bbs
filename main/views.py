@@ -1,3 +1,4 @@
+# coding: utf-8
 # Create your views here.
 from django.contrib.auth import login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -7,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.forms.formsets import formset_factory
+from django.contrib import messages
 
 from models import *
 
@@ -38,7 +40,7 @@ def register(request):
         orderform = OrderForm(request.POST)
         formset = OrderLineFormSet(request.POST)
         if formset.is_valid() and orderform.is_valid():
-            order_sum = sum([orderline['amount'] * orderline['unit_price'] for orderline in formset.cleaned_data])
+            order_sum = sum([ol['amount'] * ol['unit_price'] for ol in formset.cleaned_data])
             order = orderform.save(commit=False)
             order.order_sum = order_sum
             order.save()
@@ -47,6 +49,7 @@ def register(request):
             profile.balance -= order.order_sum
             profile.save()
 
+            orderlines = []
             for ol in formset.cleaned_data:
                 if ol['amount'] > 0:
                     product = Product.objects.get(pk=ol['product'])
@@ -55,7 +58,10 @@ def register(request):
                         product=product,
                         amount=ol['amount'],
                         unit_price=ol['unit_price'])
+
+                    orderlines.append(str(ol['amount']) + " stk " + str(product))
                 
+            messages.success(request, '{0} kjøpte nettopp {1}.'.format(order.customer, ",".join(orderlines)))
             return HttpResponseRedirect( reverse('main.views.register') )
         else:
             # errors
