@@ -21,12 +21,12 @@ class Product(models.Model):
 	updated = models.DateTimeField(auto_now=True)
 
 class Order(models.Model):
-	user = models.ForeignKey(User)
+	customer = models.ForeignKey(User)
 	order_sum = models.FloatField(db_column='sum')
 	created = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
-		return "{0}: {1} kr".format(self.user, self.order_sum)
+		return "{0}: {1} kr".format(self.customer, self.order_sum)
 
 class OrderLine(models.Model):
 	order = models.ForeignKey(Order)

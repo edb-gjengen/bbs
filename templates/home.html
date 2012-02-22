@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {%block header%}
-    <h1>Biceps Bar System</h1>
+    {% include "nav.html" with active="home" %}
 {%endblock%}
 
 {%block content%}
-<a href="/register/">Kasse</a>
+<div class="row-fluid">
+    <section class="span4">
+    <h1>Biceps Bar System</h1>
+    </section>
+</div>
 {%endblock%}

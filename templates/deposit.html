@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block header %}
+        {% include "nav.html" with active="deposit" %}
+{% endblock %}
+
+{% block content %}
+<section id="deposit" class="row-fluid">
+    <div class="span12">
+        <form id="order" method="post" class="form-stacked" autocomplete="off">
+            {% csrf_token %}
+            <fieldset>
+            {{form}}
+            </fieldset>
+            <div class="form-actions">
+                    <button type="submit" class="btn btn-large btn-primary" name="submit_order">Sett inn</button>
+                    <a href="{% url register %}" class="btn">Avbryt</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

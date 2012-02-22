@@ -2,17 +2,18 @@ from django import forms
 
 from models import *
 
-class OrderForm(forms.Form):
-	pass
+class OrderForm(forms.ModelForm):
+    # TODO : validate that the customer can afford the order
+    class Meta:
+        model = Order
+        fields = ('customer',)
 
-class OrderLineForm(forms.ModelForm):
-	#product = forms.CharField(required=True, widget=forms.HiddenInput)
-	#amount = forms.IntegerField(required=True)
-	class Meta:
-		model = OrderLine
-		fields = ('amount','product')
-		widgets = {
-			'product': forms.HiddenInput(),
-			'amount': forms.TextInput(attrs={'size': '2'}),
-		}
-	# TODO : Validation
+class OrderLineForm(forms.Form):
+    product = forms.IntegerField(required=True)
+    amount = forms.IntegerField(required=True)
+    unit_price = forms.FloatField(required=True)
+
+class DepositForm(forms.ModelForm):
+
+    class Meta:
+        model = Transaction

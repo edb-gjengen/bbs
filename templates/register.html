@@ -1,51 +1,79 @@
 {% extends "base.html" %}
 {% block header %}
-    <h1>Biceps Bar System</h1>
-	<nav>
-	<ul>
-		<li><a href="{% url main.views.logout %}">Logout</a></li>
-	</ul>
-	</nav>
+        {% include "nav.html" with active="register" %}
 {% endblock %}
 
 {% block content %}
-<section id="register">
-<form id="order" method="post">
-{% csrf_token %}
-<section id="customer">
-<h2>Velg kunde</h2>
-<input type="hidden" name="customer" value="" />
-<ul>
-{% for user in users %}
-	<li class="customer">
-	{% if user.get_profile.image %}
-	    <img class="profile" src="{{ user.get_profile.image.url }}" /><br />
-	{% else %}
-	    <img class="profile" src="/static/gaute/images/unknown.png" /><br />
-	{% endif %}
-	<span class="name">{{ user }}</span> ({{ user.get_profile.balance }})</li>
-{% endfor %}
-</ul>
+<section id="register" class="row-fluid">
+    <form id="order" method="post" autocomplete="off">
+        <fieldset>
+            {% csrf_token %}
+            <!-- Formset validation fields -->
+            <input type="hidden" name="form-TOTAL_FORMS" value="{{ products|length }}" id="id_form-TOTAL_FORMS" />
+            <input type="hidden" name="form-INITIAL_FORMS" value="{{ products|length }}" id="id_form-INITIAL_FORMS" />
+            <input type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS" />
+
+            <section id="customer" class="row-fluid">
+                <div class="span12">
+                    <h2>Hvem kjøper?</h2>
+                    <!-- Typeahead customer field -->
+                    <input name="customer_name" id="id_customer_typeahead" value="" data-provide="typeahead" data-source="{{users_js}}" />
+                    <!-- Actual customer select field (hidden) -->
+                    <div style="display:none;">{{orderform.customer }}</div>
+                    {% if users %}
+                        <ul class="well">
+                        {% for user in users %}
+                                <li class="customer">
+                                {% if user.get_profile.image %}
+                                    <img class="profile" src="{{ user.get_profile.image.url }}" /><br />
+                                {% else %}
+                                    <img class="profile" src="{{ STATIC_URL }}gaute/img/unknown.png" /><br />
+                                {% endif %}
+                                <span class="name">{{ user }}</span> ({{ user.get_profile.balance }})
+                                <span class="id" style="display:none;">{{ user.id }}</span>
+                                </li>
+                                </li>
+                        {% endfor %}
+                        </ul>
+                    {%else%}
+                        <div class="alert alert-error">Ingen har positiv saldo i BBS.</div>
+                    {%endif%}
+                </div>
+            </section>
+
+            <section id="products" class="row-fluid">
+                <div class="span12">
+                    <h2>Kjøper hva?</h2>
+                    <ul class="well">
+                        {% for product in products %}
+                                <li id="form-{{forloop.counter0}}" class="product"><input type="hidden" name="form-{{ forloop.counter0 }}-product" value="{{product.id }}" />
+                                <input type="text" id="form-{{ forloop.counter0 }}-amount" name="form-{{ forloop.counter0 }}-amount" value="0" class="span2" size="2" />
+                                <input type="hidden" name="form-{{ forloop.counter0 }}-unit_price" value="{{product.sale_price_int }}" />
+                                {% if product.image %}
+                                        <img class="product" src="{{ product.image.url }}" /><br />
+                                {% else %}
+                                        <img class="product" src="{{ STATIC_URL }}gaute/img/product.png" /><br />
+                                {% endif %}
+                                <span class="name">{{ product.name }}</span> - <span class="sale_price_int">{{product.sale_price_int|floatformat:0}}</span>
+                                </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </section>
+            <section id="total" class="row-fluid">
+                <div class="span2">
+                    <h2>Totalt: <span class="total_text"></span></h2>
+                </div>
+            </section>
+        </fieldset>
+        <div class="form-actions">
+                <button type="submit" class="btn btn-large btn-primary" name="submit_order">Kjøp</button>
+                <button type="reset" class="btn">Start på nytt</button>
+        </div>
+    </form>
 </section>
-<section id="products">
-<h2>Velg antall</h2>
-<ul>
-{% for product in products %}
-	<li id="form-{{forloop.counter0}}" class="product"><input type="hidden" name="form-{{ forloop.counter0 }}-product" value="{{product.id }}" />
-	<input type="text" id="form-{{ forloop.counter0 }}-amount" name="form-{{ forloop.counter0 }}-amount" value="0" size="2" />
-	{% if product.image %}
-		<img class="product" src="{{ product.image.url }}" /><br />
-	{% else %}
-		<img class="product" src="/static/gaute/images/product.png" /><br />
-	{% endif %}
-	{{ product.name }}
-	</li>
-{% endfor %}
-</ul>
-</section>
-<section id="total"><h3>Totalt</h3><span class="total_text"></span></section>
-    <input type="reset" id="reset" value="Start på nytt" />
-    <input type="submit" id="submit_order" name="submit_order" value="Kjøp" />
-</form>
-</section>
+{% endblock %}
+{% block tailinc %}
+    <script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>
+    <script src="{{ STATIC_URL }}js/register.js"></script>
 {% endblock %}

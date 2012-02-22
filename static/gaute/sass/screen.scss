@@ -1,30 +1,9 @@
-// This import applies a global reset to any page that imports this stylesheet.
-@import "blueprint/reset";
-
-// To configure blueprint, edit the partials/base.sass file.
-@import "partials/base";
-
-// Import all the default blueprint modules so that we can access their mixins.
-@import "blueprint";
-
-// Combine the partials into a single screen stylesheet.
-@import "partials/page";
-@import "partials/form";
-@import "partials/two_col";
-
-@import "compass";
+//@import "compass";
+@import "compass_twitter_bootstrap";
 
 body {
-    background-color: $blueprint-background-color;
 
     #header {
-        nav {
-            margin:2em;
-
-            ul {
-                @include inline-block-list;
-            }
-        }
     }
 
     #register {
@@ -33,16 +12,15 @@ body {
                 @include inline-block-list;
                 
                 li {
-                    img { }
-                    padding: 1em;
+                    padding: 1.5em;
                     text-align: center;
                     width: 100px;
 
                     &:hover {
-                        background-color: darken($blueprint-background-color, 20%);
+                        background-color: #dddddd;
                     }
-                    &.selected {
-                        background-color: darken($blueprint-background-color, 20%);
+                    &.marked {
+                        background-color: #dddddd;
                     }
                 }
             }
@@ -56,19 +34,25 @@ body {
                     text-align: center;
 
                     &:hover {
-                        background-color: darken($blueprint-background-color, 20%);
+                        background-color: #dddddd;
                     }
                 }
             }
         }
-    }
-    input[type=submit] {
-        padding: 1em;
-        padding-left: 1.5em;
-        padding-right: 1.5em;
-        position:relative;
-        left: 100px;
-            
+        #total {
+            div {
+                color: #ffffff;
+                background-color: #222;
+                padding: 10px;
+                min-width:115px;
+                h2 {
+                    color: #ffffff;
+                }
+            }
+        }
+        button {
+            margin-top:10px;
+        }
     }
     section {
         margin-bottom:2em;

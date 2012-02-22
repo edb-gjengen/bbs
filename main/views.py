@@ -26,21 +26,63 @@ def home(request):
             form = AuthenticationForm(request)
     return render_to_response('home.html', locals(), context_instance=RequestContext(request))
 
-@login_required
 def register(request):
-    if request.method == "POST":
-        # TODO: Form processing is not working at all
-        form = OrderLineForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect( reverse('main.views.register') )
     products = Product.objects.all()
-    users = User.objects.all()
-    # Formset for orderlines
-    # FIXME: Like this?
-    #OrderLineFormSet = formset_factory(OrderLineForm, extra=products.count())
-    #formset = OrderLineFormSet()
+    users = User.objects.filter(userprofile__balance__gt=0)
+    users_js = "[{0}]".format(
+        ",".join(['"'+user+'"' for user in users.values_list('username', flat=True)]))
+
+    # multiple orderlines (one per product)
+    OrderLineFormSet = formset_factory(OrderLineForm)
+    if request.method == "POST":
+        orderform = OrderForm(request.POST)
+        formset = OrderLineFormSet(request.POST)
+        if formset.is_valid() and orderform.is_valid():
+            order_sum = sum([orderline['amount'] * orderline['unit_price'] for orderline in formset.cleaned_data])
+            order = orderform.save(commit=False)
+            order.order_sum = order_sum
+            order.save()
+
+            profile = order.customer.get_profile()
+            profile.balance -= order.order_sum
+            profile.save()
+
+            for ol in formset.cleaned_data:
+                if ol['amount'] > 0:
+                    product = Product.objects.get(pk=ol['product'])
+                    OrderLine.objects.create(
+                        order=order,
+                        product=product,
+                        amount=ol['amount'],
+                        unit_price=ol['unit_price'])
+                
+            return HttpResponseRedirect( reverse('main.views.register') )
+        else:
+            # errors
+            orderform = OrderForm(request.POST)
+            formset = OrderLineFormSet(request.POST)
+    else:
+        orderform = OrderForm()
+        formset = OrderLineFormSet()
     return render_to_response('register.html', locals(), context_instance=RequestContext(request))
+
+def deposit(request):
+    users = User.objects.all()
+
+    if request.method == "POST":
+        form = DepositForm(request.POST)
+        if form.is_valid():
+            transaction = form.save()
+            profile = transaction.user.get_profile()
+            profile.balance += transaction.amount
+            profile.save()
+            return HttpResponseRedirect( reverse('main.views.deposit') )
+        else:
+            form = DepositForm(request.POST)
+    else:
+        form = DepositForm()
+
+    return render_to_response('deposit.html', locals(), context_instance=RequestContext(request))
 
 def logout(request):
     auth_logout(request)

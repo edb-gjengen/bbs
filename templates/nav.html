@@ -1,0 +1,25 @@
+        <nav class="navbar">
+            <div class="navbar-inner">
+                <div class="container">
+                    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a href="/" class="brand">Biceps Bar System - BBS</a>
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            {% if active %}
+                                <li class="{% if active = "register" %}active{% endif %}"><a href="/register"><i class="icon-home icon-white"></i> Kjøp drikke</a></li>
+                                <li class="{% if active = "deposit" %}active{% endif %}"><a href="/deposit">Sett inn penger</a></li>
+                                <li class="{% if active = "remove_purchase" %}active{% endif %}"><a href="#"> Fjern kjøp</a></li>
+                                {% if request.user.is_superuser %}
+                                <li><a href="/admin">Administrasjon</a></li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
