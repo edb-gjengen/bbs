@@ -1,9 +1,16 @@
+# coding: utf-8
 from django import forms
+from django.utils.translation import ugettext as _
 
 from models import *
 
 class OrderForm(forms.ModelForm):
-    # TODO : validate that the customer can afford the order
+    def clean_customer(self):
+        if self.cleaned_data['customer'].get_profile().balance <= 0:
+            raise forms.ValidationError(_("Du har negativ saldo og kan ikke kjøpe noe."))
+
+        return self.cleaned_data['customer']
+
     class Meta:
         model = Order
         fields = ('customer',)

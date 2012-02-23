@@ -59,10 +59,10 @@ $(document).ready(function() {
     });
     /* Hide alert messages */
     $("a[data-dismiss=alert]").click(function(){
-        $(this).parent().hide()
+        $(this).parent().parent().parent().slideUp();
     });
     setTimeout( function() {
-        $("a[data-dismiss=alert]").parent().slideUp();
+        $("a[data-dismiss=alert]").parent().parent().parent().slideUp();
     }, 5000);
 
 });

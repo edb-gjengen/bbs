@@ -31,21 +31,27 @@ def home(request):
 def register(request):
     products = Product.objects.all()
     users = User.objects.filter(userprofile__balance__gt=0)
-    users_js = "[{0}]".format(
-        ",".join(['"'+user+'"' for user in users.values_list('username', flat=True)]))
+    users_js = users_format_js(users)
 
     # multiple orderlines (one per product)
     OrderLineFormSet = formset_factory(OrderLineForm)
     if request.method == "POST":
         orderform = OrderForm(request.POST)
         formset = OrderLineFormSet(request.POST)
+
         if formset.is_valid() and orderform.is_valid():
             order_sum = sum([ol['amount'] * ol['unit_price'] for ol in formset.cleaned_data])
             order = orderform.save(commit=False)
+            # can he afford it?
+            profile = order.customer.get_profile()
+            if order_sum > profile.balance:
+                messages.error(request, '{0} har ikke råd, mangler {1} kr.'.format(
+                    order.customer,
+                    int(order_sum - profile.balance)))
+                return HttpResponseRedirect( reverse('main.views.register') )
             order.order_sum = order_sum
             order.save()
-
-            profile = order.customer.get_profile()
+            # substract order from balance
             profile.balance -= order.order_sum
             profile.save()
 
@@ -59,12 +65,13 @@ def register(request):
                         amount=ol['amount'],
                         unit_price=ol['unit_price'])
 
-                    orderlines.append(str(ol['amount']) + " stk " + str(product))
+                    orderlines.append(str(ol['amount']) + " " + str(product))
                 
-            messages.success(request, '{0} kjøpte nettopp {1}.'.format(order.customer, ",".join(orderlines)))
+            messages.success(request, '{0} kjøpte {1}.'.format(order.customer, ", ".join(orderlines)))
             return HttpResponseRedirect( reverse('main.views.register') )
         else:
             # errors
+            messages.error(request, 'Skjemaet er ikke gyldig.')
             orderform = OrderForm(request.POST)
             formset = OrderLineFormSet(request.POST)
     else:
@@ -74,6 +81,7 @@ def register(request):
 
 def deposit(request):
     users = User.objects.all()
+    users_js = users_format_js(users)
 
     if request.method == "POST":
         form = DepositForm(request.POST)
@@ -82,8 +90,14 @@ def deposit(request):
             profile = transaction.user.get_profile()
             profile.balance += transaction.amount
             profile.save()
+
+            messages.success(request, '{0} satte inn {1} kr. Ny saldo er {2}'.format(
+                transaction.user,
+                transaction.amount,
+                profile.balance))
             return HttpResponseRedirect( reverse('main.views.deposit') )
         else:
+            messages.error(request, 'Skjemaet er ikke gyldig.')
             form = DepositForm(request.POST)
     else:
         form = DepositForm()
@@ -93,3 +107,9 @@ def deposit(request):
 def logout(request):
     auth_logout(request)
     return render_to_response('registration/logout.html', locals(), context_instance=RequestContext(request))
+
+def users_format_js(users):
+    users = "[{0}]".format(
+        ",".join(['"'+user+'"' for user in users.values_list('username', flat=True)]))
+    return users
+

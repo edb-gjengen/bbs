@@ -21,10 +21,12 @@
     <div id="container" class="container-fluid">
         {%block content%}
         {%endblock%}
-        <div id="footer" class="row-fluid span12">
-            {%block footer %}
-                <img src="{{ STATIC_URL }}gaute/img/edb_brick.png" />
-            {%endblock%}
+        <div id="footer" class="row-fluid">
+            <div class="span12">
+                {%block footer %}
+                    <img src="{{ STATIC_URL }}gaute/img/edb_brick.png" />
+                {%endblock%}
+            </div>
         </div>
     </div>
 

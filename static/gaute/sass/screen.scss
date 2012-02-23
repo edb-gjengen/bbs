@@ -5,26 +5,26 @@ body {
 
     #header {
     }
+    #customer {
+        ul {
+            @include inline-block-list;
 
-    #register {
-        #customer {
-            ul {
-                @include inline-block-list;
-                
-                li {
-                    padding: 1.5em;
-                    text-align: center;
-                    width: 100px;
+            li {
+                padding: 1.5em;
+                text-align: center;
+                width: 100px;
 
-                    &:hover {
-                        background-color: #dddddd;
-                    }
-                    &.marked {
-                        background-color: #dddddd;
-                    }
+                &:hover {
+                    background-color: #dddddd;
+                }
+                &.marked {
+                    background-color: #dddddd;
                 }
             }
         }
+    }
+
+    #register {
         #products {
             ul {
                 @include inline-block-list;

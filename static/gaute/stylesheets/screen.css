@@ -4090,20 +4090,20 @@ a.thumbnail:hover {
   visibility: hidden;
 }
 
-body #register #customer ul {
+body #customer ul {
   margin: 0;
   padding: 0;
   border: 0;
   *zoom: 1;
 }
-body #register #customer ul:before, body #register #customer ul:after {
+body #customer ul:before, body #customer ul:after {
   display: table;
   content: "";
 }
-body #register #customer ul:after {
+body #customer ul:after {
   clear: both;
 }
-body #register #customer ul li {
+body #customer ul li {
   list-style-image: none;
   list-style-type: none;
   margin-left: 0;
@@ -4114,18 +4114,18 @@ body #register #customer ul li {
   *vertical-align: auto;
   white-space: nowrap;
 }
-body #register #customer ul li {
+body #customer ul li {
   *display: inline;
 }
-body #register #customer ul li {
+body #customer ul li {
   padding: 1.5em;
   text-align: center;
   width: 100px;
 }
-body #register #customer ul li:hover {
+body #customer ul li:hover {
   background-color: #dddddd;
 }
-body #register #customer ul li.marked {
+body #customer ul li.marked {
   background-color: #dddddd;
 }
 body #register #products ul {

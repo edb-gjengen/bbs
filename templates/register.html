@@ -5,6 +5,7 @@
 
 {% block content %}
 <section id="register" class="row-fluid">
+    {% if messages %}
     <section class="row-fluid">
         <div class="span4">
             {% for message in messages %}
@@ -12,6 +13,7 @@
             {% endfor %}
         </div>
     </section>
+    {% endif %}
     <form id="order" method="post" autocomplete="off">
         <fieldset>
             {% csrf_token %}
@@ -21,13 +23,13 @@
             <input type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS" />
 
             <section id="customer" class="row-fluid">
+                {% if users %}
                 <div class="span12">
                     <h2>Hvem kjøper?</h2>
                     <!-- Typeahead customer field -->
                     <input name="customer_name" id="id_customer_typeahead" value="" data-provide="typeahead" data-source="{{users_js}}" />
                     <!-- Actual customer select field (hidden) -->
                     <div style="display:none;">{{orderform.customer }}</div>
-                    {% if users %}
                         <ul class="well">
                         {% for user in users %}
                                 <li class="customer">
@@ -42,10 +44,13 @@
                                 </li>
                         {% endfor %}
                         </ul>
-                    {%else%}
-                        <div class="alert alert-error">Ingen har positiv saldo i BBS.</div>
-                    {%endif%}
                 </div>
+                {%else%}
+                    <div class="span3">
+                        <h2>Hvem kjøper?</h2>
+                        <div class="alert alert-error">Ingen har positiv saldo i BBS.</div><a href="{% url deposit %}" class="btn">Sett inn penger</a>
+                    </div>
+                {%endif%}
             </section>
 
             <section id="products" class="row-fluid">
