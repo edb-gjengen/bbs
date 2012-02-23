@@ -40,7 +40,6 @@
                                     <img class="profile" src="{% gravatar_for_user user %}" /><br />
                                 {% endif %}
                                 <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span> ({{ user.get_profile.balance }})
-                                <span class="username" style="display:none;">{{ user }}</span>
                                 <span class="id" style="display:none;">{{ user.id }}</span>
                                 </li>
                                 </li>

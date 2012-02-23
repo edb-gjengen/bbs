@@ -31,6 +31,8 @@ def home(request):
 def register(request):
     products = Product.objects.all()
     users = User.objects.filter(userprofile__balance__gt=0)
+    # sort users after user's last purchase time
+    users = sorted(users, key=lambda u: u.get_profile().last_purchase_date(), reverse=True)
     users_js = users_format_js(users)
 
     # multiple orderlines (one per product)
@@ -80,7 +82,7 @@ def register(request):
     return render_to_response('register.html', locals(), context_instance=RequestContext(request))
 
 def deposit(request):
-    users = User.objects.all()
+    users = User.objects.all().order_by('first_name','last_name')
     users_js = users_format_js(users)
 
     if request.method == "POST":
@@ -109,7 +111,9 @@ def logout(request):
     return render_to_response('registration/logout.html', locals(), context_instance=RequestContext(request))
 
 def users_format_js(users):
-    users = "[{0}]".format(
-        ",".join(['"'+user[0]+ ' ' + user[1][:1] + '"' for user in users.values_list('first_name','last_name')]))
-    return users
+    users_js = []
+    for user in users:
+        users_js.append('"' + user.first_name + ' ' + user.last_name[:1] + '"')
+    users_js = "[{0}]".format(",".join(users_js))
+    return users_js
 

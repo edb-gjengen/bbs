@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from datetime import datetime
 
 class Product(models.Model):
 
@@ -52,6 +53,18 @@ class UserProfile(models.Model):
 	user = models.ForeignKey(User, unique=True)
 	balance = models.FloatField(default=0.0)
 	image = models.ImageField(upload_to='users', blank=True)
+
+        def last_purchase(self):
+            if len(self.user.order_set.all()) == 0:
+                return None
+            return self.user.order_set.order_by('created').reverse()[0]
+
+        def last_purchase_date(self):
+            last = self.last_purchase()
+            if last:
+                return last.created
+            else:
+                return datetime.min
 
 	def __unicode__(self):
 		return "{0}".format(self.user)
