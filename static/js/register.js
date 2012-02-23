@@ -33,8 +33,8 @@ $(document).ready(function() {
         /* Disable the customer button just clicked */
         $(this).addClass("marked");
         /* Update the typeahead field */
-        var username = $(this).children("span.name").text()
-        $("#id_customer_typeahead").val(username);
+        var name = $(this).children("span.name").text()
+        $("#id_customer_typeahead").val(name);
         /* Update the select field */
         var id = $(this).children("span.id").text()
         $("#id_customer option").removeAttr('selected');

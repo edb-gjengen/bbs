@@ -110,6 +110,6 @@ def logout(request):
 
 def users_format_js(users):
     users = "[{0}]".format(
-        ",".join(['"'+user+'"' for user in users.values_list('username', flat=True)]))
+        ",".join(['"'+user[0]+ ' ' + user[1][:1] + '"' for user in users.values_list('first_name','last_name')]))
     return users
 
