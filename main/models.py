@@ -50,7 +50,7 @@ class Transaction(models.Model):
 		return "{0}: {1}: {2}".format(self.id, self.user, self.amount)
 
 class UserProfile(models.Model):
-	user = models.ForeignKey(User, unique=True)
+	user = models.OneToOneField(User)
 	balance = models.FloatField(default=0.0)
 	image = models.ImageField(upload_to='users', blank=True)
 
