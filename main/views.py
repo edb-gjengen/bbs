@@ -29,7 +29,7 @@ def home(request):
     return render_to_response('home.html', locals(), context_instance=RequestContext(request))
 
 def register(request):
-    products = Product.objects.all()
+    products = Product.objects.filter(active=True)
     users = User.objects.filter(userprofile__balance__gt=0)
     # sort users after user's last purchase time
     users = sorted(users, key=lambda u: u.get_profile().last_purchase_date(), reverse=True)
