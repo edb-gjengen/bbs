@@ -35,11 +35,12 @@
                         {% for user in users %}
                                 <li class="customer">
                                 {% if user.get_profile.image %}
-                                    <img class="profile" src="{{ user.get_profile.image.url }}" /><br />
+                                    <img class="profile" src="{{ user.get_profile.image }}" /><br />
                                 {% else %}
-                                    <img class="profile" src="{% gravatar_for_user user %}" /><br />
+                                    <img class="profile" src="{% gravatar_for_user user 50 %}" /><br />
                                 {% endif %}
-                                <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span> ({{ user.get_profile.balance }})
+                                <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span><br />
+                                <span class="balance">{{ user.get_profile.balance }}</span>
                                 <span class="id" style="display:none;">{{ user.id }}</span>
                                 </li>
                                 </li>
@@ -60,8 +61,9 @@
                     <ul class="well">
                         {% for product in products %}
                                 <li id="form-{{forloop.counter0}}" class="product"><input type="hidden" name="form-{{ forloop.counter0 }}-product" value="{{product.id }}" />
-                                <input type="text" id="form-{{ forloop.counter0 }}-amount" name="form-{{ forloop.counter0 }}-amount" value="0" class="span2" size="2" />
+                                <input type="hidden" id="form-{{ forloop.counter0 }}-amount" name="form-{{ forloop.counter0 }}-amount" value="0" class="span2" size="2" />
                                 <input type="hidden" name="form-{{ forloop.counter0 }}-unit_price" value="{{product.sale_price_int }}" />
+                                <span class="qty">0</span>
                                 {% if product.image %}
                                         <img class="product" src="{{ product.image.url }}" /><br />
                                 {% else %}

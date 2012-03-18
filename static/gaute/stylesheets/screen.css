@@ -4118,15 +4118,20 @@ body #customer ul li {
   *display: inline;
 }
 body #customer ul li {
-  padding: 1.5em;
+  padding-right: 10px;
+  padding-top: 10px;
   text-align: center;
-  width: 100px;
+  width: 79px;
 }
 body #customer ul li:hover {
   background-color: #dddddd;
 }
 body #customer ul li.marked {
-  background-color: #dddddd;
+  color: #468847;
+  background-color: #DFF0D8;
+}
+body #customer ul li .name {
+  font-weight: bold;
 }
 body #register #products ul {
   margin: 0;
@@ -4156,11 +4161,24 @@ body #register #products ul li {
   *display: inline;
 }
 body #register #products ul li {
-  padding: 1.5em;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   text-align: center;
 }
 body #register #products ul li:hover {
   background-color: #dddddd;
+}
+body #register #products ul li.marked {
+  color: #468847;
+  background-color: #DFF0D8;
+}
+body #register #products ul li .qty {
+  font-size: 1.7em;
+  font-weight: bold;
+}
+body #register #products ul li .name {
+  font-weight: bold;
 }
 body #register #total div {
   color: #ffffff;

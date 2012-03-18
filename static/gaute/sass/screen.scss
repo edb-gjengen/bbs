@@ -10,15 +10,20 @@ body {
             @include inline-block-list;
 
             li {
-                padding: 1.5em;
+                padding-right: 10px;
+                padding-top: 10px;
                 text-align: center;
-                width: 100px;
+                width: 79px;
 
                 &:hover {
                     background-color: #dddddd;
                 }
                 &.marked {
-                    background-color: #dddddd;
+                    color: #468847;
+                    background-color: #DFF0D8;
+                }
+                .name {
+                    font-weight: bold;
                 }
             }
         }
@@ -30,11 +35,24 @@ body {
                 @include inline-block-list;
                 
                 li {
-                    padding: 1.5em;
+                    padding-top: 10px;
+                    padding-left: 20px;
+                    padding-right: 20px;
                     text-align: center;
 
                     &:hover {
                         background-color: #dddddd;
+                    }
+                    &.marked {
+                        color: #468847;
+                        background-color: #DFF0D8;
+                    }
+                    .qty {
+                        font-size: 1.7em;
+                        font-weight: bold;
+                    }
+                    .name {
+                        font-weight: bold;
                     }
                 }
             }

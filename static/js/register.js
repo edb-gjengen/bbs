@@ -5,6 +5,21 @@ $(document).ready(function() {
             $(this).show();
         });
     }
+    function enable_all_products() {
+        $("li.product").each(function(i) {
+            $(this).removeClass("marked");
+            $(this).show();
+        });
+    }
+    function reset_qtys() {
+        $(".qty").each(function(i) {
+            $(this).html('0');
+        });
+
+        $("input[name$=amount]").each(function(i) {
+            $(this).val("0");
+        });
+    }
     function filter_customers(typed) {
         /* FIXME: Does not work well. */
         setTimeout(function() {
@@ -42,9 +57,14 @@ $(document).ready(function() {
     });
     /* Product amount controls */
     $("li.product").click( function() {
-        var form_field = $(this).children("input[type=text]");
+        /* Mark the product as selected */
+        $(this).addClass("marked");
+        /* Update amounts */
+        var form_field = $(this).children("input[name$=amount]");
+        var display = $(this).children(".qty");
         var qty = Number(form_field.val()) + 1;
         form_field.val(qty);
+        display.html(qty);
         /* Update total*/
         var sale_price_int = Number($(this).children("span.sale_price_int").text());
         var cur_total = Number($("span.total_text").text())
@@ -56,6 +76,8 @@ $(document).ready(function() {
         $("#id_customer_typeahead").val("");
         $("span.total_text").html("");
         enable_all_customers();
+        enable_all_products();
+        reset_qtys();
     });
     /* Hide alert messages */
     $("a[data-dismiss=alert]").click(function(){
