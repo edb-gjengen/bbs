@@ -4125,6 +4125,7 @@ body #customer ul li {
 }
 body #customer ul li:hover {
   background-color: #dddddd;
+  cursor: pointer;
 }
 body #customer ul li.marked {
   color: #468847;
@@ -4168,6 +4169,7 @@ body #register #products ul li {
 }
 body #register #products ul li:hover {
   background-color: #dddddd;
+  cursor: pointer;
 }
 body #register #products ul li.marked {
   color: #468847;

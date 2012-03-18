@@ -40,6 +40,7 @@ for member in group_members:
     match = difflib.get_close_matches(member[0], names, 1) # max 1 match
     if match:
         u = UserProfile.objects.get(pk=name_lookup[match[0]])
+        # Note: This is not correct, image is only kind of a textfield
         u.image = 'https://graph.facebook.com/{0}/picture'.format(member[1])
         u.save()
 

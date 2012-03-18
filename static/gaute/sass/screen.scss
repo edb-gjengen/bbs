@@ -17,6 +17,7 @@ body {
 
                 &:hover {
                     background-color: #dddddd;
+                    cursor: pointer;
                 }
                 &.marked {
                     color: #468847;
@@ -42,6 +43,7 @@ body {
 
                     &:hover {
                         background-color: #dddddd;
+                        cursor: pointer;
                     }
                     &.marked {
                         color: #468847;
