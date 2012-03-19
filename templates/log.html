@@ -17,7 +17,13 @@
     {% endif %}
     <section id="orders" class="row-fluid">
         <div class="span12">
-            <h2 title="Ordre fra de siste 2 dagene eller de 5 siste ordrene.">Siste ordre</h2>
+            {% if not limit %}
+                <h2 title="Alle registrerte ordre">Alle ordre</h2><br />
+                <a href="{% url log %}">Vis kun siste</a>
+            {% else %}
+                <h2 title="Ordre fra de siste 2 dagene eller de 5 siste ordrene.">Siste ordre</h2><br />
+                <a href="{% url log-all %}">Vis alle</a>
+            {%endif %}
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -45,7 +51,13 @@
     </section>
     <section id="transactions" class="row-fluid">
         <div class="span12">
-            <h2 title="Transaksjoner fra de siste 2 dagene eller de 5 siste transaksjonene.">Siste transaksjoner</h2>
+            {% if not limit %}
+                <h2 title="Alle registrerte transaksjoner">Alle transaksjoner</h2>
+                <br /><a href="{% url log %}#transactions">Vis kun siste</a>
+            {% else %}
+                <h2 title="Transaksjoner fra de siste 2 dagene eller de 5 siste transaksjonene.">Siste transaksjoner</h2><br />
+                <a href="{% url log-all %}#transactions">Vis alle</a>
+            {%endif %}
             <table class="table table-striped">
                 <thead>
                 <tr>
