@@ -51,6 +51,10 @@ def register(request):
                     order.customer,
                     int(order_sum - profile.balance)))
                 return HttpResponseRedirect( reverse('main.views.register') )
+            # empty order?
+            if order_sum == 0:
+                messages.error(request, 'Du har ikke valgt hva du skal kjøpe...')
+                return HttpResponseRedirect( reverse('main.views.register') )
             order.order_sum = order_sum
             order.save()
             # substract order from balance

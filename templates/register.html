@@ -10,7 +10,7 @@
     <section class="row-fluid">
         <div class="span4">
             {% for message in messages %}
-                <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}<a class="close" data-dismiss="alert">×</a></div>
+                <div {% if message.tags %}class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}<a class="close" data-dismiss="alert">×</a></div>
             {% endfor %}
         </div>
     </section>

@@ -5,6 +5,7 @@ body {
 
     #header {
     }
+
     #customer {
         ul {
             @include inline-block-list;
@@ -59,6 +60,7 @@ body {
                 }
             }
         }
+        
         #total {
             div {
                 color: #ffffff;
