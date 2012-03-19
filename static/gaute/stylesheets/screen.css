@@ -4327,6 +4327,10 @@ body #register #total div h2 {
 body #register button {
   margin-top: 10px;
 }
+body #log table .amount {
+  font-size: 2em;
+  font-weight: bold;
+}
 body section {
   margin-bottom: 2em;
 }
