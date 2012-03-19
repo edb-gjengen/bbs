@@ -1,0 +1,29 @@
+<div id="modal-{{order.id}}" class="modal"  style="display: none;">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">×</a>
+        <h3>Er du sikker?</h3>
+    </div>
+    <div class="modal-body">
+        <p>
+        Orderen til {% if order.customer.get_profile.image %}<img src="{{ order.customer.get_profile.image }}" class="customer" title="{{ order.customer.first_name }} {{ order.customer.last_name|slice:":1"}}" />{% else %}<strong>{{ order.customer.first_name }} {{ order.customer.last_name|slice:":1"}}</strong>{% endif %} fra {{ order.created }} vil bli <em>slettet</em>.</p>
+        <p>
+        Orderen inneholdt:
+        <ul>
+            {% for line in order.orderline_set.all %}
+                <li><span class="bold">{{ line.amount}}</span>
+                <a href="#" class="product" title="{{ line.unit_price}} per">{{ line.product }}</a>
+                {% if not forloop.last %},{% endif %}</li>
+                {% endfor %}
+        </ul>
+        Totalt: {{ order.order_sum }},-
+        </p>
+        <p>
+        <strong>{{ order.customer.first_name }} {{ order.customer.last_name|slice:":1"}}</strong> sin saldo vil bli kreditert {{ order.order_sum }} kr.
+        </p>
+        <p>Vil du fortsette?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn">Nei</a>
+        <a href="#" class="btn btn-danger"><i class="icon-trash icon-white"></i> Ja</a>
+    </div>
+</div>

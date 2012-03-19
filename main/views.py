@@ -110,6 +110,12 @@ def deposit(request):
 
     return render_to_response('deposit.html', locals(), context_instance=RequestContext(request))
 
+def log(request):
+    orders = Order.objects.all().order_by('-created')
+    transactions = Transaction.objects.all().order_by('-created')
+
+    return render_to_response('log.html', locals(), context_instance=RequestContext(request))
+
 def logout(request):
     auth_logout(request)
     return render_to_response('registration/logout.html', locals(), context_instance=RequestContext(request))

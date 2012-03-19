@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load gravatar %}
+{% block header %}
+        {% include "nav.html" with active="log" %}
+{% endblock %}
+
+{% block content %}
+<section id="log" class="row-fluid">
+    {% if messages %}
+    <section class="row-fluid">
+        <div class="span4">
+            {% for message in messages %}
+                <div {% if message.tags %}class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}<a class="close" data-dismiss="alert">×</a></div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+    <section id="orders" class="row-fluid">
+        <div class="span12">
+            <h2>Siste ordre</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Når</th>
+                    <th>Hvem</th>
+                    <th>Hva</th>
+                    <th>Sum</th>
+                    <th>Handling</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.created }}</td>
+                    <td>{% if order.customer.get_profile.image %}<img src="{{ order.customer.get_profile.image }}" class="customer" title="{{ order.customer.first_name }} {{ order.customer.last_name|slice:":1"}}" />{% else %}{{ order.customer.first_name }} {{ order.customer.last_name|slice:":1"}}{% endif %}</td>
+                    <td>{% for line in order.orderline_set.all %}
+                        <span class="bold">{{ line.amount}}</span>
+                        <a href="#" class="product" title="{{ line.unit_price}} per">{{ line.product }}</a>{% if not forloop.last %},{% endif %}
+                        {% endfor %}</td>
+                    <td>{{ order.order_sum }}</td>
+                    <td>{% include "modal-confirm-delete.html" with order=order %}<a class="btn btn-danger" data-toggle="modal" href="#modal-{{order.id}}"><i class="icon-trash icon-white"></i> Slett</a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>
+{% endblock %}
+{% block tailinc %}
+    <script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
+    <script src="{{ STATIC_URL }}js/log.js"></script>
+{% endblock %}
