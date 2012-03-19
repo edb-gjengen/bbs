@@ -2,10 +2,10 @@
 require 'compass_twitter_bootstrap'
 
 # Set this to the root of your project when deployed:
-http_path = "/"
+http_path = "/static/"
 css_dir = "stylesheets"
 sass_dir = "sass"
-images_dir = "img"
+images_dir = "gaute/img"
 javascripts_dir = "javascripts"
 
 # You can select your preferred output style here (can be overridden via the command line):

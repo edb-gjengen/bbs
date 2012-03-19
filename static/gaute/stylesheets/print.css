@@ -1416,7 +1416,7 @@ table .span12 {
   height: 14px;
   line-height: 14px;
   vertical-align: text-top;
-  background-image: url('/img/glyphicons-halflings.png?1329865545');
+  background-image: url('/static/gaute/img/glyphicons-halflings.png');
   background-position: 14px 14px;
   background-repeat: no-repeat;
   *margin-right: .3em;
@@ -1427,7 +1427,7 @@ table .span12 {
 }
 
 .icon-white {
-  background-image: url('/img/glyphicons-halflings-white.png?1329865545');
+  background-image: url('/static/gaute/img/glyphicons-halflings-white.png');
 }
 
 .icon-glass {

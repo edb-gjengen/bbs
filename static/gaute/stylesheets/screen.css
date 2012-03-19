@@ -512,8 +512,7 @@ blockquote.pull-right {
   border-left: 0;
   border-right: 5px solid #eeeeee;
 }
-blockquote.pull-right p,
-blockquote.pull-right small {
+blockquote.pull-right p, blockquote.pull-right small {
   text-align: right;
 }
 
@@ -925,27 +924,20 @@ textarea[readonly] {
   cursor: not-allowed;
 }
 
-.control-group.warning > label,
-.control-group.warning .help-block,
-.control-group.warning .help-inline {
+.control-group.warning > label, .control-group.warning .help-block, .control-group.warning .help-inline {
   color: #c09853;
 }
-.control-group.warning input,
-.control-group.warning select,
-.control-group.warning textarea {
+.control-group.warning input, .control-group.warning select, .control-group.warning textarea {
   color: #c09853;
   border-color: #c09853;
 }
-.control-group.warning input:focus,
-.control-group.warning select:focus,
-.control-group.warning textarea:focus {
+.control-group.warning input:focus, .control-group.warning select:focus, .control-group.warning textarea:focus {
   border-color: #a47e3c;
   -webkit-box-shadow: 0 0 6px #dbc59e;
   -moz-box-shadow: 0 0 6px #dbc59e;
   box-shadow: 0 0 6px #dbc59e;
 }
-.control-group.warning .input-prepend .add-on,
-.control-group.warning .input-append .add-on {
+.control-group.warning .input-prepend .add-on, .control-group.warning .input-append .add-on {
   color: #c09853;
   background-color: #fcf8e3;
   border-color: #c09853;
@@ -1062,8 +1054,7 @@ select:focus:required:invalid:focus {
 .input-append:after {
   clear: both;
 }
-.input-prepend input,
-.input-prepend .uneditable-input,
+.input-prepend input, .input-prepend .uneditable-input,
 .input-append input,
 .input-append .uneditable-input {
   -moz-border-radius: 0 3px 3px 0;
@@ -1073,8 +1064,7 @@ select:focus:required:invalid:focus {
   -khtml-border-radius: 0 3px 3px 0;
   border-radius: 0 3px 3px 0;
 }
-.input-prepend input:focus,
-.input-prepend .uneditable-input:focus,
+.input-prepend input:focus, .input-prepend .uneditable-input:focus,
 .input-append input:focus,
 .input-append .uneditable-input:focus {
   position: relative;
@@ -1118,8 +1108,7 @@ select:focus:required:invalid:focus {
   /* IE6-7 */
 }
 
-.input-append input,
-.input-append .uneditable-input {
+.input-append input, .input-append .uneditable-input {
   float: left;
   -moz-border-radius: 3px 0 0 3px;
   -webkit-border-radius: 3px 0 0 3px;
@@ -1161,11 +1150,7 @@ select:focus:required:invalid:focus {
   border-radius: 14px;
 }
 
-.form-search input,
-.form-search textarea,
-.form-search select,
-.form-search .help-inline,
-.form-search .uneditable-input,
+.form-search input, .form-search textarea, .form-search select, .form-search .help-inline, .form-search .uneditable-input,
 .form-inline input,
 .form-inline textarea,
 .form-inline select,
@@ -1252,8 +1237,7 @@ table {
   width: 100%;
   margin-bottom: 18px;
 }
-.table th,
-.table td {
+.table th, .table td {
   padding: 8px;
   line-height: 18px;
   text-align: left;
@@ -1266,16 +1250,14 @@ table {
 .table thead th {
   vertical-align: bottom;
 }
-.table thead:first-child tr th,
-.table thead:first-child tr td {
+.table thead:first-child tr th, .table thead:first-child tr td {
   border-top: 0;
 }
 .table tbody + tbody {
   border-top: 2px solid #ddd;
 }
 
-.table-condensed th,
-.table-condensed td {
+.table-condensed th, .table-condensed td {
   padding: 4px 5px;
 }
 
@@ -1290,19 +1272,13 @@ table {
   -khtml-border-radius: 4px;
   border-radius: 4px;
 }
-.table-bordered th + th,
-.table-bordered td + td,
-.table-bordered th + td,
-.table-bordered td + th {
+.table-bordered th + th, .table-bordered td + td, .table-bordered th + td, .table-bordered td + th {
   border-left: 1px solid #ddd;
 }
-.table-bordered thead:first-child tr:first-child th,
-.table-bordered tbody:first-child tr:first-child th,
-.table-bordered tbody:first-child tr:first-child td {
+.table-bordered thead:first-child tr:first-child th, .table-bordered tbody:first-child tr:first-child th, .table-bordered tbody:first-child tr:first-child td {
   border-top: 0;
 }
-.table-bordered thead:first-child tr:first-child th:first-child,
-.table-bordered tbody:first-child tr:first-child td:first-child {
+.table-bordered thead:first-child tr:first-child th:first-child, .table-bordered tbody:first-child tr:first-child td:first-child {
   -moz-border-radius: 4px 0 0 0;
   -webkit-border-radius: 4px 0 0 0;
   -o-border-radius: 4px 0 0 0;
@@ -1310,8 +1286,7 @@ table {
   -khtml-border-radius: 4px 0 0 0;
   border-radius: 4px 0 0 0;
 }
-.table-bordered thead:first-child tr:first-child th:last-child,
-.table-bordered tbody:first-child tr:first-child td:last-child {
+.table-bordered thead:first-child tr:first-child th:last-child, .table-bordered tbody:first-child tr:first-child td:last-child {
   -moz-border-radius: 0 4px 0 0;
   -webkit-border-radius: 0 4px 0 0;
   -o-border-radius: 0 4px 0 0;
@@ -1319,8 +1294,7 @@ table {
   -khtml-border-radius: 0 4px 0 0;
   border-radius: 0 4px 0 0;
 }
-.table-bordered thead:last-child tr:last-child th:first-child,
-.table-bordered tbody:last-child tr:last-child td:first-child {
+.table-bordered thead:last-child tr:last-child th:first-child, .table-bordered tbody:last-child tr:last-child td:first-child {
   -moz-border-radius: 0 0 0 4px;
   -webkit-border-radius: 0 0 0 4px;
   -o-border-radius: 0 0 0 4px;
@@ -1328,8 +1302,7 @@ table {
   -khtml-border-radius: 0 0 0 4px;
   border-radius: 0 0 0 4px;
 }
-.table-bordered thead:last-child tr:last-child th:last-child,
-.table-bordered tbody:last-child tr:last-child td:last-child {
+.table-bordered thead:last-child tr:last-child th:last-child, .table-bordered tbody:last-child tr:last-child td:last-child {
   -moz-border-radius: 0 0 4px 0;
   -webkit-border-radius: 0 0 4px 0;
   -o-border-radius: 0 0 4px 0;
@@ -1338,13 +1311,11 @@ table {
   border-radius: 0 0 4px 0;
 }
 
-.table-striped tbody tr:nth-child(odd) td,
-.table-striped tbody tr:nth-child(odd) th {
+.table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
   background-color: #f9f9f9;
 }
 
-.table tbody tr:hover td,
-.table tbody tr:hover th {
+.table tbody tr:hover td, .table tbody tr:hover th {
   background-color: #f5f5f5;
 }
 
@@ -1416,7 +1387,7 @@ table .span12 {
   height: 14px;
   line-height: 14px;
   vertical-align: text-top;
-  background-image: url('/img/glyphicons-halflings.png?1329865545');
+  background-image: url('/static/gaute/img/glyphicons-halflings.png');
   background-position: 14px 14px;
   background-repeat: no-repeat;
   *margin-right: .3em;
@@ -1427,7 +1398,7 @@ table .span12 {
 }
 
 .icon-white {
-  background-image: url('/img/glyphicons-halflings-white.png?1329865545');
+  background-image: url('/static/gaute/img/glyphicons-halflings-white.png');
 }
 
 .icon-glass {
@@ -3087,8 +3058,7 @@ input[type="submit"].btn.small {
   color: white;
   background-color: transparent;
 }
-.navbar .btn,
-.navbar .btn-group {
+.navbar .btn, .navbar .btn-group {
   margin-top: 5px;
 }
 .navbar .btn-group .btn {
@@ -3106,28 +3076,22 @@ input[type="submit"].btn.small {
 .navbar-form:after {
   clear: both;
 }
-.navbar-form input,
-.navbar-form select {
+.navbar-form input, .navbar-form select {
   display: inline-block;
   margin-top: 5px;
   margin-bottom: 0;
 }
-.navbar-form .radio,
-.navbar-form .checkbox {
+.navbar-form .radio, .navbar-form .checkbox {
   margin-top: 5px;
 }
-.navbar-form input[type="image"],
-.navbar-form input[type="checkbox"],
-.navbar-form input[type="radio"] {
+.navbar-form input[type="image"], .navbar-form input[type="checkbox"], .navbar-form input[type="radio"] {
   margin-top: 3px;
 }
-.navbar-form .input-append,
-.navbar-form .input-prepend {
+.navbar-form .input-append, .navbar-form .input-prepend {
   margin-top: 6px;
   white-space: nowrap;
 }
-.navbar-form .input-append input,
-.navbar-form .input-prepend input {
+.navbar-form .input-append input, .navbar-form .input-prepend input {
   margin-top: 0;
 }
 
@@ -4100,16 +4064,13 @@ a.thumbnail:hover {
   display: block;
   line-height: 1;
 }
-.carousel .active,
-.carousel .next,
-.carousel .prev {
+.carousel .active, .carousel .next, .carousel .prev {
   display: block;
 }
 .carousel .active {
   left: 0;
 }
-.carousel .next,
-.carousel .prev {
+.carousel .next, .carousel .prev {
   position: absolute;
   top: 0;
   width: 100%;
@@ -4120,8 +4081,7 @@ a.thumbnail:hover {
 .carousel .prev {
   left: -100%;
 }
-.carousel .next.left,
-.carousel .prev.right {
+.carousel .next.left, .carousel .prev.right {
   left: 0;
 }
 .carousel .active.left {
