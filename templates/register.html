@@ -26,7 +26,7 @@
             <section id="customer" class="row-fluid">
                 {% if users %}
                 <div class="span12">
-                    <h2>Hvem kjøper?</h2>
+                    <h2 title="Sortert etter hvem som kjøpte noe sist.">Hvem kjøper?</h2>
                     <!-- Typeahead customer field -->
                     <input name="customer_name" id="id_customer_typeahead" value="" data-provide="typeahead" data-source="{{users_js}}" />
                     <!-- Actual customer select field (hidden) -->
@@ -90,5 +90,6 @@
 {% endblock %}
 {% block tailinc %}
     <script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
     <script src="{{ STATIC_URL }}js/register.js"></script>
 {% endblock %}

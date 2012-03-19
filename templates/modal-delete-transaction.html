@@ -1,0 +1,18 @@
+<div id="modal-trans-{{t.id}}" class="modal"  style="display: none;">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">×</a>
+        <h3>Er du sikker?</h3>
+    </div>
+    <div class="modal-body">
+        <p>
+        Inskuddet til <strong>{{ t.user.first_name }} {{ t.user.last_name|slice:":1"}}</strong> på <strong>{{ t.amount }}</strong> fra {{ t.created }} vil bli <em>slettet</em>.</p>
+        <p>
+        <strong>{{ t.user.first_name }} {{ t.user.last_name|slice:":1"}}</strong> sin saldo vil debiteres med {{ t.amount }} kr.
+        </p>
+        <p>Vil du fortsette?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Nei</a>
+        <a href="#" class="btn btn-danger"><i class="icon-trash icon-white"></i> Ja</a>
+    </div>
+</div>

@@ -72,12 +72,24 @@ body {
                 }
             }
         }
+        h2 {
+            display: inline-block;
+        }
+        input[name=customer_name] {
+            display: block;
+        }
         button {
             margin-top:10px;
         }
     }
     #log {
+        h2 {
+            display:inline-block;
+        }
         table {
+            tr{
+                text-align: middle;
+            }
             .amount {
                 font-size: 2em;
                 font-weight: bold;

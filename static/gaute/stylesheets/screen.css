@@ -4324,8 +4324,20 @@ body #register #total div {
 body #register #total div h2 {
   color: #ffffff;
 }
+body #register h2 {
+  display: inline-block;
+}
+body #register input[name=customer_name] {
+  display: block;
+}
 body #register button {
   margin-top: 10px;
+}
+body #log h2 {
+  display: inline-block;
+}
+body #log table tr {
+  text-align: middle;
 }
 body #log table .amount {
   font-size: 2em;

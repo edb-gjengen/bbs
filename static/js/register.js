@@ -87,4 +87,5 @@ $(document).ready(function() {
         $("a[data-dismiss=alert]").parent().parent().parent().slideUp();
     }, 5000);
 
+    $("h2").tooltip({placement: 'right'});
 });

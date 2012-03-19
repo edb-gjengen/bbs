@@ -1,5 +1,7 @@
 # coding: utf-8
-# Create your views here.
+from datetime import timedelta
+from datetime import datetime
+
 from django.contrib.auth import login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
@@ -76,7 +78,7 @@ def register(request):
             messages.success(request, '{0} kjøpte {1}.'.format(order.customer, ", ".join(orderlines)))
             return HttpResponseRedirect( reverse('main.views.register') )
         else:
-            # errors
+            # TODO specify error(s)
             messages.error(request, 'Skjemaet er ikke gyldig.')
             orderform = OrderForm(request.POST)
             formset = OrderLineFormSet(request.POST)
@@ -110,9 +112,23 @@ def deposit(request):
 
     return render_to_response('deposit.html', locals(), context_instance=RequestContext(request))
 
-def log(request):
-    orders = Order.objects.all().order_by('-created')
-    transactions = Transaction.objects.all().order_by('-created')
+def log(request, limit=datetime.now()-timedelta(days=2)):
+    if limit: 
+        # display last two days of orders and transactions
+        orders = Order.objects.filter(created__gte=limit).order_by('-created')
+        transactions = Transaction.objects.filter(created__gte=limit).order_by('-created')
+
+        # no action in the last two days?
+        # ...then display the last 5 items
+        if len(orders) == 0:
+            orders = Order.objects.all().order_by('-created')[:5]
+
+        if len(transactions) == 0:
+            transactions = Transaction.objects.all().order_by('-created')[:5]
+    else:
+        # display everything
+        orders = Order.objects.all().order_by('-created')
+        transactions = Transaction.objects.all().order_by('-created')
 
     return render_to_response('log.html', locals(), context_instance=RequestContext(request))
 
