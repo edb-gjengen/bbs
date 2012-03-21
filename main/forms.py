@@ -18,7 +18,7 @@ class OrderForm(forms.ModelForm):
 class OrderLineForm(forms.Form):
     product = forms.IntegerField(required=True)
     amount = forms.IntegerField(required=True)
-    unit_price = forms.FloatField(required=True)
+    unit_price = forms.FloatField(required=True, localize=True)
 
 class DepositForm(forms.ModelForm):
 
