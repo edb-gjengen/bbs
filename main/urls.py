@@ -5,4 +5,6 @@ urlpatterns = patterns('main.views',
     url(r'^deposit/$', 'deposit', name='deposit'),
     url(r'^log/$', 'log', name='log'),
     url(r'^log/all$', 'log', kwargs={'limit': None}, name='log-all'),
+    url(r'^stats/$', 'stats', name='stats'),
+    url(r'^stats/orders$', 'stats_orders', name='stats-orders'),
 )

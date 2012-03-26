@@ -14,6 +14,7 @@
                                 <li class="{% if active = "register" %}active{% endif %}"><a href="/register"><i class="icon-home icon-white"></i> Kjøp drikke</a></li>
                                 <li class="{% if active = "deposit" %}active{% endif %}"><a href="/deposit">Sett inn penger</a></li>
                                 <li class="{% if active = "log" %}active{% endif %}"><a href="/log"> Vis logg</a></li>
+                                <li class="{% if active = "stats" %}active{% endif %}"><a href="/stats"> Vis statistikk</a></li>
                                 {% if request.user.is_superuser %}
                                 <li><a href="/admin">Administrasjon</a></li>
                                 {% endif %}

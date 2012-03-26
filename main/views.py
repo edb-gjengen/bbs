@@ -1,6 +1,7 @@
 # coding: utf-8
 from datetime import timedelta
 from datetime import datetime
+import simplejson as json
 
 from django.contrib.auth import login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -11,6 +12,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.forms.formsets import formset_factory
 from django.contrib import messages
+from django.db.models import Count
 
 from models import *
 
@@ -131,6 +133,21 @@ def log(request, limit=datetime.now()-timedelta(days=2)):
         transactions = Transaction.objects.all().order_by('-created')
 
     return render_to_response('log.html', locals(), context_instance=RequestContext(request))
+
+def stats(request):
+
+    return render_to_response('stats.html', locals(), context_instance=RequestContext(request))
+
+def stats_orders(request):
+
+    total = float(Order.objects.count())
+    per_user = Order.objects.values('customer__first_name','customer__last_name').annotate(num=Count('customer')).order_by('num')
+    f_per_user = []
+    for row in per_user:
+        who = row['customer__first_name'] + " " + row['customer__last_name'][0]
+        num = row['num']
+        f_per_user.append([who, num])
+    return HttpResponse(json.dumps(f_per_user), content_type='application/javascript; charset=utf8')
 
 def logout(request):
     auth_logout(request)
