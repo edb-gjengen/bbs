@@ -12,7 +12,7 @@ $(document).ready(function() {
             plotShadow: false
         },
         title: {
-            text: 'Ordre/bruker'
+            text: 'Antall ordre per bruker'
         },
         tooltip: {
             formatter: function() {
