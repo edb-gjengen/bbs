@@ -144,14 +144,17 @@ def products(request):
 
     f_products = []
     for product in products:
+        f_product = []
         for attr in Product._meta.get_all_field_names():
-            if hasattr(product, attr):
+            if hasattr(product, attr) and product.__getattribute__(attr):
                 #print type(product.__getattribute__(attr))
                 if type(product.__getattribute__(attr)) is datetime:
                     # TODO parse datetime
-                    f_products.append({attr : product.__getattribute__(attr.())})
+                    date = product.__getattribute__(attr)
+                    f_product.append({attr : str(product.__getattribute__(attr))})
                 else:
-                    f_products.append({attr : product.__getattribute__(attr)})
+                    f_product.append({attr : product.__getattribute__(attr)})
+        f_products.append(f_product)
 
     return HttpResponse(json.dumps(f_products), content_type='application/javascript; charset=utf8')
 
