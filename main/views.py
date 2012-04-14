@@ -135,8 +135,25 @@ def log(request, limit=datetime.now()-timedelta(days=2)):
     return render_to_response('log.html', locals(), context_instance=RequestContext(request))
 
 def stats(request):
+    products = Product.objects.filter(active=True)
 
     return render_to_response('stats.html', locals(), context_instance=RequestContext(request))
+
+def products(request):
+    products = Product.objects.filter(active=True)
+
+    f_products = []
+    for product in products:
+        for attr in Product._meta.get_all_field_names():
+            if hasattr(product, attr):
+                #print type(product.__getattribute__(attr))
+                if type(product.__getattribute__(attr)) is datetime:
+                    # TODO parse datetime
+                    f_products.append({attr : product.__getattribute__(attr.())})
+                else:
+                    f_products.append({attr : product.__getattribute__(attr)})
+
+    return HttpResponse(json.dumps(f_products), content_type='application/javascript; charset=utf8')
 
 def stats_orders(request):
 

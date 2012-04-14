@@ -1,4 +1,4 @@
-var chart;
+var charts;
 $(document).ready(function() {
     // define the options
     var options =  {
@@ -39,9 +39,24 @@ $(document).ready(function() {
         data: [],
     }]
 }
-    var url = '/stats/orders';
-    $.getJSON(url, function(data) {
-        options.series[0].data = data;
-        chart = new Highcharts.Chart(options);
+    var products_url = '/stats/products';
+    /* drink beer and  */
+    $.getJSON(products_url, function(data) {
+        var graph_mappings = [
+            ['/stats/orders', 'order_chart']
+        ];
+        var products = data;
+        for(i in products) {
+            var mapping = ['/stats/product/'+products[i].id, 'product_chart'+products[i].id];
+            graph_mappings.push(mapping);
+        }
+        /* TODO merere her */
+        for(i in graph_mappings) {
+            $.getJSON(graph_mappings, function(data) {
+                options.series[0].data = data;
+                options.chart.renderTo = graph_mappings[i][1];
+                charts.push(new Highcharts.Chart(options));
+            });
+        }
     });
 });

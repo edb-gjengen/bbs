@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load gravatar %}
 {% block header %}
         {% include "nav.html" with active="deposit" %}
 {% endblock %}
@@ -30,7 +29,7 @@
                 {% if user.get_profile.image %}
                     <img class="profile" src="{{ user.get_profile.image }}" alt="Profile picture"/><br />
                 {% else %}
-                    <img class="profile" src="{% gravatar_for_user user 50 %}" alt="Profile picture" /><br />
+                    <img class="profile" src="{{ STATIC_URL }}gaute/img/unknown_person.png" alt="Profile picture" /><br />
                 {% endif %}
                 <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span><br />
                 <span class="balance">{{ user.get_profile.balance }}</span>
