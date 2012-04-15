@@ -5,25 +5,30 @@
 
 {% block content %}
 <section id="stats" class="row-fluid">
-    <section id="order" class="row-fluid">
-        <div class="span12">
-            <h2>Ordre</h2>
-            <div id="order_chart"></div>
-            <!--<div id="container" style="width: 800px; height: 400px; margin: 0 auto;"></div> -->
-        </div>
-    </section>
-
     <section id="product" class="row-fluid">
         <h2>Produkter</h2>
         {% for product in products %}
             <section id="product_{{ product.id }}">
                 <div class="span6">
                     <div id="product_chart{{ product.id }}"></div>
-                    <!--<div id="container" style="width: 800px; height: 400px; margin: 0 auto;"></div> -->
                 </div>
             </section>
         {% endfor %}
     </section>
+    <section id="order_hourly" class="row-fluid">
+        <h2>Time for time</h2>
+        <div class="span11">
+            <div id="order_hourly_chart"></div>
+        </div>
+    </section>
+
+    <section id="order" class="row-fluid">
+        <div class="span12">
+            <h2>Ordre</h2>
+            <div id="order_chart"></div>
+        </div>
+    </section>
+
 </section>
 {% endblock %}
 {% block tailinc %}

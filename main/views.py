@@ -1,6 +1,7 @@
 # coding: utf-8
-from datetime import timedelta
 from datetime import datetime
+from datetime import timedelta
+from itertools import groupby
 import simplejson as json
 
 from django.contrib.auth import login, logout as auth_logout
@@ -209,6 +210,21 @@ def stats_orders(request):
         num = row['num']
         f_per_user.append([who, num])
     return HttpResponse(json.dumps(f_per_user), content_type='application/javascript; charset=utf8')
+
+def stats_orders_hourly(request):
+    orders = Order.objects.all()
+    f_hourly = dict([(key,0) for key in range(0,24)]) # init
+    # group by hour
+    for key, values in groupby(orders, key=lambda row: row.created.hour):
+        count = len(list(values))
+        f_hourly[key] = f_hourly[key] + count
+
+    response = {
+        'start': str(orders[0].created),
+        'hourly' : [[k,v] for k,v in f_hourly.iteritems()],
+        'total' : sum(f_hourly.values()),
+    }
+    return HttpResponse(json.dumps(response), content_type='application/javascript; charset=utf8')
 
 def logout(request):
     auth_logout(request)
