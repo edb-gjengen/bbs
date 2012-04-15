@@ -7,5 +7,7 @@ urlpatterns = patterns('main.views',
     url(r'^log/all$', 'log', kwargs={'limit': None}, name='log-all'),
     url(r'^stats/$', 'stats', name='stats'),
     url(r'^stats/orders$', 'stats_orders', name='stats-orders'),
-    url(r'^stats/products$', 'products', name='stats-products'),
+    url(r'^stats/product/(?P<product>[0-9]+)$', 'stats_product', name='stats-product'),
+    url(r'^products/(?P<product_id>[0-9]+)', 'products', name='json-product'),
+    url(r'^products/$', 'products', name='json-products'),
 )

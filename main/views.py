@@ -139,24 +139,44 @@ def stats(request):
 
     return render_to_response('stats.html', locals(), context_instance=RequestContext(request))
 
-def products(request):
-    products = Product.objects.filter(active=True)
+def serialize_product(product):
+    f_product = {}
+    for attr in Product._meta.get_all_field_names():
+        if hasattr(product, attr) and product.__getattribute__(attr):
+            #print type(product.__getattribute__(attr))
+            if type(product.__getattribute__(attr)) is datetime:
+                # TODO parse datetime
+                date = product.__getattribute__(attr)
+                f_product[attr] = str(product.__getattribute__(attr))
+            else:
+                f_product[attr] = product.__getattribute__(attr)
+    return f_product
 
-    f_products = []
-    for product in products:
-        f_product = []
-        for attr in Product._meta.get_all_field_names():
-            if hasattr(product, attr) and product.__getattribute__(attr):
-                #print type(product.__getattribute__(attr))
-                if type(product.__getattribute__(attr)) is datetime:
-                    # TODO parse datetime
-                    date = product.__getattribute__(attr)
-                    f_product.append({attr : str(product.__getattribute__(attr))})
-                else:
-                    f_product.append({attr : product.__getattribute__(attr)})
-        f_products.append(f_product)
+def products(request, product_id=None):
+    if product_id:
+        #single
+        products = get_object_or_404(Product, pk=product_id)
+    else:
+        #many
+        products = Product.objects.filter(active=True)
+
+    if product_id:
+        f_products = serialize_product(products)
+    else:
+        f_products = [serialize_product(product) for product in products]
 
     return HttpResponse(json.dumps(f_products), content_type='application/javascript; charset=utf8')
+
+def stats_product(request, product):
+    sales = OrderLine.objects.filter(product=product)
+    total = float(sales.count())
+    per_user = sales.values('order__customer__first_name','order__customer__last_name').annotate(num=Count('order__customer')).order_by('num')
+    f_per_user = []
+    for row in per_user:
+        who = row['order__customer__first_name'] + " " + row['order__customer__last_name'][0]
+        num = row['num']
+        f_per_user.append([who, num])
+    return HttpResponse(json.dumps(f_per_user), content_type='application/javascript; charset=utf8')
 
 def stats_orders(request):
 
