@@ -12,7 +12,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.forms.formsets import formset_factory
 from django.contrib import messages
-from django.db.models import Count
+from django.db.models import Count, Sum
 
 from models import *
 
@@ -143,10 +143,7 @@ def serialize_product(product):
     f_product = {}
     for attr in Product._meta.get_all_field_names():
         if hasattr(product, attr) and product.__getattribute__(attr):
-            #print type(product.__getattribute__(attr))
             if type(product.__getattribute__(attr)) is datetime:
-                # TODO parse datetime
-                date = product.__getattribute__(attr)
                 f_product[attr] = str(product.__getattribute__(attr))
             else:
                 f_product[attr] = product.__getattribute__(attr)
@@ -167,21 +164,45 @@ def products(request, product_id=None):
 
     return HttpResponse(json.dumps(f_products), content_type='application/javascript; charset=utf8')
 
-def stats_product(request, product):
+def stats_product(product):
     sales = OrderLine.objects.filter(product=product)
-    total = float(sales.count())
-    per_user = sales.values('order__customer__first_name','order__customer__last_name').annotate(num=Count('order__customer')).order_by('num')
+    # reverse lookup via order, customer
+    per_user = sales.values('order__customer__first_name','order__customer__last_name').annotate(num=Sum('amount')).order_by('num').reverse()
     f_per_user = []
     for row in per_user:
         who = row['order__customer__first_name'] + " " + row['order__customer__last_name'][0]
         num = row['num']
         f_per_user.append([who, num])
-    return HttpResponse(json.dumps(f_per_user), content_type='application/javascript; charset=utf8')
+    response = {
+        'product' : serialize_product(Product.objects.get(pk=product)) if type(product) is unicode else serialize_product(product),
+        'counts' : f_per_user,
+        'total_counts' : sum([row['num'] for row in per_user]),
+        }
+    return response
+
+def stats_products(request, product=None):
+    if product:
+        #single
+        f_products = [stats_product(product)]
+        sales = OrderLine.objects.filter(product=product)
+    else:
+        #all
+        sales = OrderLine.objects.filter(product__active=True)
+        f_products = [stats_product(p) for p in Product.objects.filter(active=True)]
+
+    totals = float(sum([sale.amount for sale in sales]))
+    response = {
+        'request' : 'all' if not product else product,
+        'response' : {
+            'products' : f_products,
+            'total_count' : totals,
+            }
+        }
+    return HttpResponse(json.dumps(response), content_type='application/javascript; charset=utf8')
 
 def stats_orders(request):
-
     total = float(Order.objects.count())
-    per_user = Order.objects.values('customer__first_name','customer__last_name').annotate(num=Count('customer')).order_by('num')
+    per_user = Order.objects.values('customer__first_name','customer__last_name').annotate(num=Count('customer')).order_by('num').reverse()
     f_per_user = []
     for row in per_user:
         who = row['customer__first_name'] + " " + row['customer__last_name'][0]
