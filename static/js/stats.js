@@ -4,6 +4,7 @@ $(document).ready(function() {
     var products_url = '/stats/products/';
     var order_url = '/stats/orders/';
     var order_hourly_url = '/stats/orders/hourly';
+    var products_realtime_url = '/stats/orders/products_realtime'
 
     /* orders */
     $.getJSON(order_url, function(data) {
@@ -99,7 +100,7 @@ $(document).ready(function() {
             charts.push(new Highcharts.Chart(options));
         }
     });
-    /* orders hourly */
+      /* orders hourly */
     $.getJSON(order_hourly_url, function(data) {
         var render_to = 'order_hourly_chart';
 
@@ -139,7 +140,7 @@ $(document).ready(function() {
                 column: {
                     minPointLength: 3,
                 },
-                series: {
+                series: {
                     groupPadding: 0,
                     pointPadding: 0.05,
                 },
@@ -151,4 +152,85 @@ $(document).ready(function() {
         };
         charts.push(new Highcharts.Chart(options));
     });
+    
+    var products_realtime_chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'products_realtime_chart'
+        },
+        title: {
+            text: "Produkter solgt over tid"
+        },
+        xAxis: {
+            type: "datetime"
+        },
+        yAxis: {
+            title: {
+                text: "Antall solgt"
+            }            
+        },
+        
+        plotOptions: {
+            series: {
+                marker: {
+                    radius: 3
+                }
+            }
+        },
+        
+        series: {}
+    });
+    charts.push(products_realtime_chart);
+    
+    function parse_products_realtime_data(data) {
+        var chart = products_realtime_chart;
+        
+        for (product in data.products) {
+            if (chart.get(product) === null) {
+                chart.addSeries({
+                    data: [],
+                    id: product,
+                    name: product
+                });
+                
+                var series = chart.get(product);
+                _.each(data.products[product], function(point) {
+                    series.addPoint({
+                        id: point[0],
+                        x: point[0],
+                        y: point[1]
+                    });
+                });
+            }
+            else {
+                var series = chart.get(product);
+                _.each(data.products[product], function(point) {
+                    if (chart.get(point[0]) === null) {
+                        series.addPoint({
+                            id: point[0],
+                            x: point[0],
+                            y: point[1]
+                        });
+                    }
+                });
+            }
+        }
+    }
+    
+    function get_products_realtime_data() {
+        var that = this;
+        $.ajax( {
+            url: products_realtime_url,
+            dataType: "json",
+            success: function (data) {
+                parse_products_realtime_data(data);
+                
+                setTimeout(function () {
+                    get_products_realtime_data();
+                }, 15000);
+            },
+            cache: false
+        });
+    }
+    
+    get_products_realtime_data();
 });

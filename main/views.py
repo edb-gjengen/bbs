@@ -3,6 +3,7 @@ from datetime import datetime
 from datetime import timedelta
 from itertools import groupby
 import simplejson as json
+import time
 
 from django.contrib.auth import login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -171,7 +172,7 @@ def stats_product(product):
     per_user = sales.values('order__customer__first_name','order__customer__last_name').annotate(num=Sum('amount')).order_by('num').reverse()
     f_per_user = []
     for row in per_user:
-        who = row['order__customer__first_name'] + " " + row['order__customer__last_name'][0]
+        who = row['order__customer__first_name'] + " " + row['order__customer__last_name']
         num = row['num']
         f_per_user.append([who, num])
     response = {
@@ -206,7 +207,7 @@ def stats_orders(request):
     per_user = Order.objects.values('customer__first_name','customer__last_name').annotate(num=Count('customer')).order_by('num').reverse()
     f_per_user = []
     for row in per_user:
-        who = row['customer__first_name'] + " " + row['customer__last_name'][0]
+        who = row['customer__first_name'] + " " + row['customer__last_name']
         num = row['num']
         f_per_user.append([who, num])
     return HttpResponse(json.dumps(f_per_user), content_type='application/javascript; charset=utf8')
@@ -225,6 +226,31 @@ def stats_orders_hourly(request):
         'total' : sum(f_hourly.values()),
     }
     return HttpResponse(json.dumps(response), content_type='application/javascript; charset=utf8')
+    
+def stats_products_realtime(request):
+    end_time = datetime.now()
+    start_time = datetime.now() - timedelta(hours=24)
+    
+    order_lines = OrderLine.objects.filter(order__created__range=(start_time, end_time)).order_by("order__created")
+    products = {}
+    for order_line in order_lines:
+        order_time_in_milliseconds = int(time.mktime(order_line.order.created.timetuple()) * 1000)
+        if order_line.product not in products:
+            products[order_line.product] = [[order_time_in_milliseconds, order_line.amount]]
+        else:
+            prev_entry = products[order_line.product][-1]
+            products[order_line.product].append([order_time_in_milliseconds, prev_entry[1] + order_line.amount])
+    
+    serialized_products = {}
+    for product, value in products.iteritems():
+        serialized_products[product.name] = value
+        
+    response = {
+        'products': serialized_products
+    }
+    
+    return HttpResponse(json.dumps(response), content_type='application/javascript; charset=utf8')
+
 
 def logout(request):
     auth_logout(request)

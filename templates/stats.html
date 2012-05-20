@@ -5,6 +5,13 @@
 
 {% block content %}
 <section id="stats" class="row-fluid">
+    <section id="products_realtime" class="row-fluid">
+        <div class="span12">
+            <h2>Realtime produkter</h2>
+            <div id="products_realtime_chart"></div>
+        </div>
+    </section>
+        
     <section id="product" class="row-fluid">
         <h2>Produkter</h2>
         {% for product in products %}
@@ -28,6 +35,8 @@
             <div id="order_chart"></div>
         </div>
     </section>
+    
+
 
 </section>
 {% endblock %}
@@ -35,6 +44,7 @@
     <script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>
     <script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
     <script src="{{ STATIC_URL }}js/highcharts.js"></script>
+    <script src="{{ STATIC_URL }}js/underscore-min.js"></script>
     <script src="{{ STATIC_URL }}js/stats.js"></script>
 {% endblock %}
 

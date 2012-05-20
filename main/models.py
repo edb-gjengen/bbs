@@ -36,10 +36,10 @@ class OrderLine(models.Model):
 	unit_price = models.FloatField()
 
 	def __unicode__(self):
-		return "{1} {0} ({2} kr per)".format(self.product, self.amount, self.unit_price)
+	    return u"{1} {0} ({2} kr per)".format(self.product, self.amount, self.unit_price)
 
 	class Meta:
-		unique_together = ('order', 'product')
+	    unique_together = ('order', 'product')
 
 class Transaction(models.Model):
 	user = models.ForeignKey(User)
@@ -47,7 +47,7 @@ class Transaction(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
-		return "{0}: {1}: {2}".format(self.id, self.user, self.amount)
+	    return "{0}: {1}: {2}".format(self.id, self.user, self.amount)
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
