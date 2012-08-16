@@ -263,3 +263,12 @@ def users_format_js(users):
     users_js = u"[{0}]".format(u",".join(users_js))
     return users_js
 
+def order_reciept(request, order):
+    order = Order.objects.get(pk=order)
+    orderlines = OrderLine.objects.filter(order=order)
+    for line in orderlines:
+        line.tot = line.amount * line.unit_price
+
+    print order.order_sum
+
+    return render_to_response('order_reciept.html', locals(), context_instance=RequestContext(request))

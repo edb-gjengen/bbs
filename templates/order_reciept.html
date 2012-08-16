@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<section id="reciept" class="row-fluid">
+    <section class="row-fluid">
+        <div class="span6">
+            <h2>KAKtoffelboden - plassen utenfor Chateau Neuf</h2>
+            <ul>
+                <li>
+                Dato: {{ order.created }}
+                </li>
+            {% for line in orderlines %}
+            <li>
+            <strong>{{line.product }}</strong>  {{line.amount}} stk * {{line.unit_price}} = {{line.tot}}
+            </li>
+
+            {% endfor %}
+        </ul>
+        Totalt: {{order.order_sum }}
+        </div>
+    </section>
+
+    {% endblock %}

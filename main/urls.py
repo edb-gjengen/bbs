@@ -13,4 +13,5 @@ urlpatterns = patterns('main.views',
     url(r'^stats/products/(?P<product>[0-9]+)/$', 'stats_products', name='stats-product'),
     url(r'^products/(?P<product_id>[0-9]+)/$', 'products', name='json-product'),
     url(r'^products/$', 'products', name='json-products'),
+    url(r'^order/(?P<order>[0-9]+)/$', 'order_reciept', name='order_reciept'),
 )

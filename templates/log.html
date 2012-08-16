@@ -41,7 +41,7 @@
                     <td>{% for line in order.orderline_set.all %}
                         <span class="amount">{{ line.amount}}</span> <a href="#" class="product" title="{{ line.unit_price}} per">{{ line.product }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</td>
                     <td>{{ order.order_sum }}</td>
-                    <td>{% include "modal-delete-order.html" with order=order %}<a class="btn btn-danger" data-toggle="modal" href="#modal-order-{{order.id}}"><i class="icon-trash icon-white"></i> Slett</a></td>
+                    <td><a class="btn btn-info" data-toggle="modal" href="{% url order_reciept order=order.id %} "><i class="icon-list-alt icon-white"></i> Kvittering</a> {% include "modal-delete-order.html" with order=order %}<a class="btn btn-danger" data-toggle="modal" href="#modal-order-{{order.id}}"><i class="icon-trash icon-white"></i> Slett</a></td>
                 </tr>
                 {% endfor %}
                 </tbody>
