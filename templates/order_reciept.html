@@ -3,19 +3,24 @@
 <section id="reciept" class="row-fluid">
     <section class="row-fluid">
         <div class="span6">
-            <h2>KAKtoffelboden - plassen utenfor Chateau Neuf</h2>
+            <h2>KAKtoffelboden</h2>
+            <p>
+            Dato: {{ order.created }}<br />
+            Kvitteringsid: {{ order.pk }}
+            </p>
+            <h4>Ordre</h4>
             <ul>
-                <li>
-                Dato: {{ order.created }}
-                </li>
             {% for line in orderlines %}
             <li>
-            <strong>{{line.product }}</strong>  {{line.amount}} stk * {{line.unit_price}} = {{line.tot}}
+            {{line.product }} {{line.amount}} stk * {{line.unit_price}} = {{line.tot}}
             </li>
 
             {% endfor %}
         </ul>
-        Totalt: {{order.order_sum }}
+        <br />
+        <strong>Totalt: {{order.order_sum }}</strong>
+        <p>Slemdalsveien 15, 0369 OSLO<br />
+        Telefon: 48105885</p>
         </div>
     </section>
 
