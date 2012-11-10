@@ -14,7 +14,7 @@
         </div>
     </section>
     {% endif %}
-    <form id="order" method="post" autocomplete="off">
+    <form id="order" class="form-stacked" method="post" autocomplete="off">
         <fieldset>
             {% csrf_token %}
             <!-- Formset validation fields -->
@@ -27,7 +27,7 @@
                 <div class="span12">
                     <h2 title="Sortert etter hvem som kjøpte noe sist.">Hvem kjøper?</h2>
                     <!-- Typeahead customer field -->
-                    <input name="customer_name" id="id_customer_typeahead" value="" data-provide="typeahead" data-source="{{users_js}}" />
+                    <input name="customer_name" type="text" id="id_customer_typeahead" value="" data-provide="typeahead" data-source="{{users_js}}" />
                     <!-- Actual customer select field (hidden) -->
                     <div style="display:none;">{{orderform.customer }}</div>
                         <ul class="well">
@@ -36,7 +36,7 @@
                                 {% if user.get_profile.image %}
                                     <img class="profile" src="{{ user.get_profile.image }}" alt="Profile picture" /><br />
                                 {% else %}
-                                    <img class="profile" src="{{ STATIC_URL }}gaute/img/unknown_person.png" alt="Profile picture" /><br />
+                                    <img class="profile" src="{{ STATIC_URL }}img/unknown_person.png" alt="Profile picture" /><br />
                                 {% endif %}
                                 <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span><br />
                                 <span class="balance">{{ user.get_profile.balance }}</span>
@@ -65,7 +65,7 @@
                                 {% if product.image %}
                                         <img class="product" src="{{ product.image.url }}" /><br />
                                 {% else %}
-                                        <img class="product" src="{{ STATIC_URL }}gaute/img/product.png" /><br />
+                                        <img class="product" src="{{ STATIC_URL }}img/product.png" /><br />
                                 {% endif %}
                                 <span class="name">{{ product.name }}</span> - <span class="sale_price_int">{{product.sale_price_int|floatformat:0}}</span>
                                 </li>

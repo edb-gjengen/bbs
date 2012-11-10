@@ -20,7 +20,7 @@
             <section id="customer" class="row-fluid">
             <h2>Hvem skal sette inn penger?</h2>
             <!-- Typeahead customer field -->
-            <input name="customer_name" id="id_customer_typeahead" value="" data-provide="typeahead" data-source="{{users_js}}" />
+            <input name="customer_name" id="id_customer_typeahead" type="text" value="" data-provide="typeahead" data-source="{{users_js}}" />
             <!-- Actual customer select field (hidden) -->
             <div style="display:none;">{{form.user }}</div>
             <ul class="well">
@@ -29,7 +29,7 @@
                 {% if user.get_profile.image %}
                     <img class="profile" src="{{ user.get_profile.image }}" alt="Profile picture"/><br />
                 {% else %}
-                    <img class="profile" src="{{ STATIC_URL }}gaute/img/unknown_person.png" alt="Profile picture" /><br />
+                    <img class="profile" src="{{ STATIC_URL }}img/unknown_person.png" alt="Profile picture" /><br />
                 {% endif %}
                 <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span><br />
                 <span class="balance">{{ user.get_profile.balance }}</span>

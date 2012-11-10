@@ -1,6 +1,12 @@
 @import "compass";
-@import "compass_twitter_bootstrap";
-@import "compass_twitter_bootstrap_responsive";
+@import "compass/reset";
+
+// Fixes image path for icons from sass-bootstrap
+$iconSpritePath: generated-image-url("glyphicons-halflings.png");
+$iconWhiteSpritePath: generated-image-url("glyphicons-halflings-white.png");
+
+@import "bootstrap";
+@import "bootstrap-responsive";
 
 body {
 
