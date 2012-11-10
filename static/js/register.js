@@ -21,19 +21,25 @@ $(document).ready(function() {
         });
     }
     function filter_customers(typed) {
-        /* FIXME: Does not work. */
-        console.log(typed);
         setTimeout(function() {
             $("li.customer").each(function(i) {
-                if($(this).children("span.name").text().indexOf(typed) == -1) {
+                var pattern = new RegExp(typed,"i");
+                var name = $(this).children("span.name").text();
+                if(!pattern.test(name)) {
                     $(this).hide();
                     $(this).removeClass("marked");
                 } else {
                     $(this).show();
-                }
-                /* Full match */
-                if($(this).children("span.name").text() == typed) {
-                    $(this).addClass("marked");
+                    var full_match = name.toLowerCase() == typed.toLowerCase();
+                    // FIXME: needs one more char.
+                    //var single_match = $("li.customer:visible").length == 1;
+                    //console.log(full_match, single_match);
+                    //if(full_match || single_match) {
+                    if(full_match) {
+                        $(this).addClass("marked");
+                    } else {
+                        $(this).removeClass("marked");
+                    }
                 }
             });
         }, 50);
