@@ -21,7 +21,8 @@ $(document).ready(function() {
         });
     }
     function filter_customers(typed) {
-        /* FIXME: Does not work well. */
+        /* FIXME: Does not work. */
+        console.log(typed);
         setTimeout(function() {
             $("li.customer").each(function(i) {
                 if($(this).children("span.name").text().indexOf(typed) == -1) {
@@ -38,8 +39,8 @@ $(document).ready(function() {
         }, 50);
     }
     /* Customer search */
-    $('.typeahead').typeahead();
-    $('#id_customer_name').keydown(function(event) {
+    //$('.typeahead').typeahead();
+    $('#id_customer_typeahead').keyup(function(event) {
         filter_customers(event.srcElement.value);
     });
     /* Customer selection */
