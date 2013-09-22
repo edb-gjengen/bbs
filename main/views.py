@@ -37,7 +37,7 @@ def home(request):
 def register(request):
     products = Product.objects.filter(active=True)
     cheapest_product_price = products.aggregate(Min('sale_price_int')).values()[0]
-    one_year_ago = datetime.now() - timedelta(days=365) # one year ago
+    half_a_year_ago = datetime.now() - timedelta(days=180)
     users = User.objects.filter(userprofile__balance__gt=cheapest_product_price)
     # sort users after user's last purchase time
     users = sorted(users, key=lambda u: u.get_profile().last_purchase_date(), reverse=True)

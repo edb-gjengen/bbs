@@ -99,6 +99,7 @@ $(document).ready(function() {
     $(".toggle-infrequent-users").on('click', function(e) {
         e.preventDefault();
         $("li.customer.infrequent").toggleClass('hidden');
+        $(".users-description .infrequent-users").toggleClass('hidden');
         if($(this).text() === "Vis alle") {
             $(this).text("Skjul gamliser");
         }
