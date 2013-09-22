@@ -1,16 +1,15 @@
 @import "compass";
 @import "compass/reset";
 
-// Fixes image path for icons from sass-bootstrap
-$iconSpritePath: generated-image-url("glyphicons-halflings.png");
-$iconWhiteSpritePath: generated-image-url("glyphicons-halflings-white.png");
-
 @import "bootstrap";
 @import "bootstrap-responsive";
 
 body {
 
     #header {
+        .navbar {
+            margin-bottom: 0;
+        }
     }
 
     #customer {
@@ -31,6 +30,9 @@ body {
                     color: #468847;
                     background-color: #DFF0D8;
                 }
+                &.hidden {
+                    display: none !important;
+                }
                 .name {
                     font-weight: bold;
                 }
@@ -40,6 +42,7 @@ body {
 
     #register {
         #products {
+            margin-bottom:2em;
             ul {
                 @include inline-block-list;
                 
@@ -68,15 +71,13 @@ body {
             }
         }
         
-        #total {
-            div {
+        .total {
+            color: #ffffff;
+            background-color: #222;
+            padding: 0 10px;
+            min-width:115px;
+            h2 {
                 color: #ffffff;
-                background-color: #222;
-                padding: 10px;
-                min-width:115px;
-                h2 {
-                    color: #ffffff;
-                }
             }
         }
         h2 {
@@ -104,6 +105,5 @@ body {
         }
     }
     section {
-        margin-bottom:2em;
     }
 }

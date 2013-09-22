@@ -31,8 +31,7 @@
                     <!-- Actual customer select field (hidden) -->
                     <div style="display:none;">{{orderform.customer }}</div>
                         <ul class="well">
-                        {% for user in users %}
-                                <li class="customer">
+                        {% for user in users %}<li class="customer{% if user.get_profile.last_purchase_date < one_year_ago %} infrequent hidden{% endif %}">
                                 {% if user.get_profile.image %}
                                     <img class="profile" src="{{ user.get_profile.image }}" alt="Profile picture" /><br />
                                 {% else %}
@@ -41,9 +40,11 @@
                                 <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span><br />
                                 <span class="balance">{{ user.get_profile.balance }}</span>
                                 <span class="id" style="display:none;">{{ user.id }}</span>
-                                </li>
-                        {% endfor %}
+                                </li>{% endfor %}
                         </ul>
+                        <div class="users-description pull-right">
+                            <small>Viser: De med minst <strong>{{ cheapest_product_price }}</strong> i saldo<span class="infrequent-users"> og mer enn ett kjøp siden <strong>{{ one_year_ago }}</strong></span>. <a href="#" class="toggle-infrequent-users">Vis alle</a></small>
+                        </div>
                 </div>
                 {%else%}
                     <div class="span3">
@@ -73,13 +74,11 @@
                     </ul>
                 </div>
             </section>
-            <section id="total" class="row-fluid">
-                <div class="span2">
-                    <h2>Totalt: <span class="total_text"></span></h2>
-                </div>
-            </section>
         </fieldset>
         <div class="form-actions">
+                <div class="span3 total">
+                    <h2>Totalt: <span class="total_text"></span></h2>
+                </div>
                 <button type="submit" class="btn btn-large btn-primary" name="submit_order">Kjøp</button>
                 <button type="reset" class="btn">Start på nytt</button>
         </div>

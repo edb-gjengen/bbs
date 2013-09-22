@@ -4,3 +4,4 @@ settings.py
 dev.db
 static/.sass-cache
 uploads/[^.]*
+venv

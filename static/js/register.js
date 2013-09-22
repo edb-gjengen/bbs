@@ -74,7 +74,7 @@ $(document).ready(function() {
         display.html(qty);
         /* Update total*/
         var sale_price_int = Number($(this).children("span.sale_price_int").text());
-        var cur_total = Number($("span.total_text").text())
+        var cur_total = Number($("span.total_text").text());
         $("span.total_text").html(cur_total + sale_price_int);
     });
     /* Form reset */
@@ -95,4 +95,15 @@ $(document).ready(function() {
     }, 5000);
 
     $("h2").tooltip({placement: 'right'});
+    /* Toggle infrequent users */
+    $(".toggle-infrequent-users").on('click', function(e) {
+        e.preventDefault();
+        $("li.customer.infrequent").toggleClass('hidden');
+        if($(this).text() === "Vis alle") {
+            $(this).text("Skjul gamliser");
+        }
+        else {
+            $(this).text("Vis alle");
+        }
+    });
 });

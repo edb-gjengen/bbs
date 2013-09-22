@@ -2,7 +2,7 @@
 from datetime import datetime
 from datetime import timedelta
 from itertools import groupby
-import simplejson as json
+import json
 import time
 
 from django.contrib.auth import login, logout as auth_logout
@@ -14,7 +14,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.forms.formsets import formset_factory
 from django.contrib import messages
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Max, Min
 
 from models import *
 
@@ -36,7 +36,9 @@ def home(request):
 
 def register(request):
     products = Product.objects.filter(active=True)
-    users = User.objects.filter(userprofile__balance__gt=0)
+    cheapest_product_price = products.aggregate(Min('sale_price_int')).values()[0]
+    one_year_ago = datetime.now() - timedelta(days=365) # one year ago
+    users = User.objects.filter(userprofile__balance__gt=cheapest_product_price)
     # sort users after user's last purchase time
     users = sorted(users, key=lambda u: u.get_profile().last_purchase_date(), reverse=True)
     users_js = users_format_js(users)
