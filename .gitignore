@@ -5,3 +5,4 @@ dev.db
 static/.sass-cache
 uploads/[^.]*
 venv
+node_modules
