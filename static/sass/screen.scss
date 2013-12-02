@@ -1,8 +1,8 @@
 @import "compass";
 @import "compass/reset";
 
+@import "variables";
 @import "bootstrap";
-@import "bootstrap-responsive";
 
 body {
 
@@ -104,6 +104,8 @@ body {
             }
         }
     }
-    section {
+    /* General styles*/
+    .glyphicon .white {
+        color: white;
     }
 }

@@ -18,12 +18,13 @@
         {% include "nav.html" %}
     {%endblock%}
     </header>
-    <div id="container" class="container-fluid">
+    <div id="container" class="container">
         {%block content%}
         {%endblock%}
-        <div id="footer" class="row-fluid">
-            <div class="span12">
+        <div id="footer" class="row">
+            <div class="col-xs-12">
                 {%block footer %}
+                    <br />
                     <img src="{{ STATIC_URL }}img/edb_brick.png" alt="EDB" />
                 {%endblock%}
             </div>
@@ -31,7 +32,7 @@
     </div>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-collapse.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/collapse.js"></script>
     {%block tailinc %}
     {%endblock%}
 </body>

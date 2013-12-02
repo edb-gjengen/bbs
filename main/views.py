@@ -36,7 +36,7 @@ def home(request):
 
 def register(request):
     products = Product.objects.filter(active=True)
-    cheapest_product_price = products.aggregate(Min('sale_price_int')).values()[0]
+    cheapest_product_price = products.aggregate(Min('sale_price_int')).values()[0] or 0
     half_a_year_ago = datetime.now() - timedelta(days=180)
     users = User.objects.filter(userprofile__balance__gt=cheapest_product_price)
     # sort users after user's last purchase time
@@ -222,6 +222,8 @@ def stats_orders_hourly(request):
         count = len(list(values))
         f_hourly[key] = f_hourly[key] + count
 
+    if len(orders) == 0:
+        return HttpResponse(json.dumps({}), content_type='application/javascript; charset=utf8')
     response = {
         'start': str(orders[0].created),
         'hourly' : [[k,v] for k,v in f_hourly.iteritems()],

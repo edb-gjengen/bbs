@@ -4,10 +4,10 @@
 {% endblock %}
 
 {% block content %}
-<section id="deposit" class="row-fluid">
+<section id="deposit" class="row">
     {% if messages %}
-    <section class="row-fluid">
-        <div class="span4">
+    <section class="row">
+        <div class="col-xs-4">
             {% for message in messages %}
                 <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}<a class="close" data-dismiss="alert">×</a></div>
             {% endfor %}
@@ -17,7 +17,7 @@
     <form id="order" method="post" class="form-stacked" autocomplete="off">
         {% csrf_token %}
         <fieldset>
-            <section id="customer" class="row-fluid">
+            <section id="customer" class="row">
             <h2>Hvem skal sette inn penger?</h2>
             <!-- Typeahead customer field -->
             <input name="customer_name" id="id_customer_typeahead" type="text" value="" data-provide="typeahead" data-source="{{users_js}}" />
@@ -45,7 +45,7 @@
             </section>
         </fieldset>
         <div class="form-actions">
-                <button type="submit" class="btn btn-large btn-primary" name="submit_order">Sett inn</button>
+                <button type="submit" class="btn btn-lg btn-primary" name="submit_order">Sett inn</button>
                 <a href="{% url register %}" class="btn">Avbryt</a>
         </div>
     </form>

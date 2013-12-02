@@ -4,10 +4,10 @@
 {% endblock %}
 
 {% block content %}
-<section id="register" class="row-fluid">
+<section id="register" class="row">
     {% if messages %}
-    <section class="row-fluid">
-        <div class="span4">
+    <section class="row">
+        <div class="col-xs-4">
             {% for message in messages %}
                 <div {% if message.tags %}class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}<a class="close" data-dismiss="alert">×</a></div>
             {% endfor %}
@@ -22,14 +22,24 @@
             <input type="hidden" name="form-INITIAL_FORMS" value="{{ products|length }}" id="id_form-INITIAL_FORMS" />
             <input type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS" />
 
-            <section id="customer" class="row-fluid">
+            <section id="customer">
                 {% if users %}
-                <div class="span12">
-                    <h2 title="Sortert etter hvem som kjøpte noe sist.">Hvem kjøper?</h2>
-                    <!-- Typeahead customer field -->
-                    <input name="customer_name" type="text" id="id_customer_typeahead" value="" data-provide="typeahead" data-source="{{users_js}}" />
-                    <!-- Actual customer select field (hidden) -->
-                    <div style="display:none;">{{orderform.customer }}</div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2 title="Sortert etter hvem som kjøpte noe sist.">Hvem kjøper?</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3">
+                        <!-- Typeahead customer field -->
+                        <input name="customer_name" type="text" id="id_customer_typeahead" value="" data-provide="typeahead" data-source="{{users_js}}" class="form-control" />
+                        <!-- Actual customer select field (hidden) -->
+                        <div style="display:none;">{{orderform.customer }}</div>
+                        <br />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
                         <ul class="well">
                         {% for user in users %}<li class="customer{% if user.get_profile.last_purchase_date < half_a_year_ago %} infrequent hidden{% endif %}">
                                 {% if user.get_profile.image %}
@@ -45,17 +55,20 @@
                         <div class="users-description pull-right">
                             <small>Viser: De med minst <strong>{{ cheapest_product_price }}</strong> i saldo<span class="infrequent-users"> og mer enn ett kjøp siden <strong>{{ half_a_year_ago }}</strong></span>. <a href="#" class="toggle-infrequent-users">Vis alle</a></small>
                         </div>
+                    </div>
                 </div>
                 {%else%}
-                    <div class="span3">
+                <div class="row">
+                    <div class="col-xs-3">
                         <h2>Hvem kjøper?</h2>
                         <div class="alert alert-error">Ingen har positiv saldo i BBS.</div><a href="{% url deposit %}" class="btn">Sett inn penger</a>
                     </div>
+                </div>
                 {%endif%}
             </section>
 
-            <section id="products" class="row-fluid">
-                <div class="span12">
+            <section id="products" class="row">
+                <div class="col-xs-12">
                     <h2>Kjøper hva?</h2>
                     <ul class="well">
                         {% for product in products %}
@@ -76,17 +89,17 @@
             </section>
         </fieldset>
         <div class="form-actions">
-                <div class="span3 total">
+                <div class="col-xs-3 total">
                     <h2>Totalt: <span class="total_text"></span></h2>
                 </div>
-                <button type="submit" class="btn btn-large btn-primary" name="submit_order">Kjøp</button>
-                <button type="reset" class="btn">Start på nytt</button>
+                <button type="submit" class="btn btn-lg btn-primary" name="submit_order">Kjøp</button>
+                <button type="reset" class="btn btn-default">Start på nytt</button>
         </div>
     </form>
 </section>
 {% endblock %}
 {% block tailinc %}
     <!--<script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>-->
-    <script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
+    <script src="{{ STATIC_URL }}js/tooltip.js"></script>
     <script src="{{ STATIC_URL }}js/register.js"></script>
 {% endblock %}
