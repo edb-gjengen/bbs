@@ -7845,3 +7845,20 @@ body .glyphicon .white {
   display: block;
   width: 100%;
 }
+
+/* line 118, ../sass/screen.scss */
+#footer .credits {
+  text-align: center;
+  margin: 2em;
+  font-size: 10px;
+  color: grey;
+}
+/* line 123, ../sass/screen.scss */
+#footer .credits img {
+  margin-top: 10px;
+  display: inline-block;
+}
+/* line 127, ../sass/screen.scss */
+#footer .credits .love {
+  color: #faafba;
+}

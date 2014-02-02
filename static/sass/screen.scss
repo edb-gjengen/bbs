@@ -115,3 +115,16 @@ body {
     }
 
 }
+#footer .credits {
+    text-align: center;
+    margin: 2em;
+    font-size: 10px;
+    color: grey;
+    img {
+        margin-top: 10px;
+        display: inline-block;
+    }
+    .love {
+        color: #faafba;
+    }
+}

@@ -22,10 +22,12 @@
         {%block content%}
         {%endblock%}
         <div id="footer" class="row">
-            <div class="col-md-12 text-right">
+            <div class="col-md-12">
                 {%block footer %}
-                    <br />
-                    <img src="{{ STATIC_URL }}img/edb_brick.png" alt="EDB" />
+                <div class="credits">
+                    Laget med <span class="love" title="kærlighed">♥</span> av <a href="http://edb.neuf.no/">KAK: EDB</a><br/>
+                     <a href="http://edb.neuf.no/"><img src="{{ STATIC_URL }}img/edb_brick.png" alt="EDB" /></a>
+                </div>
                 {%endblock%}
             </div>
         </div>
@@ -34,6 +36,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap/collapse.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap/dropdown.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap/tooltip.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/app.js"></script>
     {%block tailinc %}
     {%endblock%}
 </body>
