@@ -3,6 +3,14 @@
 {% block title %}Logg inn{% endblock %}
 
 {% block content %}
-Du er logget ut. Vil du <a href="{% url main.views.home %}">logge inn igjen</a>.
-
+<div class="row">
+    <div class="col-md-6">
+        {% if user.is_authenticated %}
+            <p class="alert alert-success">Du er logget ut.</p>
+            <p>Vil du <a href="{% url home %}">logge inn igjen?</a></p>
+        {% else %}
+            <p>Du er allerede logget ut.</p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

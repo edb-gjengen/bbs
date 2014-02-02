@@ -8,33 +8,35 @@
 {% endblock %}
 
 {% block content %}
-    <section class="row">
-        <div class="col-md-4">
-            {% for message in messages %}
-                <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}<a class="close" data-dismiss="alert">×</a></div>
-            {% endfor %}
-        </div>
-    </section>
-    <section class="row">
-        <div class="col-md-5">
-            <h1>Legg til ny bruker</h1>
-            {% if form.errors %}
-                <p>{{ form.errors }}.</p>
-            {% endif %}
+    {% if perms.auth.can_add_user %}
+        <section class="row">
+            <div class="col-md-4">
+                {% for message in messages %}
+                    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}<a class="close" data-dismiss="alert">×</a></div>
+                {% endfor %}
+            </div>
+        </section>
+        <section class="row">
+            <div class="col-md-5">
+                <h1>Legg til ny bruker</h1>
+                {% if form.errors %}
+                    <p>{{ form.errors }}.</p>
+                {% endif %}
 
-            <form method="post" role="form">
-                {% csrf_token %}
+                <form method="post" role="form">
+                    {% csrf_token %}
 
-                <div class="form-group">
-                    <label for="id_first_name">{{ form.first_name.label }}</label>{{ form.first_name|add_class:"form-control"}}
-                    <label for="id_last_name">{{ form.last_name.label }}</label>{{ form.last_name|add_class:"form-control"}}
-                    <label for="id_email">{{ form.email.label }}</label>{{ form.email|add_class:"form-control"}}
-                    <label for="id_facebook_username">{{ form.facebook_username.label }}</label>{{ form.facebook_username|add_class:"form-control"|attr:"placeholder: F.eks simbras"}}
+                    <div class="form-group">
+                        <label for="id_first_name">{{ form.first_name.label }}</label>{{ form.first_name|add_class:"form-control"}}{{ form.first_name.error }}
+                        <label for="id_last_name">{{ form.last_name.label }}</label>{{ form.last_name|add_class:"form-control"}}{{ form.last_name.error }}
+                        <label for="id_email">{{ form.email.label }}</label>{{ form.email|add_class:"form-control"}}{{ form.email.error }}
+                        <label for="id_facebook_username">{{ form.facebook_username.label }}</label>{{ form.facebook_username|add_class:"form-control"|attr:"placeholder: F.eks simbras"}}{{form.facebook_username.error}}
 
-                </div>
-                <input type="submit" value="Legg til" class="btn btn-primary btn-lg" />
-                <a href="{% url register %}" class="btn btn-default" />Tilbake</a>
-            </form>
-        </div>
-    </section>
+                    </div>
+                    <input type="submit" value="Legg til" class="btn btn-primary btn-lg" />
+                    <a href="{% url register %}" class="btn btn-default" />Tilbake</a>
+                </form>
+            </div>
+        </section>
+        {% endif %}
 {% endblock %}

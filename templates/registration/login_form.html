@@ -1,20 +1,16 @@
-{% if form.errors %}
-<p>Brukernavn og passord stemmer ikke overens. Prøv igjen.</p>
-{% endif %}
+{% load widget_tweaks %}
+<div class="form-login">
+    {% if form.errors %}
+    <p class="alert alert-danger">Brukernavn og passord stemmer ikke overens. Prøv igjen.</p>
+    {% endif %}
 
-<form method="post" action="{% url django.contrib.auth.views.login %}" class="bp">
-{% csrf_token %}
-<table>
-<tr>
-    <th><label for="id_username">Brukernavn:</label></th>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <th><label for="id_password">Passord: </label></th>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
-
-<input type="submit" value="Logg inn" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
+    <form method="post" action="{% url django.contrib.auth.views.login %}" class="">
+        {% csrf_token %}
+        <label for="id_username">Brukernavn:</label>
+        {{ form.username|add_class:"form-control" }}
+        <label for="id_password">Passord: </label>
+        {{ form.password|add_class:"form-control" }}<br/>
+        <input type="submit" value="Logg inn" class="btn btn-primary btn-lg"/>
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+</div>

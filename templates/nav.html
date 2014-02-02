@@ -1,5 +1,4 @@
 <nav class="navbar navbar-inverse" role="navigation">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span>
@@ -15,11 +14,22 @@
         <ul class="nav navbar-nav">
             <li class="{% if active = "register" %}active{% endif %}"><a href="/register"><i class="glyphicon glyphicon-home white"></i> Kjøp drikke</a></li>
             <li class="{% if active = "deposit" %}active{% endif %}"><a href="/deposit">Sett inn penger</a></li>
-            <li class="{% if active = "log" %}active{% endif %}"><a href="/log"> Vis logg</a></li>
-            <li class="{% if active = "stats" %}active{% endif %}"><a href="/stats"> Vis statistikk</a></li>
-            {% if request.user.is_superuser %}
-            <li class="{% if active = "create_user" %}active{% endif %}"><a href="{% url create-user %}">Ny bruker</a></li>
-            <li><a href="/admin">Administrasjon</a></li>
+            <li class="{% if active = "log" %}active{% endif %}"><a href="/log"><i class="glyphicon glyphicon-list-alt"></i> Logg</a></li>
+            <li class="{% if active = "stats" %}active{% endif %}"><a href="/stats"><i class="glyphicon glyphicon-stats"></i> Statistikk</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if not user.is_authenticated %}
+            <li><a href="{% url login %}">Logg inn</a></li>
+            {% else %}
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Innstillinger <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li class="{% if active = "create_user" %}active{% endif %}"><a href="{% url create-user %}"><i class="glyphicon glyphicon-plus"></i> Ny bruker</a></li>
+                    {% if request.user.is_superuser %}<li><a href="/admin"><i class="glyphicon glyphicon-cog"></i> Administrasjon</a></li>{% endif %}
+                    <li class="divider"></li>
+                    <li><a href="{% url logout %}"><i class="glyphicon glyphicon-log-out"></i> Logg ut</a></li>
+                </ul>
+            </li>
             {% endif %}
         </ul>
     </div><!-- /.navbar-collapse -->

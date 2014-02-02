@@ -124,6 +124,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'main',
+    'widget_tweaks',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -151,6 +152,3 @@ LOGGING = {
 
 # User profile
 AUTH_PROFILE_MODULE = 'main.UserProfile'
-
-# Gravatar
-GRAVATAR_DEFAULT_IMAGE = 'mm'

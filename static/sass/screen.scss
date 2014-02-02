@@ -6,10 +6,8 @@
 
 body {
 
-    #header {
-        .navbar {
-            margin-bottom: 0;
-        }
+    h2 {
+        margin-top: 0;
     }
 
     #customer {
@@ -79,6 +77,7 @@ body {
             min-width:115px;
             h2 {
                 color: #ffffff;
+                margin: 0.2em 0;
             }
         }
         h2 {
@@ -86,9 +85,6 @@ body {
         }
         input[name=customer_name] {
             display: block;
-        }
-        button {
-            margin-top:10px;
         }
     }
     #log {
@@ -109,4 +105,13 @@ body {
     .glyphicon .white {
         color: white;
     }
+}
+.form-login {
+    max-width: 320px;
+    margin: 4em auto;
+    [type=submit] {
+        display: block;
+        width: 100%;
+    }
+
 }

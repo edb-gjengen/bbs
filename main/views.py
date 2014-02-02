@@ -272,12 +272,11 @@ def create_user(request):
         form = SimpleCreateUserForm(data=request.POST)
         if form.is_valid():
             user = form.save()
-
             messages.success(request, "Hurra! {0} {1} er lagt til".format(user.first_name, user.last_name))
             return redirect('create-user')
 
         else:
-            messages.error(request, '')
+            messages.error(request, 'Feil med skjemaet, se under.')
             form = SimpleCreateUserForm(data=request.POST)
     else:
         form = SimpleCreateUserForm()

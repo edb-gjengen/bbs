@@ -22,7 +22,7 @@
         {%block content%}
         {%endblock%}
         <div id="footer" class="row">
-            <div class="col-xs-12">
+            <div class="col-md-12 text-right">
                 {%block footer %}
                     <br />
                     <img src="{{ STATIC_URL }}img/edb_brick.png" alt="EDB" />
@@ -32,7 +32,8 @@
     </div>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/collapse.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap/collapse.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap/dropdown.js"></script>
     {%block tailinc %}
     {%endblock%}
 </body>
