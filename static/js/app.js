@@ -365,4 +365,30 @@ $(document).ready(function() {
         get_products_realtime_data();
 
     }
+    var input_selector = "#id_facebook_username";
+    /* Facebook username check */
+    $(input_selector).on('keyup', _.debounce(function(event) {
+        var user_id = event.target.value;
+        if(user_id.trim().length === 0) {
+            $(input_selector).parent().removeClass('has-success has-feedback has-error');
+            $(input_selector).parent().find(".form-control-feedback").hide();
+            return;
+        }
+        var pictureUrl= "https://graph.facebook.com/" + user_id + "/picture";
+        $.ajax({
+            url: pictureUrl,
+            statusCode: {
+                200: function() {
+                    $(input_selector).parent().addClass('has-success has-feedback');
+                    $(input_selector).parent().removeClass('has-error');
+                    $(input_selector).parent().find(".form-control-feedback").show().removeClass("glyphicon-remove").addClass("glyphicon-ok");
+                },
+                404: function() {
+                    $(input_selector).parent().addClass('has-error has-feedback');
+                    $(input_selector).parent().removeClass('has-success');
+                    $(input_selector).parent().find(".form-control-feedback").show().removeClass("glyphicon-ok").addClass("glyphicon-remove");
+                }
+            }
+        });
+    }, 400)); // Only every 400ms
 }); 
