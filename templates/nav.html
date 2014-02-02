@@ -18,6 +18,7 @@
             <li class="{% if active = "log" %}active{% endif %}"><a href="/log"> Vis logg</a></li>
             <li class="{% if active = "stats" %}active{% endif %}"><a href="/stats"> Vis statistikk</a></li>
             {% if request.user.is_superuser %}
+            <li class="{% if active = "create_user" %}active{% endif %}"><a href="{% url create-user %}">Ny bruker</a></li>
             <li><a href="/admin">Administrasjon</a></li>
             {% endif %}
         </ul>

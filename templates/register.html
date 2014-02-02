@@ -25,12 +25,12 @@
             <section id="customer">
                 {% if users %}
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-md-12">
                         <h2 title="Sortert etter hvem som kjøpte noe sist.">Hvem kjøper?</h2>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-3">
+                    <div class="col-md-3">
                         <!-- Typeahead customer field -->
                         <input name="customer_name" type="text" id="id_customer_typeahead" value="" data-provide="typeahead" data-source="{{users_js}}" class="form-control" />
                         <!-- Actual customer select field (hidden) -->
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-md-12">
                         <ul class="well">
                         {% for user in users %}<li class="customer{% if user.get_profile.last_purchase_date < half_a_year_ago %} infrequent hidden{% endif %}">
                                 {% if user.get_profile.image %}
@@ -59,7 +59,7 @@
                 </div>
                 {%else%}
                 <div class="row">
-                    <div class="col-xs-3">
+                    <div class="col-md-3">
                         <h2>Hvem kjøper?</h2>
                         <div class="alert alert-error">Ingen har positiv saldo i BBS.</div><a href="{% url deposit %}" class="btn">Sett inn penger</a>
                     </div>
@@ -68,7 +68,7 @@
             </section>
 
             <section id="products" class="row">
-                <div class="col-xs-12">
+                <div class="col-md-12">
                     <h2>Kjøper hva?</h2>
                     <ul class="well">
                         {% for product in products %}

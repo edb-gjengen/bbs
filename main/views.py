@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.forms.formsets import formset_factory
 from django.contrib import messages
@@ -267,3 +267,19 @@ def users_format_js(users):
     users_js = u"[{0}]".format(u",".join(users_js))
     return users_js
 
+def create_user(request):
+    if request.method == "POST":
+        form = SimpleCreateUserForm(data=request.POST)
+        if form.is_valid():
+            user = form.save()
+
+            messages.success(request, "Hurra! {0} {1} er lagt til".format(user.first_name, user.last_name))
+            return redirect('create-user')
+
+        else:
+            messages.error(request, '')
+            form = SimpleCreateUserForm(data=request.POST)
+    else:
+        form = SimpleCreateUserForm()
+
+    return render(request, 'registration/create_user.html', locals())

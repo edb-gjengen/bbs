@@ -32,7 +32,7 @@ $(document).ready(function() {
     /* Customer search */
     //$('.typeahead').typeahead();
     $('#id_customer_typeahead').keyup(function(event) {
-        filter_customers(event.srcElement.value);
+        filter_customers(event.target.value);
     });
     /* Customer selection */
     $("li.customer").click( function() {
