@@ -15,7 +15,6 @@ body {
             @include inline-block-list;
 
             li {
-                padding-right: 10px;
                 padding-top: 10px;
                 text-align: center;
                 width: 79px;
@@ -127,4 +126,7 @@ body {
     .love {
         color: #faafba;
     }
+}
+.alert-error {
+    @extend .alert-danger;
 }

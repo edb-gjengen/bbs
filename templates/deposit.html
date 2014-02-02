@@ -35,7 +35,7 @@
                 <div class="col-md-12">
                     <ul class="well">
                         {% for user in users %}
-                        <li class="customer">
+                        <li class="customer">{% spaceless %}
                         {% if user.get_profile.image %}
                             <img class="profile" src="{{ user.get_profile.image }}" alt="Profile picture"/><br />
                         {% else %}
@@ -44,7 +44,7 @@
                         <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span><br />
                         <span class="balance">{{ user.get_profile.balance }}</span>
                         <span class="id" style="display:none;">{{ user.id }}</span>
-                        </li>
+                        {% endspaceless %}</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -72,8 +72,3 @@
     </form>
 </section>
 {% endblock %}
-{% block tailinc %}
-    <!--<script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>-->
-    <script src="{{ STATIC_URL }}js/deposit.js"></script>
-{% endblock %}
-

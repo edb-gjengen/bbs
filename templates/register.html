@@ -41,7 +41,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="well">
-                        {% for user in users %}<li class="customer{% if user.get_profile.last_purchase_date < half_a_year_ago %} infrequent hidden{% endif %}">
+                            {% for user in users %}<li class="customer{% if user.get_profile.last_purchase_date < half_a_year_ago %} infrequent hidden{% endif %}">{% spaceless %}
                                 {% if user.get_profile.image %}
                                     <img class="profile" src="{{ user.get_profile.image }}" alt="Profile picture" /><br />
                                 {% else %}
@@ -50,7 +50,7 @@
                                 <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span><br />
                                 <span class="balance">{{ user.get_profile.balance }}</span>
                                 <span class="id" style="display:none;">{{ user.id }}</span>
-                                </li>{% endfor %}
+                                {% endspaceless %}</li>{% endfor %}
                         </ul>
                         <div class="users-description pull-right">
                             <small>Viser: De med minst <strong>{{ cheapest_product_price }}</strong> i saldo<span class="infrequent-users"> og mer enn ett kjøp siden <strong>{{ half_a_year_ago }}</strong></span>. <a href="#" class="toggle-infrequent-users">Vis alle</a></small>
@@ -97,9 +97,4 @@
         </div>
     </form>
 </section>
-{% endblock %}
-{% block tailinc %}
-    <!--<script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>-->
-    <script src="{{ STATIC_URL }}js/bootstrap/tooltip.js"></script>
-    <script src="{{ STATIC_URL }}js/register.js"></script>
 {% endblock %}
