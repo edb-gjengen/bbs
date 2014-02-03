@@ -371,7 +371,7 @@ $(document).ready(function() {
         var user_id = event.target.value;
         if(user_id.trim().length === 0) {
             $(input_selector).parent().removeClass('has-success has-feedback has-error');
-            $(input_selector).parent().find(".form-control-feedback").hide();
+            $(input_selector).parent().find(".facebook-image img").hide();
             return;
         }
         var pictureUrl= "https://graph.facebook.com/" + user_id + "/picture";
@@ -381,14 +381,15 @@ $(document).ready(function() {
                 200: function() {
                     $(input_selector).parent().addClass('has-success has-feedback');
                     $(input_selector).parent().removeClass('has-error');
-                    $(input_selector).parent().find(".form-control-feedback").show().removeClass("glyphicon-remove").addClass("glyphicon-ok");
+                    $(input_selector).parent().find(".facebook-image").show().html('<img src='+pictureUrl+' />')
+                    
                 },
                 404: function() {
                     $(input_selector).parent().addClass('has-error has-feedback');
                     $(input_selector).parent().removeClass('has-success');
-                    $(input_selector).parent().find(".form-control-feedback").show().removeClass("glyphicon-ok").addClass("glyphicon-remove");
+                    $(input_selector).parent().find(".facebook-image img").hide();
                 }
             }
         });
-    }, 400)); // Only every 400ms
+    }, 300)); // Only every 300ms
 }); 

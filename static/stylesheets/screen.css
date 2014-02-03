@@ -7861,3 +7861,8 @@ body .glyphicon .white {
 #footer .credits .love {
   color: #faafba;
 }
+
+/* line 134, ../sass/screen.scss */
+.facebook-image img {
+  height: 32px;
+}
