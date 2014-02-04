@@ -371,23 +371,25 @@ $(document).ready(function() {
         var user_id = event.target.value;
         if(user_id.trim().length === 0) {
             $(input_selector).parent().removeClass('has-success has-feedback has-error');
-            $(input_selector).parent().find(".facebook-image img").hide();
+            $(input_selector).parent().find(".facebook-image img").attr('src', no_picture_url);
             return;
         }
-        var pictureUrl= "https://graph.facebook.com/" + user_id + "/picture";
+        var picture_url = "https://graph.facebook.com/" + user_id + "/picture";
+        var static_url = $("meta[name=x-django-static-url]").attr('content');
+        var no_picture_url = static_url +"img/unknown_person.png";
         $.ajax({
-            url: pictureUrl,
+            url: picture_url,
             statusCode: {
                 200: function() {
                     $(input_selector).parent().addClass('has-success has-feedback');
                     $(input_selector).parent().removeClass('has-error');
-                    $(input_selector).parent().find(".facebook-image").show().html('<img src='+pictureUrl+' />')
+                    $(input_selector).parent().find(".facebook-image img").attr('src', picture_url);
                     
                 },
                 404: function() {
                     $(input_selector).parent().addClass('has-error has-feedback');
                     $(input_selector).parent().removeClass('has-success');
-                    $(input_selector).parent().find(".facebook-image img").hide();
+                    $(input_selector).parent().find(".facebook-image img").attr('src', no_picture_url);
                 }
             }
         });

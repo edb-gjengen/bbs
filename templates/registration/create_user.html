@@ -37,7 +37,7 @@
                         <label for="id_facebook_username">{{ form.facebook_username.label }}</label>
                         <div class="input-group">
                             {{ form.facebook_username|add_class:"form-control input-lg"|attr:"placeholder: F.eks simbras"}}{{form.facebook_username.error}}
-                            <span class="input-group-addon facebook-image"></span>
+                            <span class="input-group-addon facebook-image"><img src="{{ STATIC_URL}}img/unknown_person.png" /></span>
                         </div>
 
                     </div>
