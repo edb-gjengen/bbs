@@ -5,12 +5,8 @@
 {% block content %}
 <div class="row">
     <div class="col-md-6">
-        {% if user.is_authenticated %}
-            <p class="alert alert-success">Du er logget ut.</p>
-            <p>Vil du <a href="{% url home %}">logge inn igjen?</a></p>
-        {% else %}
-            <p>Du er allerede logget ut.</p>
-        {% endif %}
+        <p class="alert alert-success">Du er logget ut.</p>
+        <p>Vil du <a href="{% url home %}">logge inn igjen?</a></p>
     </div>
 </div>
 {% endblock %}

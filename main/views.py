@@ -5,6 +5,7 @@ from itertools import groupby
 import json
 import time
 
+from django.conf import settings
 from django.contrib.auth import login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
@@ -17,8 +18,9 @@ from django.contrib import messages
 from django.db.models import Count, Sum, Max, Min
 
 from models import *
-
 from forms import *
+
+import utils
 
 def home(request):
     if request.method == "POST":
@@ -55,8 +57,9 @@ def register(request):
             # can he afford it?
             profile = order.customer.get_profile()
             if order_sum > profile.balance:
-                messages.error(request, '{0} har ikke råd, mangler {1} kr.'.format(
-                    order.customer,
+                messages.error(request, '{0} {1} har ikke råd, mangler {2} kr.'.format(
+                    order.customer.first_name,
+                    order.customer.last_name,
                     int(order_sum - profile.balance)))
                 return HttpResponseRedirect( reverse('main.views.register') )
             # empty order?
@@ -81,7 +84,11 @@ def register(request):
 
                     orderlines.append(str(ol['amount']) + " " + str(product))
                 
-            messages.success(request, '{0} kjøpte {1}.'.format(order.customer, ", ".join(orderlines)))
+            messages.success(request, '{0} {1} kjøpte {2}.'.format(
+                order.customer.first_name,
+                order.customer.last_name,
+                ", ".join(orderlines)
+            ))
             return HttpResponseRedirect( reverse('main.views.register') )
         else:
             # TODO specify error(s)
@@ -96,17 +103,33 @@ def register(request):
 def deposit(request):
     users = User.objects.all().order_by('first_name','last_name')
     users_js = users_format_js(users)
+    allowed_users = utils.users_with_perm('add_transaction')
+
+    limit_deposits = settings.BBS_LIMIT_DEPOSITS
 
     if request.method == "POST":
         form = DepositForm(request.POST)
         if form.is_valid():
+            amount = form.cleaned_data['amount']
+            user = form.cleaned_data['user']
+            if amount + user.get_profile().balance > settings.BBS_SALDO_MAX:
+                messages.error(request, '{0} {1} kan ikke sette inn {2} kr, det overskrider maks saldo ({3} kr) med {4} kr'.format(
+                    user.first_name,
+                    user.last_name,
+                    amount,
+                    settings.BBS_SALDO_MAX,
+                    amount + user.get_profile().balance - settings.BBS_SALDO_MAX
+                ))
+                return HttpResponseRedirect( reverse('main.views.deposit') )
+
             transaction = form.save()
             profile = transaction.user.get_profile()
             profile.balance += transaction.amount
             profile.save()
 
-            messages.success(request, '{0} satte inn {1} kr. Ny saldo er {2}'.format(
-                transaction.user,
+            messages.success(request, '{0} {1} satte inn {2} kr. Ny saldo er {3}'.format(
+                transaction.user.first_name,
+                transaction.user.last_name,
                 transaction.amount,
                 profile.balance))
             return HttpResponseRedirect( reverse('main.views.deposit') )

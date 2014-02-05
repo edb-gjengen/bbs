@@ -15,6 +15,20 @@
         </div>
     </section>
     {% endif %}
+    {% if not perms.main.can_add_transaction and limit_deposits %}
+    <section class="row">
+        <div class="col-xs-4">
+            <p class="alert alert-warning">Du har ikke tilgang til å sette inn penger.</p>
+            <p>Spør en av disse om de kan hjelpe deg:</p>
+            <ul>
+            {% for u in allowed_users %}
+                <li style="padding-bottom: 8px;"><img src="{{u.get_profile.image }}" />{{u.first_name }} {{u.last_name }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </section>
+
+    {% else %}
     <form id="order" method="post" class="form-stacked" autocomplete="off">
         {% csrf_token %}
         <section id="customer">
@@ -70,5 +84,6 @@
             </div>
         </div>
     </form>
+    {% endif %}
 </section>
 {% endblock %}
