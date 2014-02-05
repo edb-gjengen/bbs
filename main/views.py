@@ -108,7 +108,7 @@ def deposit(request):
     # FIXME: dont need this
     try:
         limit_deposists = settings.BBS_LIMIT_DEPOSITS
-    except e:
+    except:
         pass
 
     if request.method == "POST":
