@@ -105,7 +105,11 @@ def deposit(request):
     users_js = users_format_js(users)
     allowed_users = utils.users_with_perm('add_transaction')
 
-    limit_deposits = settings.BBS_LIMIT_DEPOSITS
+    # FIXME: dont need this
+    try:
+        limit_deposists = settings.BBS_LIMIT_DEPOSITS
+    except e:
+        pass
 
     if request.method == "POST":
         form = DepositForm(request.POST)
