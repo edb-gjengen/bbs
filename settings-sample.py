@@ -153,4 +153,7 @@ LOGGING = {
 # User profile
 AUTH_PROFILE_MODULE = 'main.UserProfile'
 
-LOGIN_REDIRECT_URL = '/register/'
+LOGIN_REDIRECT_URL = '/'
+
+SESSION_COOKIE_AGE = 900 # 15 minutes
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
