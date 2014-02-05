@@ -41,7 +41,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="well">
-                            {% for user in users %}<li class="customer{% if user.get_profile.last_purchase_date < half_a_year_ago %} infrequent hidden{% endif %}">{% spaceless %}
+                            {% for user in users %}<li class="customer{% if user.get_profile.last_purchase_date < half_a_year_ago and not user.get_profile.last_purchase == None %} infrequent hidden{% endif %}">{% spaceless %}
                                 {% if user.get_profile.image %}
                                     <img class="profile" src="{{ user.get_profile.image }}" alt="Profile picture" /><br />
                                 {% else %}
