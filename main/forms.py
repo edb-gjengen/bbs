@@ -35,6 +35,8 @@ class SimpleCreateUserForm(forms.Form):
     facebook_username = forms.CharField(required=False, label="Facebook-brukernavn")
 
     def _get_facebook_url(self, facebook_username):
+        if facebook_username == "":
+            return ""
         return "https://graph.facebook.com/{0}/picture".format(facebook_username)
 
     def save(self, commit=True):   
