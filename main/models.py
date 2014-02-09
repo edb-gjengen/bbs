@@ -27,7 +27,7 @@ class Order(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
-		return "{0}: {1} kr".format(self.customer, self.order_sum)
+		return u"{0}: {1} kr".format(self.customer, self.order_sum)
 
 class OrderLine(models.Model):
 	order = models.ForeignKey(Order)
@@ -47,7 +47,7 @@ class Transaction(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
-	    return "{0}: {1}: {2}".format(self.id, self.user, self.amount)
+	    return u"{0}: {1}: {2}".format(self.id, self.user, self.amount)
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
@@ -67,7 +67,7 @@ class UserProfile(models.Model):
                 return datetime.min
 
 	def __unicode__(self):
-		return "{0}".format(self.user)
+		return u"{0}".format(self.user)
 
 # Create a new UserProfile object when we create a new User.
 @receiver(post_save, sender=User, dispatch_uid='randomz')

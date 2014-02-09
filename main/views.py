@@ -57,14 +57,14 @@ def register(request):
             # can he afford it?
             profile = order.customer.get_profile()
             if order_sum > profile.balance:
-                messages.error(request, '{0} {1} har ikke råd, mangler {2} kr.'.format(
+                messages.error(request, u'{0} {1} har ikke råd, mangler {2} kr.'.format(
                     order.customer.first_name,
                     order.customer.last_name,
                     int(order_sum - profile.balance)))
                 return HttpResponseRedirect( reverse('main.views.register') )
             # empty order?
             if order_sum == 0:
-                messages.error(request, 'Du har ikke valgt hva du skal kjøpe...')
+                messages.error(request, u'Du har ikke valgt hva du skal kjøpe...')
                 return HttpResponseRedirect( reverse('main.views.register') )
             order.order_sum = order_sum
             order.save()
@@ -84,7 +84,7 @@ def register(request):
 
                     orderlines.append(str(ol['amount']) + " " + str(product))
                 
-            messages.success(request, '{0} {1} kjøpte {2}.'.format(
+            messages.success(request, u'{0} {1} kjøpte {2}.'.format(
                 order.customer.first_name,
                 order.customer.last_name,
                 ", ".join(orderlines)
@@ -117,7 +117,7 @@ def deposit(request):
             amount = form.cleaned_data['amount']
             user = form.cleaned_data['user']
             if amount + user.get_profile().balance > settings.BBS_SALDO_MAX:
-                messages.error(request, '{0} {1} kan ikke sette inn {2} kr, det overskrider maks saldo ({3} kr) med {4} kr'.format(
+                messages.error(request, u'{0} {1} kan ikke sette inn {2} kr, det overskrider maks saldo ({3} kr) med {4} kr'.format(
                     user.first_name,
                     user.last_name,
                     amount,
@@ -131,14 +131,14 @@ def deposit(request):
             profile.balance += transaction.amount
             profile.save()
 
-            messages.success(request, '{0} {1} satte inn {2} kr. Ny saldo er {3}'.format(
+            messages.success(request, u'{0} {1} satte inn {2} kr. Ny saldo er {3}'.format(
                 transaction.user.first_name,
                 transaction.user.last_name,
                 transaction.amount,
                 profile.balance))
             return HttpResponseRedirect( reverse('main.views.deposit') )
         else:
-            messages.error(request, 'Skjemaet er ikke gyldig.')
+            messages.error(request, u'Skjemaet er ikke gyldig.')
             form = DepositForm(request.POST)
     else:
         form = DepositForm()
@@ -299,11 +299,11 @@ def create_user(request):
         form = SimpleCreateUserForm(data=request.POST)
         if form.is_valid():
             user = form.save()
-            messages.success(request, "Hurra! {0} {1} er lagt til".format(user.first_name, user.last_name))
+            messages.success(request, u"Hurra! {0} {1} er lagt til".format(user.first_name, user.last_name))
             return redirect('create-user')
 
         else:
-            messages.error(request, 'Feil med skjemaet, se under.')
+            messages.error(request, u'Feil med skjemaet, se under.')
             form = SimpleCreateUserForm(data=request.POST)
     else:
         form = SimpleCreateUserForm()
