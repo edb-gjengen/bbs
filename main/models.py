@@ -52,7 +52,8 @@ class Transaction(models.Model):
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	balance = models.FloatField(default=0.0)
-	image = models.ImageField(upload_to='users', blank=True)
+	#image = models.ImageField(upload_to='users', blank=True)
+	image = models.URLField(blank=True)
 
         def last_purchase(self):
             if len(self.user.order_set.all()) == 0:
