@@ -116,7 +116,7 @@ def deposit(request):
         if form.is_valid():
             amount = form.cleaned_data['amount']
             user = form.cleaned_data['user']
-            if amount + user.get_profile().balance > settings.BBS_SALDO_MAX or amount + user.get_profile().balance != 1337:
+            if amount + user.get_profile().balance > settings.BBS_SALDO_MAX and amount + user.get_profile().balance != 1337:
                 messages.error(request, u'{0} {1} kan ikke sette inn {2} kr, det overskrider maks saldo ({3} kr) med {4} kr'.format(
                     user.first_name,
                     user.last_name,
