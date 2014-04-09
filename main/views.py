@@ -82,7 +82,7 @@ def register(request):
                         amount=ol['amount'],
                         unit_price=ol['unit_price'])
 
-                    orderlines.append(str(ol['amount']) + " " + str(product))
+                    orderlines.append(u"{0} {1}".format(ol['amount'], product))
                 
             messages.success(request, u'{0} {1} kjøpte {2}.'.format(
                 order.customer.first_name,
