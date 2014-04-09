@@ -87,12 +87,12 @@ def register(request):
             messages.success(request, u'{0} {1} kjøpte {2}.'.format(
                 order.customer.first_name,
                 order.customer.last_name,
-                ", ".join(orderlines)
+                u", ".join(orderlines)
             ))
             return HttpResponseRedirect( reverse('main.views.register') )
         else:
             # TODO specify error(s)
-            messages.error(request, 'Skjemaet er ikke gyldig.')
+            messages.error(request, u'Skjemaet er ikke gyldig.')
             orderform = OrderForm(request.POST)
             formset = OrderLineFormSet(request.POST)
     else:
