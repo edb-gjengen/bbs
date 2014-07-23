@@ -378,8 +378,6 @@ def report(request):
             "transactions_units": sum(map(lambda x: x['transactions__amount'], group))
         }})
 
-    import pprint
-    pprint.pprint(inventory_products)
     itrans = InventoryTransaction.objects.filter(created__range=[start_time, end_time])
     inv_in = sum(map(lambda x: x[1].get('transactions_sum',0), inventory_products.items()))
 
@@ -408,7 +406,7 @@ def report(request):
     for p in inventory_products.items():
             p[1]['value_diff'] = p[1].get('transactions_sum', 0) - p[1].get('orderlines_sum', 0)
             p[1]['units_diff'] = p[1].get('transactions_units', 0) - p[1].get('orderlines_units', 0)
-    pprint.pprint(inventory_products)
+
     inv_out = sum(map(lambda x: x[1].get('orderlines_sum',0), inventory_products.items()))
 
     inv_diff = inv_in - inv_out
