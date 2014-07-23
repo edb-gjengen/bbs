@@ -1,25 +1,24 @@
 # coding: utf-8
-from datetime import datetime
 from datetime import timedelta
+from datetime import datetime
 from itertools import groupby
 import json
 import time
 
 from django.conf import settings
-from django.contrib.auth import login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout as auth_logout
+from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.db.models import Count, Sum, Max, Min
+from django.forms.formsets import formset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render, get_object_or_404, redirect
 from django.template import RequestContext
-from django.forms.formsets import formset_factory
-from django.contrib import messages
-from django.db.models import Count, Sum, Max, Min
 
-from models import *
 from forms import *
-
+from models import *
 import utils
 
 def home(request):
@@ -81,6 +80,8 @@ def register(request):
                         product=product,
                         amount=ol['amount'],
                         unit_price=ol['unit_price'])
+                    product.inventory_amount -= ol['amount']
+                    product.save()
 
                     orderlines.append(u"{0} {1}".format(ol['amount'], product))
                 
@@ -173,6 +174,9 @@ def stats(request):
 def serialize_product(product):
     f_product = {}
     for attr in Product._meta.get_all_field_names():
+        if attr == "transactions" or attr == "orderlines":
+            continue
+
         if hasattr(product, attr) and product.__getattribute__(attr):
             if type(product.__getattribute__(attr)) is datetime:
                 f_product[attr] = str(product.__getattribute__(attr))
@@ -309,3 +313,122 @@ def create_user(request):
         form = SimpleCreateUserForm()
 
     return render(request, 'registration/create_user.html', locals())
+
+def inventory(request):
+    products = Product.objects.all().order_by('-active', 'inventory_amount', 'name')
+    transactions = InventoryTransaction.objects.all().order_by('-created')
+
+    inventory_value = sum(map(lambda x: x[0] * x[1], Product.objects.filter(active=True).values_list('inventory_amount', 'sale_price_int')))
+    num_products = sum(Product.objects.filter(active=True).values_list('inventory_amount', flat=True))
+
+    return render(request, 'inventory.html', locals())
+
+def inventory_add(request):
+    if request.method == "POST":
+        form = InventoryTransactionForm(data=request.POST)
+        if form.is_valid():
+            itrans = form.save(commit=False)
+            # Add amount and user, then save
+            itrans.product.inventory_amount += itrans.amount 
+            itrans.user = request.user
+            itrans.product.save()
+            itrans.save()
+            messages.success(request, u"Satt inn {0} stk {1}.".format(itrans.amount, itrans.product))
+            return redirect('inventory-add')
+
+        else:
+            messages.error(request, u'Feil med skjemaet, se under.')
+            form = InventoryTransactionForm(data=request.POST)
+    else:
+        form = InventoryTransactionForm()
+
+    return render(request, 'inventory_add.html', locals())
+
+def report(request):
+    datetime_now = datetime.now()
+    start_time = datetime.now() - timedelta(days=30)
+    start_time = start_time.replace(hour=0, minute=0, second=0, microsecond=0) # start of day, 1 month
+    end_time = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999) # end of day
+
+    if request.GET.get('start_time', False) or request.GET.get('end_time', False):
+        form = DateRangeForm(request.GET)
+        if form.is_valid():
+            start_time = form.cleaned_data['start_time']
+            end_time = form.cleaned_data['end_time'].replace(hour=23, minute=59, second=59, microsecond=999) # end of day
+
+    else: 
+        form = DateRangeForm(initial={
+            'start_time': start_time.strftime("%Y-%m-%d"),
+            'end_time': end_time.strftime("%Y-%m-%d")
+        })
+
+    # Inventory
+    products = Product.objects.filter(transactions__created__range=[start_time, end_time]).values('name', 'transactions__unit_price','transactions__amount').order_by('name')
+    # group by name and sum
+    inventory_products = {}
+    for k, g in groupby(products, lambda x: x['name']):
+        group = []
+        for el in g:
+            el['transactions__price'] = el['transactions__amount'] * el['transactions__unit_price']
+            group.append(el)
+        inventory_products.update({ k: {
+            'name': k,
+            "transactions": group,
+            "transactions_sum": sum(map(lambda x: x['transactions__price'], group)),
+            "transactions_units": sum(map(lambda x: x['transactions__amount'], group))
+        }})
+
+    import pprint
+    pprint.pprint(inventory_products)
+    itrans = InventoryTransaction.objects.filter(created__range=[start_time, end_time])
+    inv_in = sum(map(lambda x: x[1].get('transactions_sum',0), inventory_products.items()))
+
+
+    # out 
+    out_products = Product.objects.filter(orderlines__order__created__range=[start_time, end_time]).values('name', 'orderlines__unit_price','orderlines__amount').order_by('name')
+    # group by name and sum
+    for k, g in groupby(out_products, lambda x: x['name']):
+        group = []
+        for el in g:
+            el['orderlines__price'] = el['orderlines__amount'] * el['orderlines__unit_price']
+            group.append(el)
+
+        product = {
+            'name': k,
+            "orderlines": group,
+            "orderlines_sum": sum(map(lambda x: x['orderlines__price'], group)),
+            "orderlines_units": sum(map(lambda x: x['orderlines__amount'], group))
+        }
+        if k in inventory_products:
+            # add diff
+            inventory_products[k].update(product)
+        else:
+            inventory_products.update({k: product})
+
+    for p in inventory_products.items():
+            p[1]['value_diff'] = p[1].get('transactions_sum', 0) - p[1].get('orderlines_sum', 0)
+            p[1]['units_diff'] = p[1].get('transactions_units', 0) - p[1].get('orderlines_units', 0)
+    pprint.pprint(inventory_products)
+    inv_out = sum(map(lambda x: x[1].get('orderlines_sum',0), inventory_products.items()))
+
+    inv_diff = inv_in - inv_out
+    
+    # Deposits and sales
+    saldo_profiles = sum(UserProfile.objects.all().values_list('balance', flat=True))
+    deposits = sum(Transaction.objects.all().values_list('amount', flat=True))
+    purchases = sum(Order.objects.all().values_list('order_sum', flat=True))
+    saldo = deposits - purchases
+
+    deposits_start = sum(Transaction.objects.filter(created__lt=start_time).values_list('amount', flat=True))
+    purchases_start = sum(Order.objects.filter(created__lt=start_time).values_list('order_sum', flat=True))
+    saldo_start = deposits_start - purchases_start
+
+    deposits_end = sum(Transaction.objects.filter(created__lt=end_time).values_list('amount', flat=True))
+    purchases_end = sum(Order.objects.filter(created__lt=end_time).values_list('order_sum', flat=True))
+    saldo_end = deposits_end - purchases_end
+
+    deposits_diff = deposits_end - deposits_start
+    purchases_diff = purchases_end - purchases_start
+    saldo_diff = saldo_end - saldo_start
+
+    return render(request, 'report.html', locals())

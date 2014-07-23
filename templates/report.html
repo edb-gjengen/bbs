@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+{% block header %}
+        {% include "nav.html" with active="inventory" %}
+{% endblock %}
+
+{% block content %}
+<section id="inventory-report" class="row">
+    <div class="col-md-7">
+        <h2>Varerapport</h2>
+        <form class="inventory-report-form">
+            {{ form|bootstrap_horizontal }} ({{ start_time|timesince:end_time}})
+            <button type="submit" class="btn btn-default">Oppdater</button>
+        </form>
+        <h2>Beholdning</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Navn</th>
+                    <th>Sum verdi (innkjøp)</th>
+                    <th>Sum verdi (salg)</th>
+                    <th>Endring verdi</th>
+                    <th>Enheter (innkjøp)</th>
+                    <th>Enheter (salg)</th>
+                    <th>Endring enheter</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for name,p in inventory_products.items %}
+            <tr>
+                <td>{{name}}</td>
+                <td>{{p.transactions_sum|default:"0"}} kr</td>
+                <td>{{p.orderlines_sum|default:"0"}} kr</td>
+                <td class="{% if p.value_diff > 0 %}positive{% elif p.value_diff < 0 %}negative{% endif %}">{% if p.value_diff > 0 %}<i class="glyphicon glyphicon-arrow-up"></i> {% elif p.value_diff < 0 %}<i class="glyphicon glyphicon-arrow-down"></i> {% endif %}{{ p.value_diff }}</td>
+
+                <td>{{p.transactions_units|default:"0"}} stk</td>
+                <td>{{p.orderlines_units|default:"0"}} stk</td>
+                <td class="{% if p.units_diff > 0 %}positive{% elif p.units_diff < 0 %}negative{% endif %}">{% if p.units_diff > 0 %}<i class="glyphicon glyphicon-arrow-up"></i> {% elif p.units_diff < 0 %}<i class="glyphicon glyphicon-arrow-down"></i> {% endif %}{{ p.units_diff }}</td>
+
+            </tr>
+            {% endfor %}
+            <tr>
+                <td><strong>Totalt</strong></td>
+                <td>{{ inv_in }} kr</td>
+                <td>{{ inv_out }} kr</td>
+                <td class="{% if inv_diff > 0 %}positive{% elif inv_diff < 0 %}negative{% endif %}">{% if inv_diff > 0 %}<i class="glyphicon glyphicon-arrow-up"></i> {% elif inv_diff < 0 %}<i class="glyphicon glyphicon-arrow-down"></i> {% endif %}{{ inv_diff }}</td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+        </ul>
+        <h2>Innskudd</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Dato</th>
+                    <th>Saldo</th>
+                    <th>Innskudd</th>
+                    <th>Kjøp</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Fra</td>
+                <td>{{ start_time|date:"Y-m-d" }}</td>
+                <td>{{ saldo_start }}</td>
+                <td>{{ deposits_start }}</td>
+                <td>{{ purchases_start }}</td>
+            </tr>
+            <tr>
+                <td>Til</td>
+                <td>{{ end_time|date:"Y-m-d" }}</td>
+                <td>{{ saldo_end }}</td>
+                <td>{{ deposits_end }}</td>
+                <td>{{ purchases_end }}</td>
+            </tr>
+            <tr>
+                <td><strong>Endring</strong></td>
+                <td>Siste {{ start_time|timesince:end_time}}</td>
+                <td class="{% if saldo_diff > 0 %}positive{% elif saldo_diff < 0 %}negative{% endif %}">{% if saldo_diff > 0 %}<i class="glyphicon glyphicon-arrow-up"></i> {% elif saldo_diff < 0 %}<i class="glyphicon glyphicon-arrow-down"></i> {% endif %}{{ saldo_diff }}</td>
+                <td class="{% if deposits_diff > 0 %}positive{% elif deposits_diff < 0 %}negative{% endif %}">{% if deposits_diff > 0 %}<i class="glyphicon glyphicon-arrow-up"></i> {% elif deposits_diff < 0 %}<i class="glyphicon glyphicon-arrow-down"></i> {% endif %}{{ deposits_diff }}</td>
+                <td class="{% if purchases_diff > 0 %}positive{% elif purchases_diff < 0 %}negative{% endif %}">{% if purchases_diff > 0 %}<i class="glyphicon glyphicon-arrow-up"></i> {% elif purchases_diff < 0 %}<i class="glyphicon glyphicon-arrow-down"></i> {% endif %}{{ purchases_diff }}</td>
+            </tr>
+            {% if end_time|date:"Y-m-d" != datetime_now|date:"Y-m-d" %}
+            <tr>
+                <td>I dag</td>
+                <td>{% now "Y-m-d" %}</td>
+                <td>{{ saldo }} (innskudd - kjøp) / {{ saldo_profiles }} kr (profil)</td>
+                <td>{{ deposits }}</td>
+                <td>{{ purchases }}</td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

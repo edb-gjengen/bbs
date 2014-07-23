@@ -3,6 +3,7 @@
 
 @import "variables";
 @import "bootstrap";
+@import "datepicker";
 
 body {
 
@@ -97,6 +98,45 @@ body {
             .amount {
                 font-size: 2em;
                 font-weight: bold;
+            }
+        }
+    }
+    #inventory {
+        tr {
+            &.info {
+                border-left: 8px solid #d9edf7;
+            }
+            &.warning {
+                border-left: 8px solid #da7878;
+
+                .product-amount {
+                    font-weight: bold;
+                }
+            }
+            &.success {
+                border-left: 8px solid darken(#dff0d8, 10%);
+            }
+            > td {
+                background-color: inherit; 
+            }
+            &:nth-child(odd) td {
+                background-color: #f9f9f9;
+            }
+            &.inactive {
+                color: #888;
+            }
+        }
+    }
+    #inventory-report {
+        .form-control {
+            width: auto;
+        }
+        table {
+            .positive {
+                color: #468847;
+            }
+            .negative {
+                color: #da7878;
             }
         }
     }

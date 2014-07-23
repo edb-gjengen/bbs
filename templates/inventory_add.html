@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load bootstrap %}
+
+{% block title %}Legg til nye varer {% endblock %}
+
+{% block header %}
+        {% include "nav.html" with active="inventory_add" %}
+{% endblock %}
+
+{% block content %}
+    {% if perms.auth.can_add_inventory_transaction %}
+        <section class="row">
+            <div class="col-md-4">
+                {% for message in messages %}
+                    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}<a class="close" data-dismiss="alert">×</a></div>
+                {% endfor %}
+            </div>
+        </section>
+        <section class="row">
+            <div class="col-md-5">
+                <h1>Legg til nye varer</h1>
+                {% if form.non_field_errors %}
+                    <p>{{ form.non_field_errors}}.</p>
+                {% endif %}
+
+                <form method="post" role="form">
+                    {% csrf_token %}
+                    {{ form|bootstrap }}
+
+                    <input type="submit" value="Legg til" class="btn btn-primary btn-lg" />
+                    <a href="{% url 'inventory' %}" class="btn btn-default" />Tilbake</a>
+                </form>
+            </div>
+        </section>
+        {% endif %}
+{% endblock %}

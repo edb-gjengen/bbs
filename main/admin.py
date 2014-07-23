@@ -5,6 +5,7 @@ class ProductAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Product, ProductAdmin)
+admin.site.register(InventoryTransaction)
 admin.site.register(Order)
 admin.site.register(OrderLine)
 admin.site.register(Transaction)

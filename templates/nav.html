@@ -19,15 +19,17 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
             {% if not user.is_authenticated %}
-            <li><a href="{% url login %}">Logg inn</a></li>
+            <li><a href="{% url 'login' %}">Logg inn</a></li>
             {% else %}
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Innstillinger <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li class="{% if active = "create_user" %}active{% endif %}"><a href="{% url create-user %}"><i class="glyphicon glyphicon-plus"></i> Ny bruker</a></li>
+                    <li class="{% if active = "create_user" %}active{% endif %}"><a href="{% url 'create-user' %}"><i class="glyphicon glyphicon-plus"></i> Ny bruker</a></li>
                     {% if request.user.is_superuser %}<li><a href="/admin"><i class="glyphicon glyphicon-cog"></i> Administrasjon</a></li>{% endif %}
+                    {% if request.user.is_superuser %}<li><a href="{% url 'inventory' %}"><i class="glyphicon glyphicon-briefcase"></i> Varebeholdning</a></li>{% endif %}
+                    {% if request.user.is_superuser %}<li><a href="{% url 'report' %}"><i class="glyphicon glyphicon-briefcase"></i> Rapport</a></li>{% endif %}
                     <li class="divider"></li>
-                    <li><a href="{% url logout %}"><i class="glyphicon glyphicon-log-out"></i> Logg ut</a></li>
+                    <li><a href="{% url 'logout' %}"><i class="glyphicon glyphicon-log-out"></i> Logg ut</a></li>
                 </ul>
             </li>
             {% endif %}

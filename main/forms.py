@@ -53,3 +53,20 @@ class SimpleCreateUserForm(forms.Form):
             profile.save()
 
         return user
+
+class InventoryTransactionForm(forms.ModelForm):
+    unit_price = forms.FloatField(required=True, localize=True)
+
+    def __init__(self, *args, **kwargs):
+        # Only show active products
+        super (InventoryTransactionForm, self).__init__(*args,**kwargs)
+        self.fields['product'].queryset = Product.objects.filter(active=True)    
+
+    class Meta:
+        model = InventoryTransaction
+        fields = ['product', 'amount', 'unit_price', 'comment']
+
+class DateRangeForm(forms.Form):
+    start_time = forms.DateTimeField(required=False, label=_("Fra"))
+    end_time = forms.DateTimeField(required=False, label=_("Til"))
+

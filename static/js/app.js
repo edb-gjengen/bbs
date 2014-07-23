@@ -365,6 +365,10 @@ $(document).ready(function() {
         get_products_realtime_data();
 
     }
+
+    /* 
+     * View: Add user
+     */
     var input_selector = "#id_facebook_username";
     /* Facebook username check */
     $(input_selector).on('keyup', _.debounce(function(event) {
@@ -394,4 +398,28 @@ $(document).ready(function() {
             }
         });
     }, 300)); // Only every 300ms
+
+    /* 
+     * View: Inventory report
+     */
+    var start_field = $(".inventory-report-form #id_start_time");
+    start_field.datepicker({
+        language: 'nb',
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        weekStart: 1,
+        endDate: new Date()
+    }).on('changeDate', function(e) {
+        end_field.datepicker('setStartDate', e.date);
+    });
+    var end_field = $(".inventory-report-form #id_end_time");
+    end_field.datepicker({
+        language: 'nb',
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        weekStart: 1,
+        endDate: new Date()
+    }).on('changeDate', function(e) {
+        start_field.datepicker('setEndDate', e.date);
+    });
 }); 

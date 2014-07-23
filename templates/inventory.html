@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block header %}
+        {% include "nav.html" with active="inventory" %}
+{% endblock %}
+
+{% block content %}
+<section id="inventory" class="row">
+    <div class="row">
+        <div class="col-md-7">
+            <h2>Varebeholdning</h2>
+            <!-- TODO History view -->
+            <!--<div class="text-right">
+                <div class="btn-group">
+                    <a href="#list" class="btn btn-default"><i class="glyphicon glyphicon-list"></i> Liste</a>
+                    <a href="#stats" class="btn btn-default"><i class="glyphicon glyphicon-stats"></i> Historikk</a>
+                </div>
+            </div>-->
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Sist oppdatert</th>
+                    <th>Vare</th>
+                    <th>Beholdning</th>
+                    <th>Pris (intern)</th>
+                    <th>Verdi</th>
+                    <th>I salg</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                <tr class="{% if not product.active %}info inactive{% elif product.inventory_amount <= 0 %}warning{% else %}success{% endif %}">
+                    <td>{{ product.updated }}</td>
+                    <td>{{ product.name }}</td>
+                    <td class="product-amount">{{ product.inventory_amount }}</td>
+                    <td>{{ product.sale_price_int }}</td>
+                    <td>{{ product.inventory_value }}</td>
+                    <td class="product-active">{% if product.active %}<i class="glyphicon glyphicon-ok"></i>{% endif %}</td>
+
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td><em>Sum</em></td>
+                    <td></td>
+                    <td> {{ num_products }}</td>
+                    <td></td>
+                    <td><b>{{ inventory_value }}</b></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <h2>Varetransaksjoner</h2>
+            <div class="text-right">
+                <a href="{% url 'inventory-add' %}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Sett inn varer</a>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Når</th>
+                    <th>Hva</th>
+                    <th>Antall</th>
+                    <th>Hvem</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>{{ t.created }}</td>
+                    <td>{{ t.product }}</td>
+                    <td>{{ t.amount }}</td>
+                    <td>{% if t.user.get_profile.image %}<img src="{{ t.user.get_profile.image }}" class="customer" title="{{ t.user.first_name }} {{ t.user.last_name|slice:":1"}}" />{% else %}{{ t.user.first_name }} {{ t.user.last_name|slice:":1"}}{% endif %}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

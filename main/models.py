@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import ugettext as _
 from datetime import datetime
 
 class Product(models.Model):
@@ -17,9 +18,17 @@ class Product(models.Model):
 	alcohol_percent = models.FloatField(null=True)
 	image = models.ImageField(upload_to='products', blank=True)
 	customer_support = models.CharField(max_length=32, blank=True)
+	inventory_amount = models.FloatField(default=0)
 	active = models.BooleanField(default=True)
 	created = models.DateTimeField(auto_now_add=True)
 	updated = models.DateTimeField(auto_now=True)
+
+        @property
+        def inventory_value(self):
+            return self.inventory_amount * self.sale_price_int
+
+        class Meta:
+            ordering = ['name']
 
 class Order(models.Model):
 	customer = models.ForeignKey(User)
@@ -30,24 +39,45 @@ class Order(models.Model):
 		return u"{0}: {1} kr".format(self.customer, self.order_sum)
 
 class OrderLine(models.Model):
-	order = models.ForeignKey(Order)
-	product = models.ForeignKey(Product)
+	order = models.ForeignKey('main.Order')
+	product = models.ForeignKey('main.Product', related_name='orderlines')
 	amount = models.IntegerField()
-	unit_price = models.FloatField()
+	unit_price = models.FloatField(verbose_name=_('Enhetspris'))
+
+        @property
+        def price(self):
+            return self.amount * self.unit_price
 
 	def __unicode__(self):
-	    return u"{1} {0} ({2} kr per)".format(self.product, self.amount, self.unit_price)
+	    return u"{0} {1} ({2} kr per)".format(self.amount, self.product, self.unit_price)
 
 	class Meta:
 	    unique_together = ('order', 'product')
 
 class Transaction(models.Model):
+        """ Money """
 	user = models.ForeignKey(User)
 	amount = models.FloatField()
 	created = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
 	    return u"{0}: {1}: {2}".format(self.id, self.user, self.amount)
+
+class InventoryTransaction(models.Model):
+        """ Goods """
+	user = models.ForeignKey(User)
+	product = models.ForeignKey('main.Product', related_name='transactions', verbose_name=_('Produkt'))
+	amount = models.FloatField(verbose_name=_('Antall'))
+        unit_price = models.FloatField(verbose_name=_('Enhetspris'))
+        comment = models.TextField(verbose_name=_('Kommentar'), blank=True)
+	created = models.DateTimeField(auto_now_add=True)
+
+        @property
+        def price(self):
+            return self.amount * self.unit_price
+
+	def __unicode__(self):
+            return u"{0}: {1}: {2} ({3} kr per)".format(self.id, self.user, self.product, self.amount, self.unit_price)
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)

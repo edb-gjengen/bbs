@@ -1,4 +1,5 @@
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls import patterns, include, url
+
 
 urlpatterns = patterns('main.views',
     url(r'^register/$', 'register', name='register'),
@@ -14,4 +15,8 @@ urlpatterns = patterns('main.views',
     url(r'^products/(?P<product_id>[0-9]+)/$', 'products', name='json-product'),
     url(r'^products/$', 'products', name='json-products'),
     url(r'^user/create/$', 'create_user', name='create-user'),
+    url(r'^inventory/$', 'inventory', name='inventory'),
+    url(r'^inventory/add/$', 'inventory_add', name='inventory-add'),
+    url(r'^report$', 'report', name='report'),
+    
 )
