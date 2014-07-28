@@ -18,32 +18,33 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Sist oppdatert</th>
                     <th>Vare</th>
                     <th>Beholdning</th>
                     <th>Pris (intern)</th>
-                    <th>Verdi</th>
+                    <th>Salgsverdi (intern)</th>
                     <th>I salg</th>
+                    <th>Sist oppdatert</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for product in products %}
                 <tr class="{% if not product.active %}info inactive{% elif product.inventory_amount <= 0 %}warning{% else %}success{% endif %}">
-                    <td>{{ product.updated }}</td>
                     <td>{{ product.name }}</td>
                     <td class="product-amount">{{ product.inventory_amount }}</td>
                     <td>{{ product.sale_price_int }}</td>
                     <td>{{ product.inventory_value }}</td>
                     <td class="product-active">{% if product.active %}<i class="glyphicon glyphicon-ok"></i>{% endif %}</td>
+                    <td>{{ product.updated }}</td>
 
                 </tr>
                 {% endfor %}
                 <tr>
                     <td><em>Sum</em></td>
-                    <td></td>
                     <td> {{ num_products }}</td>
                     <td></td>
                     <td><b>{{ inventory_value }}</b></td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 </tbody>
             </table>
