@@ -7,6 +7,7 @@ from models import *
 
 import utils
 
+
 class OrderForm(forms.ModelForm):
     def clean_customer(self):
         if self.cleaned_data['customer'].get_profile().balance <= 0:
@@ -18,15 +19,18 @@ class OrderForm(forms.ModelForm):
         model = Order
         fields = ('customer',)
 
+
 class OrderLineForm(forms.Form):
     product = forms.IntegerField(required=True)
     amount = forms.IntegerField(required=True)
     unit_price = forms.FloatField(required=True, localize=True)
 
+
 class DepositForm(forms.ModelForm):
 
     class Meta:
         model = Transaction
+
 
 class SimpleCreateUserForm(forms.Form):
     first_name = forms.CharField(required=True, label="Fornavn")
@@ -54,6 +58,7 @@ class SimpleCreateUserForm(forms.Form):
 
         return user
 
+
 class InventoryTransactionForm(forms.ModelForm):
     unit_price = forms.FloatField(required=True, localize=True)
 
@@ -65,6 +70,7 @@ class InventoryTransactionForm(forms.ModelForm):
     class Meta:
         model = InventoryTransaction
         fields = ['product', 'amount', 'unit_price', 'comment']
+
 
 class DateRangeForm(forms.Form):
     start_time = forms.DateTimeField(required=False, label=_("Fra"))

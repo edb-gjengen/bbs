@@ -1,6 +1,7 @@
 from django.contrib import admin
 from main.models import *
 
+
 class ProductAdmin(admin.ModelAdmin):
     pass
 
