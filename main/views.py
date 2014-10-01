@@ -1,17 +1,15 @@
 # coding: utf-8
 from datetime import timedelta
-from datetime import datetime
 from itertools import groupby
 import json
 import time
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout as auth_logout
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Sum, Max, Min
+from django.db.models import Count, Sum, Min
 from django.forms.formsets import formset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render, get_object_or_404, redirect
@@ -20,6 +18,7 @@ from django.template import RequestContext
 from forms import *
 from models import *
 import utils
+
 
 def home(request):
     if request.method == "POST":
@@ -30,10 +29,11 @@ def home(request):
     else:
         if request.user.is_authenticated():
             # Redirect to the register
-            return HttpResponseRedirect( reverse('main.views.register') )
+            return HttpResponseRedirect(reverse('main.views.register'))
         else:
             form = AuthenticationForm(request)
     return render_to_response('home.html', locals(), context_instance=RequestContext(request))
+
 
 def register(request):
     products = Product.objects.filter(active=True)
@@ -60,11 +60,11 @@ def register(request):
                     order.customer.first_name,
                     order.customer.last_name,
                     int(order_sum - profile.balance)))
-                return HttpResponseRedirect( reverse('main.views.register') )
+                return HttpResponseRedirect(reverse('main.views.register'))
             # empty order?
             if order_sum == 0:
                 messages.error(request, u'Du har ikke valgt hva du skal kjøpe...')
-                return HttpResponseRedirect( reverse('main.views.register') )
+                return HttpResponseRedirect(reverse('main.views.register'))
             order.order_sum = order_sum
             order.save()
             # substract order from balance
@@ -90,7 +90,7 @@ def register(request):
                 order.customer.last_name,
                 u", ".join(orderlines)
             ))
-            return HttpResponseRedirect( reverse('main.views.register') )
+            return HttpResponseRedirect(reverse('main.views.register'))
         else:
             # TODO specify error(s)
             messages.error(request, u'Skjemaet er ikke gyldig.')
@@ -101,10 +101,12 @@ def register(request):
         formset = OrderLineFormSet()
     return render_to_response('register.html', locals(), context_instance=RequestContext(request))
 
+
 def deposit(request):
-    users = User.objects.all().order_by('first_name','last_name')
+    users = User.objects.all().order_by('first_name', 'last_name')
     users_js = users_format_js(users)
     allowed_users = utils.users_with_perm('add_transaction')
+    error_message_template = u'{0} {1} kan ikke sette inn {2} kr, det overskrider maks saldo ({3} kr) med {4} kr'
 
     # FIXME: dont need this
     try:
@@ -118,14 +120,14 @@ def deposit(request):
             amount = form.cleaned_data['amount']
             user = form.cleaned_data['user']
             if amount + user.get_profile().balance > settings.BBS_SALDO_MAX and amount + user.get_profile().balance != 1337:
-                messages.error(request, u'{0} {1} kan ikke sette inn {2} kr, det overskrider maks saldo ({3} kr) med {4} kr'.format(
+                messages.error(request, error_message_template.format(
                     user.first_name,
                     user.last_name,
                     amount,
                     settings.BBS_SALDO_MAX,
                     amount + user.get_profile().balance - settings.BBS_SALDO_MAX
                 ))
-                return HttpResponseRedirect( reverse('main.views.deposit') )
+                return HttpResponseRedirect(reverse('main.views.deposit'))
 
             transaction = form.save()
             profile = transaction.user.get_profile()
@@ -137,7 +139,7 @@ def deposit(request):
                 transaction.user.last_name,
                 transaction.amount,
                 profile.balance))
-            return HttpResponseRedirect( reverse('main.views.deposit') )
+            return HttpResponseRedirect(reverse('main.views.deposit'))
         else:
             messages.error(request, u'Skjemaet er ikke gyldig.')
             form = DepositForm(request.POST)
@@ -145,6 +147,7 @@ def deposit(request):
         form = DepositForm()
 
     return render_to_response('deposit.html', locals(), context_instance=RequestContext(request))
+
 
 def log(request, limit=datetime.now()-timedelta(days=2)):
     if limit: 
@@ -166,10 +169,12 @@ def log(request, limit=datetime.now()-timedelta(days=2)):
 
     return render_to_response('log.html', locals(), context_instance=RequestContext(request))
 
+
 def stats(request):
     products = Product.objects.filter(active=True)
 
     return render_to_response('stats.html', locals(), context_instance=RequestContext(request))
+
 
 def serialize_product(product):
     f_product = {}
@@ -184,7 +189,8 @@ def serialize_product(product):
                 f_product[attr] = product.__getattribute__(attr)
     return f_product
 
-def products(request, product_id=None):
+
+def products_json(request, product_id=None):
     if product_id:
         #single
         products = get_object_or_404(Product, pk=product_id)
@@ -199,21 +205,27 @@ def products(request, product_id=None):
 
     return HttpResponse(json.dumps(f_products), content_type='application/javascript; charset=utf8')
 
+
 def stats_product(product):
-    sales = OrderLine.objects.filter(product=product)
     # reverse lookup via order, customer
-    per_user = sales.values('order__customer__first_name','order__customer__last_name').annotate(num=Sum('amount')).order_by('num').reverse()
+    per_user = OrderLine.objects\
+        .filter(product=product)\
+        .values('order__customer__first_name', 'order__customer__last_name')\
+        .annotate(num=Sum('amount'))\
+        .order_by('num')\
+        .reverse()
     f_per_user = []
     for row in per_user:
         who = row['order__customer__first_name'] + " " + row['order__customer__last_name']
         num = row['num']
         f_per_user.append([who, num])
     response = {
-        'product' : serialize_product(Product.objects.get(pk=product)) if type(product) is unicode else serialize_product(product),
-        'counts' : f_per_user,
-        'total_counts' : sum([row['num'] for row in per_user]),
-        }
+        'product': serialize_product(Product.objects.get(pk=product)) if type(product) is unicode else serialize_product(product),
+        'counts': f_per_user,
+        'total_counts': sum([row['num'] for row in per_user]),
+    }
     return response
+
 
 def stats_products(request, product=None):
     if product:
@@ -227,17 +239,20 @@ def stats_products(request, product=None):
 
     totals = float(sum([sale.amount for sale in sales]))
     response = {
-        'request' : 'all' if not product else product,
-        'response' : {
-            'products' : f_products,
-            'total_count' : totals,
-            }
+        'request': 'all' if not product else product,
+        'response': {
+            'products': f_products,
+            'total_count': totals,
         }
+    }
     return HttpResponse(json.dumps(response), content_type='application/javascript; charset=utf8')
 
+
 def stats_orders(request):
-    total = float(Order.objects.count())
-    per_user = Order.objects.values('customer__first_name','customer__last_name').annotate(num=Count('customer')).order_by('num').reverse()
+    per_user = Order.objects\
+        .values('customer__first_name', 'customer__last_name')\
+        .annotate(num=Count('customer'))\
+        .order_by('num').reverse()
     f_per_user = []
     for row in per_user:
         who = row['customer__first_name'] + " " + row['customer__last_name']
@@ -245,23 +260,25 @@ def stats_orders(request):
         f_per_user.append([who, num])
     return HttpResponse(json.dumps(f_per_user), content_type='application/javascript; charset=utf8')
 
+
 def stats_orders_hourly(request):
     orders = Order.objects.all()
-    f_hourly = dict([(key,0) for key in range(0,24)]) # init
+    f_hourly = dict([(key, 0) for key in range(0, 24)])  # init
     # group by hour
     for key, values in groupby(orders, key=lambda row: row.created.hour):
         count = len(list(values))
-        f_hourly[key] = f_hourly[key] + count
+        f_hourly[key] += count
 
     if len(orders) == 0:
         return HttpResponse(json.dumps({}), content_type='application/javascript; charset=utf8')
     response = {
         'start': str(orders[0].created),
-        'hourly' : [[k,v] for k,v in f_hourly.iteritems()],
-        'total' : sum(f_hourly.values()),
+        'hourly': [[k, v] for k, v in f_hourly.iteritems()],
+        'total': sum(f_hourly.values()),
     }
     return HttpResponse(json.dumps(response), content_type='application/javascript; charset=utf8')
-    
+
+
 def stats_products_realtime(request):
     end_time = datetime.now()
     start_time = datetime.now() - timedelta(hours=24)
@@ -291,12 +308,14 @@ def logout(request):
     auth_logout(request)
     return render_to_response('registration/logout.html', locals(), context_instance=RequestContext(request))
 
+
 def users_format_js(users):
     users_js = []
     for user in users:
         users_js.append('"' + user.first_name + ' ' + user.last_name[:1] + '"')
     users_js = u"[{0}]".format(u",".join(users_js))
     return users_js
+
 
 def create_user(request):
     if request.method == "POST":
@@ -314,14 +333,16 @@ def create_user(request):
 
     return render(request, 'registration/create_user.html', locals())
 
+
 def inventory(request):
     products = Product.objects.all().order_by('-active', 'inventory_amount', 'name')
     transactions = InventoryTransaction.objects.all().order_by('-created')
-
-    inventory_value = sum(map(lambda x: x[0] * x[1], Product.objects.filter(active=True).values_list('inventory_amount', 'sale_price_int')))
-    num_products = sum(Product.objects.filter(active=True).values_list('inventory_amount', flat=True))
+    products_active = products.filter(active=True)
+    inventory_value = sum(map(lambda x: x[0] * x[1], products_active.values_list('inventory_amount', 'sale_price_int')))
+    num_products = sum(products_active.values_list('inventory_amount', flat=True))
 
     return render(request, 'inventory.html', locals())
+
 
 def inventory_add(request):
     if request.method == "POST":
@@ -344,17 +365,22 @@ def inventory_add(request):
 
     return render(request, 'inventory_add.html', locals())
 
+
 def report(request):
+    # FIXME: split this up in smaller pieces
     datetime_now = datetime.now()
     start_time = datetime.now() - timedelta(days=30)
-    start_time = start_time.replace(hour=0, minute=0, second=0, microsecond=0) # start of day, 1 month
-    end_time = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999) # end of day
+    # start of day, 1 month
+    start_time = start_time.replace(hour=0, minute=0, second=0, microsecond=0)
+    # end of day
+    end_time = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999)
 
     if request.GET.get('start_time', False) or request.GET.get('end_time', False):
         form = DateRangeForm(request.GET)
         if form.is_valid():
             start_time = form.cleaned_data['start_time']
-            end_time = form.cleaned_data['end_time'].replace(hour=23, minute=59, second=59, microsecond=999) # end of day
+             # end of day
+            end_time = form.cleaned_data['end_time'].replace(hour=23, minute=59, second=59, microsecond=999)
 
     else: 
         form = DateRangeForm(initial={
@@ -363,7 +389,10 @@ def report(request):
         })
 
     # Inventory
-    products = Product.objects.filter(transactions__created__range=[start_time, end_time]).values('name', 'transactions__unit_price','transactions__amount').order_by('name')
+    products = Product.objects\
+        .filter(transactions__created__range=[start_time, end_time])\
+        .values('name', 'transactions__unit_price', 'transactions__amount')\
+        .order_by('name')
     # group by name and sum
     inventory_products = {}
     for k, g in groupby(products, lambda x: x['name']):
@@ -371,7 +400,7 @@ def report(request):
         for el in g:
             el['transactions__price'] = el['transactions__amount'] * el['transactions__unit_price']
             group.append(el)
-        inventory_products.update({ k: {
+        inventory_products.update({k: {
             'name': k,
             "transactions": group,
             "transactions_sum": sum(map(lambda x: x['transactions__price'], group)),
@@ -379,11 +408,13 @@ def report(request):
         }})
 
     itrans = InventoryTransaction.objects.filter(created__range=[start_time, end_time])
-    inv_in = sum(map(lambda x: x[1].get('transactions_sum',0), inventory_products.items()))
-
+    inv_in = sum(map(lambda x: x[1].get('transactions_sum', 0), inventory_products.items()))
 
     # out 
-    out_products = Product.objects.filter(orderlines__order__created__range=[start_time, end_time]).values('name', 'orderlines__unit_price','orderlines__amount').order_by('name')
+    out_products = Product.objects\
+        .filter(orderlines__order__created__range=[start_time, end_time])\
+        .values('name', 'orderlines__unit_price', 'orderlines__amount')\
+        .order_by('name')
     # group by name and sum
     for k, g in groupby(out_products, lambda x: x['name']):
         group = []
@@ -407,7 +438,7 @@ def report(request):
             p[1]['value_diff'] = p[1].get('transactions_sum', 0) - p[1].get('orderlines_sum', 0)
             p[1]['units_diff'] = p[1].get('transactions_units', 0) - p[1].get('orderlines_units', 0)
 
-    inv_out = sum(map(lambda x: x[1].get('orderlines_sum',0), inventory_products.items()))
+    inv_out = sum(map(lambda x: x[1].get('orderlines_sum', 0), inventory_products.items()))
 
     inv_diff = inv_in - inv_out
     
