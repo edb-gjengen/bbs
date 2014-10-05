@@ -25,20 +25,40 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     @property
-    def inventory_value(self):
-        return self.inventory_amount * self.sale_price_int
+    def wholesale_unit_price(self):
+        """
+            This is not accurate.
+        """
+        if self.inventory_amount <= 0:
+            return 0
+
+        unit_prices = self.transactions.order_by('created').values('amount', 'unit_price')
+        sum_units = 0
+        for up in unit_prices:
+            sum_units += up['amount']
+            if self.inventory_amount <= sum_units:
+                return up['unit_price']
+
+        return unit_prices[0]['unit_price']
+
+    @property
+    def wholesale_value(self):
+        return self.wholesale_unit_price * self.inventory_amount
 
     class Meta:
         ordering = ['name']
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(User)
+    customer = models.ForeignKey(User, null=True, blank=True)
     order_sum = models.FloatField(db_column='sum')
     created = models.DateTimeField(auto_now_add=True)
 
+    def is_external(self):
+        return self.customer is None
+
     def __unicode__(self):
-        return u"{0}: {1} kr".format(self.customer, self.order_sum)
+        return u"{0}: {1} kr".format(self.customer or u"Ekstern", self.order_sum)
 
 
 class OrderLine(models.Model):

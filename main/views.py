@@ -51,45 +51,64 @@ def register(request):
         formset = OrderLineFormSet(request.POST)
 
         if formset.is_valid() and orderform.is_valid():
-            order_sum = sum([ol['amount'] * ol['unit_price'] for ol in formset.cleaned_data])
             order = orderform.save(commit=False)
-            # can he afford it?
-            profile = order.customer.get_profile()
-            if order_sum > profile.balance:
-                messages.error(request, u'{0} {1} har ikke råd, mangler {2} kr.'.format(
-                    order.customer.first_name,
-                    order.customer.last_name,
-                    int(order_sum - profile.balance)))
-                return HttpResponseRedirect(reverse('main.views.register'))
+
+            if order.is_external():
+                order_sum = sum([ol['amount'] * ol['unit_price_ext'] for ol in formset.cleaned_data])
+            else:
+                order_sum = sum([ol['amount'] * ol['unit_price_int'] for ol in formset.cleaned_data])
+
             # empty order?
             if order_sum == 0:
                 messages.error(request, u'Du har ikke valgt hva du skal kjøpe...')
                 return HttpResponseRedirect(reverse('main.views.register'))
+
+            if not order.is_external():
+                profile = order.customer.get_profile()
+                # can she afford it?
+                if order_sum > profile.balance:
+                    messages.error(request, u'{0} {1} har ikke råd, mangler {2} kr.'.format(
+                        order.customer.first_name,
+                        order.customer.last_name,
+                        int(order_sum - profile.balance)))
+                    return HttpResponseRedirect(reverse('main.views.register'))
+                # substract order from balance
+                profile.balance -= order.order_sum
+                profile.save()
+
             order.order_sum = order_sum
             order.save()
-            # substract order from balance
-            profile.balance -= order.order_sum
-            profile.save()
 
             orderlines = []
             for ol in formset.cleaned_data:
                 if ol['amount'] > 0:
                     product = Product.objects.get(pk=ol['product'])
+
+                    if order.is_external():
+                        unit_price = ol['unit_price_ext']
+                    else:
+                        unit_price = ol['unit_price_int']
+
                     OrderLine.objects.create(
                         order=order,
                         product=product,
                         amount=ol['amount'],
-                        unit_price=ol['unit_price'])
+                        unit_price=unit_price)
+
                     product.inventory_amount -= ol['amount']
                     product.save()
 
                     orderlines.append(u"{0} {1}".format(ol['amount'], product))
-                
-            messages.success(request, u'{0} {1} kjøpte {2}.'.format(
-                order.customer.first_name,
-                order.customer.last_name,
-                u", ".join(orderlines)
-            ))
+
+            if order.is_external():
+                messages.success(request, u'Ekstern kjøpte {0}.'.format(u", ".join(orderlines)))
+            else:
+                messages.success(request, u'{0} {1} kjøpte {2}.'.format(
+                    order.customer.first_name,
+                    order.customer.last_name,
+                    u", ".join(orderlines)
+                ))
+
             return HttpResponseRedirect(reverse('main.views.register'))
         else:
             # TODO specify error(s)
@@ -216,7 +235,10 @@ def stats_product(product):
         .reverse()
     f_per_user = []
     for row in per_user:
-        who = row['order__customer__first_name'] + " " + row['order__customer__last_name']
+        if row['order__customer__first_name'] is not None:
+            who = row['order__customer__first_name'] + " " + row['order__customer__last_name']
+        else:
+            who = u"Ekstern"
         num = row['num']
         f_per_user.append([who, num])
     response = {
@@ -249,14 +271,19 @@ def stats_products(request, product=None):
 
 
 def stats_orders(request):
+    num_external_orders = Order.objects.filter(customer=None).count()
     per_user = Order.objects\
         .values('customer__first_name', 'customer__last_name')\
         .annotate(num=Count('customer'))\
         .order_by('num').reverse()
     f_per_user = []
     for row in per_user:
-        who = row['customer__first_name'] + " " + row['customer__last_name']
-        num = row['num']
+        if row['customer__first_name'] is not None:
+            who = row['customer__first_name'] + " " + row['customer__last_name']
+            num = row['num']
+        else:
+            who = u"Ekstern"
+            num = num_external_orders
         f_per_user.append([who, num])
     return HttpResponse(json.dumps(f_per_user), content_type='application/javascript; charset=utf8')
 
@@ -338,7 +365,7 @@ def inventory(request):
     products = Product.objects.all().order_by('-active', 'inventory_amount', 'name')
     transactions = InventoryTransaction.objects.all().order_by('-created')
     products_active = products.filter(active=True)
-    inventory_value = sum(map(lambda x: x[0] * x[1], products_active.values_list('inventory_amount', 'sale_price_int')))
+    wholesale_value = sum([p.wholesale_value for p in products_active])
     num_products = sum(products_active.values_list('inventory_amount', flat=True))
 
     return render(request, 'inventory.html', locals())

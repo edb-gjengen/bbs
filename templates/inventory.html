@@ -20,8 +20,8 @@
                 <tr>
                     <th>Vare</th>
                     <th>Beholdning</th>
-                    <th>Pris (intern)</th>
-                    <th>Salgsverdi (intern)</th>
+                    <th>Innkjøpspris</th>
+                    <th>Verdi</th>
                     <th>I salg</th>
                     <th>Sist oppdatert</th>
                 </tr>
@@ -31,19 +31,18 @@
                 <tr class="{% if not product.active %}info inactive{% elif product.inventory_amount <= 0 %}warning{% else %}success{% endif %}">
                     <td>{{ product.name }}</td>
                     <td class="product-amount">{{ product.inventory_amount }}</td>
-                    <td>{{ product.sale_price_int }}</td>
-                    <td>{{ product.inventory_value }}</td>
+                    <td>{{ product.wholesale_unit_price|default:"-" }}</td>
+                    <td>{{ product.wholesale_value|default:"-"  }}</td>
                     <td class="product-active">{% if product.active %}<i class="glyphicon glyphicon-ok"></i>{% endif %}</td>
                     <td>{{ product.updated }}</td>
 
                 </tr>
                 {% endfor %}
                 <tr>
-                    <td><em>Sum</em></td>
-                    <td> {{ num_products }}</td>
                     <td></td>
-                    <td><b>{{ inventory_value }}</b></td>
+                    <td>{{ num_products }} totalt</td>
                     <td></td>
+                    <td>{{ wholesale_value }}</td>
                     <td></td>
                 </tr>
                 </tbody>

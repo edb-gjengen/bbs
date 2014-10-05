@@ -9,7 +9,7 @@
     <section class="row">
         <div class="col-xs-4">
             {% for message in messages %}
-                <div {% if message.tags %}class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}<a class="close" data-dismiss="alert">×</a></div>
+                <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}<a class="close" data-dismiss="alert">×</a></div>
             {% endfor %}
         </div>
     </section>
@@ -41,6 +41,11 @@
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="well">
+                            <li class="customer">{% spaceless %}
+                                <img class="profile" src="{{ STATIC_URL }}img/unknown_person.png" alt="Profile picture" /><br />
+                                <span class="name">Ekstern</span><br />
+                                <span class="balance">&nbsp;</span>
+                            {% endspaceless %}</li>
                             {% for user in users %}<li class="customer{% if user.get_profile.last_purchase_date < half_a_year_ago and not user.get_profile.last_purchase == None %} infrequent hidden{% endif %}">{% spaceless %}
                                 {% if user.get_profile.image %}
                                     <img class="profile" src="{{ user.get_profile.image }}" alt="Profile picture" /><br />
@@ -74,14 +79,15 @@
                         {% for product in products %}
                                 <li id="form-{{forloop.counter0}}" class="product"><input type="hidden" name="form-{{ forloop.counter0 }}-product" value="{{product.id }}" />
                                 <input type="hidden" id="form-{{ forloop.counter0 }}-amount" name="form-{{ forloop.counter0 }}-amount" value="0" class="span2" size="2" />
-                                <input type="hidden" name="form-{{ forloop.counter0 }}-unit_price" value="{{product.sale_price_int }}" />
+                                <input type="hidden" name="form-{{ forloop.counter0 }}-unit_price_int" value="{{product.sale_price_int }}" />
+                                <input type="hidden" name="form-{{ forloop.counter0 }}-unit_price_ext" value="{{product.sale_price_ext }}" />
                                 <span class="qty">0</span>
                                 {% if product.image %}
                                         <img class="product" src="{{ product.image.url }}" /><br />
                                 {% else %}
                                         <img class="product" src="{{ STATIC_URL }}img/product.png" /><br />
                                 {% endif %}
-                                <span class="name">{{ product.name }}</span> - <span class="sale_price_int">{{product.sale_price_int|floatformat:0}}</span>
+                                <span class="name">{{ product.name }}</span> - <span class="sale_price_ext">{{product.sale_price_ext|floatformat:0}}</span>/<span class="sale_price_int">{{product.sale_price_int|floatformat:0}}</span>
                                 </li>
                         {% endfor %}
                     </ul>
