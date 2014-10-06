@@ -3,9 +3,7 @@
 
 {% block title %}Lag ny bruker {% endblock %}
 
-{% block header %}
-        {% include "nav.html" with active="create_user" %}
-{% endblock %}
+{% block active_create_user" %}active{% endblock %}
 
 {% block content %}
     {% if perms.auth.can_add_user %}

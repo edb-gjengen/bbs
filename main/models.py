@@ -131,7 +131,7 @@ class UserProfile(models.Model):
     def profile_image_url(self):
         from django.templatetags.static import static
         if not self.image:
-            return static('img/unknown_person.png')
+            return static('dist/images/unknown_person.png')
 
         return self.image
 

@@ -6,15 +6,52 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="x-django-static-url" content="{{ STATIC_URL }}">
-    {% compress css %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}stylesheets/screen.css" type="text/css" media="screen, projection">
+    {% compress css inline %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}dist/styles/screen.css" type="text/css" media="screen, projection">
     {% endcompress %}
     {%block headinc %}{%endblock%}
 </head>
 <body>
     <header id="header">
     {%block header%}
-        {% include "nav.html" %}
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Biceps Bar System - BBS</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="{% block active_register %}{% endblock %}"><a href="/register"><i class="glyphicon glyphicon-home white"></i> Kjøp drikke</a></li>
+                    <li class="{% block active_deposit %}{% endblock %}"><a href="/deposit">Sett inn penger</a></li>
+                    <li class="{% block active_log %}{% endblock %}"><a href="/log"><i class="glyphicon glyphicon-list-alt"></i> Logg</a></li>
+                    <li class="{% block active_stats %}{% endblock %}"><a href="/stats"><i class="glyphicon glyphicon-stats"></i> Statistikk</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if not user.is_authenticated %}
+                    <li><a href="{% url 'login' %}">Logg inn</a></li>
+                    {% else %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ user.get_profile.profile_image_url }}" /><span class="name">{{ user.first_name }}</span> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="{% block active_create_user %}{% endblock %}"><a href="{% url 'create-user' %}"><i class="glyphicon glyphicon-plus"></i> Ny bruker</a></li>
+                            {% if request.user.is_superuser %}<li><a href="/admin"><i class="glyphicon glyphicon-cog"></i> Administrasjon</a></li>{% endif %}
+                            {% if request.user.is_superuser %}<li class="{% block active_inventory %}{% endblock %}"><a href="{% url 'inventory' %}"><i class="glyphicon glyphicon-briefcase"></i> Varebeholdning</a></li>{% endif %}
+                            {% if request.user.is_superuser %}<li class="{% block active_report %}{% endblock %}"><a href="{% url 'report' %}"><i class="glyphicon glyphicon-briefcase"></i> Rapport</a></li>{% endif %}
+                            <li class="divider"></li>
+                            <li><a href="{% url 'logout' %}"><i class="glyphicon glyphicon-log-out"></i> Logg ut</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
     {%endblock%}
     </header>
     <div id="container" class="container">
@@ -25,23 +62,24 @@
                 {%block footer %}
                 <div class="credits">
                     Laget med <span class="love" title="kærlighed">♥</span> av <a href="http://edb.neuf.no/">EDB-gjengen i KAK</a><br/>
-                     <a href="http://edb.neuf.no/"><img src="{{ STATIC_URL }}img/edb_brick.png" alt="EDB" /></a>
+                     <a href="http://edb.neuf.no/"><img src="{{ STATIC_URL }}dist/images/edb_brick.png" alt="EDB" /></a>
                 </div>
                 {%endblock%}
             </div>
         </div>
     </div>
 
+    
     {% compress js %}
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap/collapse.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap/dropdown.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap/tooltip.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/locales/bootstrap-datepicker.nb.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/highcharts.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/underscore-min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/app.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/collapse.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.nb.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/highcharts/highcharts.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}dist/js/app.js"></script>
     {% endcompress %}
     {%block tailinc %}{%endblock%}
 </body>

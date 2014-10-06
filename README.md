@@ -8,7 +8,7 @@
     python manage.py runserver
 
 # TODO
- * Bootstrap v3 cleanups
+ * gulpfile.js: reload on js update, csso
  * Larger pictures
  * Compact GUI for max 768 vertical pixels
      * Search right of in title

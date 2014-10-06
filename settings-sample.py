@@ -1,8 +1,9 @@
 # Django settings for bbs project.
 from os.path import dirname, join
 
+
 def map_path(target_name):
-    '''Enables path names to be decided at runtime.'''
+    # Enables path names to be decided at runtime.
     return join(dirname(__file__), target_name).replace('\\', '/')
 
 DEBUG = True
@@ -16,7 +17,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'dev.db',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
@@ -86,7 +87,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -96,7 +97,7 @@ SECRET_KEY = 'osv$uy-ea$*%lc)+xiwt5@2b7au%u*c!pa6hmh#vl)*+tp%fss'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -159,8 +160,10 @@ AUTH_PROFILE_MODULE = 'main.UserProfile'
 
 LOGIN_REDIRECT_URL = '/'
 
-SESSION_COOKIE_AGE = 900 # 15 minutes
+SESSION_COOKIE_AGE = 900  # 15 minutes
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 BBS_SALDO_MAX = 600
 BBS_LIMIT_DEPOSITS = False
+
+COMPRESS_ENABLED = True

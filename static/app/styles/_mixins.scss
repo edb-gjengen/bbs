@@ -1,0 +1,10 @@
+@mixin inline-block-list() {
+	clear: both;
+	padding: 0;
+	margin: 0;
+  	li {
+		list-style: none;
+		display: inline-block;
+  		white-space: nowrap;
+    }
+}

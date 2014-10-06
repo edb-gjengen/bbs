@@ -4,9 +4,7 @@
 
 {% block title %}Legg til nye varer {% endblock %}
 
-{% block header %}
-        {% include "nav.html" with active="inventory_add" %}
-{% endblock %}
+{% block active_inventory_add" %}active{% endblock %}
 
 {% block content %}
     {% if perms.auth.can_add_inventory_transaction %}

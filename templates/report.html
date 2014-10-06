@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap %}
-{% block header %}
-        {% include "nav.html" with active="inventory" %}
-{% endblock %}
+{% block active_report %}active{% endblock %}
 
 {% block content %}
 <section id="inventory-report" class="row">
