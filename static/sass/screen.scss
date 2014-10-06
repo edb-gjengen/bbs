@@ -6,20 +6,70 @@
 @import "datepicker";
 
 body {
-
     h2 {
         margin-top: 0;
     }
+    .glyphicon .white {
+        color: white;
+    }
+}
+#header {
+    .dropdown-toggle {
+        padding-top: 0;
+        padding-bottom: 0;
 
-    #customer {
+        img {
+            width: 40px;
+            @include border-radius(50% 50%);
+        }
+        .name {
+            display: inline-block;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            padding-left: 8px;
+        }
+    }
+}
+
+#customer {
+    ul {
+        @include inline-block-list;
+
+        li {
+            padding-top: 10px;
+            text-align: center;
+            width: 79px;
+            overflow: hidden;
+
+            &:hover {
+                background-color: #dddddd;
+                cursor: pointer;
+            }
+            &.marked {
+                color: #468847;
+                background-color: #DFF0D8;
+            }
+            &.hidden {
+                display: none !important;
+            }
+            .name {
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+#register {
+    #products {
+        margin-bottom:2em;
         ul {
             @include inline-block-list;
-
+            
             li {
                 padding-top: 10px;
+                padding-left: 20px;
+                padding-right: 20px;
                 text-align: center;
-                width: 79px;
-                overflow: hidden;
 
                 &:hover {
                     background-color: #dddddd;
@@ -29,8 +79,9 @@ body {
                     color: #468847;
                     background-color: #DFF0D8;
                 }
-                &.hidden {
-                    display: none !important;
+                .qty {
+                    font-size: 1.7em;
+                    font-weight: bold;
                 }
                 .name {
                     font-weight: bold;
@@ -38,121 +89,76 @@ body {
             }
         }
     }
-
-    #register {
-        #products {
-            margin-bottom:2em;
-            ul {
-                @include inline-block-list;
-                
-                li {
-                    padding-top: 10px;
-                    padding-left: 20px;
-                    padding-right: 20px;
-                    text-align: center;
-
-                    &:hover {
-                        background-color: #dddddd;
-                        cursor: pointer;
-                    }
-                    &.marked {
-                        color: #468847;
-                        background-color: #DFF0D8;
-                    }
-                    .qty {
-                        font-size: 1.7em;
-                        font-weight: bold;
-                    }
-                    .name {
-                        font-weight: bold;
-                    }
-                }
-            }
-        }
-        
-        .total {
-            color: #ffffff;
-            background-color: #222;
-            padding: 0 10px;
-            min-width:115px;
-            h2 {
-                color: #ffffff;
-                margin: 0.2em 0;
-            }
-        }
+    
+    .total {
+        color: #ffffff;
+        background-color: #222;
+        padding: 0 10px;
+        min-width:115px;
         h2 {
-            display: inline-block;
-        }
-        input[name=customer_name] {
-            display: block;
+            color: #ffffff;
+            margin: 0.2em 0;
         }
     }
-    #log {
-        h2 {
-            display:inline-block;
+    h2 {
+        display: inline-block;
+    }
+    input[name=customer_name] {
+        display: block;
+    }
+}
+#log {
+    h2 {
+        display:inline-block;
+    }
+    table {
+        tr{
+            text-align: middle;
         }
-        table {
-            tr{
-                text-align: middle;
-            }
-            .amount {
-                font-size: 2em;
+        .amount {
+            font-size: 2em;
+            font-weight: bold;
+        }
+    }
+}
+#inventory {
+    tr {
+        &.info {
+            border-left: 8px solid #d9edf7;
+        }
+        &.warning {
+            border-left: 8px solid #da7878;
+
+            .product-amount {
                 font-weight: bold;
             }
         }
-    }
-    #inventory {
-        tr {
-            &.info {
-                border-left: 8px solid #d9edf7;
-            }
-            &.warning {
-                border-left: 8px solid #da7878;
-
-                .product-amount {
-                    font-weight: bold;
-                }
-            }
-            &.success {
-                border-left: 8px solid darken(#dff0d8, 10%);
-            }
-            > td {
-                background-color: inherit; 
-            }
-            &:nth-child(odd) td {
-                background-color: #f9f9f9;
-            }
-            &.inactive {
-                color: #888;
-            }
+        &.success {
+            border-left: 8px solid darken(#dff0d8, 10%);
         }
-    }
-    #inventory-report {
-        .form-control {
-            width: auto;
+        > td {
+            background-color: inherit; 
         }
-        table {
-            .positive {
-                color: #468847;
-            }
-            .negative {
-                color: #da7878;
-            }
+        &:nth-child(odd) td {
+            background-color: #f9f9f9;
         }
-    }
-    /* General styles*/
-    .glyphicon .white {
-        color: white;
+        &.inactive {
+            color: #888;
+        }
     }
 }
-.form-login {
-    max-width: 320px;
-    margin: 4em auto;
-    [type=submit] {
-        display: block;
-        width: 100%;
+#inventory-report {
+    .form-control {
+        width: auto;
     }
-
+    table {
+        .positive {
+            color: #468847;
+        }
+        .negative {
+            color: #da7878;
+        }
+    }
 }
 #footer .credits {
     text-align: center;
@@ -174,4 +180,13 @@ body {
     img {
         height: 32px;
     }
+}
+.form-login {
+    max-width: 320px;
+    margin: 4em auto;
+    [type=submit] {
+        display: block;
+        width: 100%;
+    }
+
 }

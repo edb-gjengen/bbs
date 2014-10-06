@@ -128,6 +128,13 @@ class UserProfile(models.Model):
         else:
             return datetime.min
 
+    def profile_image_url(self):
+        from django.templatetags.static import static
+        if self.image:
+            return static('img/unknown_person.png')
+
+        return self.image
+
     def __unicode__(self):
         return u"{0}".format(self.user)
 
