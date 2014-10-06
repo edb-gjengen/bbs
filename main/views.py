@@ -73,7 +73,7 @@ def register(request):
                         int(order_sum - profile.balance)))
                     return HttpResponseRedirect(reverse('main.views.register'))
                 # substract order from balance
-                profile.balance -= order.order_sum
+                profile.balance -= order_sum
                 profile.save()
 
             order.order_sum = order_sum

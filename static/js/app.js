@@ -43,6 +43,24 @@ function reset_qtys() {
         $(this).val("0");
     });
 }
+function update_total() {
+    var total = 0;
+    $('li.product').each(function() {
+        var amount = Number($(this).find('[name$=amount]').val());
+
+        var price_selector = '.sale_price_int';
+        if($("#id_customer_typeahead").val() === "Ekstern") {
+            price_selector = '.sale_price_ext';
+        }
+        var sale_price = Number($(this).find(price_selector).text());
+
+        total += amount * sale_price;
+    });
+    if(total === 0) {
+        total = "";
+    }
+    $("span.total_text").html(total);
+}
 
 $(document).ready(function() {
     /* Hide alert messages */
@@ -79,7 +97,7 @@ $(document).ready(function() {
         var id = $(this).children("span.id").text();
         $("#id_customer option, #id_user option").removeAttr('selected');
         $("#id_customer option[value="+id+"], #id_user option[value="+id+"]").attr('selected','selected');
-        console.log(id);
+        update_total(this);
     });
 
 
@@ -98,9 +116,7 @@ $(document).ready(function() {
         form_field.val(qty);
         display.html(qty);
         /* Update total*/
-        var sale_price_int = Number($(this).children("span.sale_price_int").text());
-        var cur_total = Number($("span.total_text").text());
-        $("span.total_text").html(cur_total + sale_price_int);
+        update_total(this);
     });
     /* Form reset */
     $("#register button[type=reset]").click( function() {
