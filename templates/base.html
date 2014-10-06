@@ -1,13 +1,15 @@
 <!doctype html>
+{% load compress %}
 <html>
 <head>
     <title>{%block title%}BBS{%endblock%}</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="x-django-static-url" content="{{ STATIC_URL }}">
+    {% compress css %}
     <link rel="stylesheet" href="{{ STATIC_URL }}stylesheets/screen.css" type="text/css" media="screen, projection">
-    {%block headinc %}
-    {%endblock%}
+    {% endcompress %}
+    {%block headinc %}{%endblock%}
 </head>
 <body>
     <header id="header">
@@ -30,6 +32,7 @@
         </div>
     </div>
 
+    {% compress js %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap/collapse.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap/dropdown.js"></script>
@@ -39,7 +42,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/highcharts.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/underscore-min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/app.js"></script>
-    {%block tailinc %}
-    {%endblock%}
+    {% endcompress %}
+    {%block tailinc %}{%endblock%}
 </body>
 </html>

@@ -85,6 +85,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -127,6 +128,7 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'south',
     'bootstrapform',
+    'compressor',
 )
 
 # A sample logging configuration. The only tangible logging
