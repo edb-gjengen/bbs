@@ -37,7 +37,7 @@
                     <tr>
                         <td>{{ order.created }}</td>
                         <td>{% if order.customer %}{% if order.customer.get_profile.image %}<img src="{{ order.customer.get_profile.image }}" class="customer" title="{{ order.customer.first_name }} {{ order.customer.last_name|slice:":1"}}" />{% else %}{{ order.customer.first_name }} {{ order.customer.last_name|slice:":1"}}{% endif %}{% else %}Ekstern{% endif %}</td>
-                        <td>{% for line in order.orderline_set.all %}
+                        <td>{% for line in order.orderlines.all %}
                             <span class="amount">{{ line.amount}}</span> <a href="#" class="product" title="{{ line.unit_price}} per">{{ line.product }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</td>
                         <td>{{ order.order_sum }}</td>
                         <!--<td><{% include "modal-delete-order.html" with order=order %}<a class="btn btn-danger" data-toggle="modal" href="#modal-order-{{order.id}}"><i class="icon-trash icon-white"></i> Slett</a></td>-->

@@ -9,7 +9,7 @@
         <p>
         Orderen inneholdt:
         <ul>
-            {% for line in order.orderline_set.all %}
+            {% for line in order.orderlines.all %}
                 <li>
                     <span class="bold">{{ line.amount}}</span>
                     <a href="#" class="product" title="{{ line.unit_price}} per">{{ line.product }}</a>
