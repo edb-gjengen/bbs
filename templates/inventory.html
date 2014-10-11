@@ -32,13 +32,13 @@
                     <td>{{ product.wholesale_unit_price|default:"-" }}</td>
                     <td>{{ product.wholesale_value|default:"-"  }}</td>
                     <td class="product-active">{% if product.active %}<i class="glyphicon glyphicon-ok"></i>{% endif %}</td>
-                    <td>{{ product.updated }}</td>
+                    <td>{{ product.updated|date:"c" }}</td>
 
                 </tr>
                 {% endfor %}
                 <tr>
-                    <td></td>
-                    <td>{{ num_products }} totalt</td>
+                    <td>Sum</td>
+                    <td>{{ num_products }}</td>
                     <td></td>
                     <td>{{ wholesale_value }}</td>
                     <td></td>

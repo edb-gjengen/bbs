@@ -50,19 +50,22 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(User, null=True, blank=True)
+    customer = models.ForeignKey(User, null=True, blank=True, related_name='orders')
     order_sum = models.FloatField(db_column='sum')
     created = models.DateTimeField(auto_now_add=True)
 
     def is_external(self):
         return self.customer is None
 
+    def reciept(self):
+        return u"{0}".format(u", ".join([str(ol) for ol in self.orderlines.all()]))
+
     def __unicode__(self):
         return u"{0}: {1} kr".format(self.customer or u"Ekstern", self.order_sum)
 
 
 class OrderLine(models.Model):
-    order = models.ForeignKey('main.Order')
+    order = models.ForeignKey('main.Order', related_name='orderlines')
     product = models.ForeignKey('main.Product', related_name='orderlines')
     amount = models.IntegerField()
     unit_price = models.FloatField(verbose_name=_('Enhetspris'))
@@ -80,7 +83,7 @@ class OrderLine(models.Model):
 
 class Transaction(models.Model):
     """ Money """
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='transactions')
     amount = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
 
@@ -90,7 +93,7 @@ class Transaction(models.Model):
 
 class InventoryTransaction(models.Model):
     """ Goods """
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='inventory_transactions')
     product = models.ForeignKey('main.Product', related_name='transactions', verbose_name=_('Produkt'))
     amount = models.FloatField(verbose_name=_('Antall'))
     unit_price = models.FloatField(verbose_name=_('Enhetspris'))
@@ -117,9 +120,9 @@ class UserProfile(models.Model):
     image = models.URLField(blank=True)
 
     def last_purchase(self):
-        if len(self.user.order_set.all()) == 0:
+        if len(self.user.orders.all()) == 0:
             return None
-        return self.user.order_set.order_by('created').reverse()[0]
+        return self.user.orders.order_by('created').reverse()[0]
 
     def last_purchase_date(self):
         last = self.last_purchase()

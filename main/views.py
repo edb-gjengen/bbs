@@ -4,9 +4,11 @@ from itertools import groupby
 import json
 import time
 
+from django.db import connection
 from django.conf import settings
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout as auth_logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Sum, Min
@@ -14,7 +16,6 @@ from django.forms.formsets import formset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render, get_object_or_404, redirect
 from django.template import RequestContext
-
 from forms import *
 from models import *
 import utils
@@ -309,7 +310,7 @@ def stats_orders_hourly(request):
 def stats_products_realtime(request):
     end_time = datetime.now()
     start_time = datetime.now() - timedelta(hours=24)
-    
+
     order_lines = OrderLine.objects.filter(order__created__range=(start_time, end_time)).order_by("order__created")
     products = {}
     for order_line in order_lines:
@@ -488,3 +489,54 @@ def report(request):
     saldo_diff = saldo_end - saldo_start
 
     return render(request, 'report.html', locals())
+
+
+@login_required
+def profile(request):
+    transactions = Transaction.objects.filter(user=request.user.pk)
+    transaction_totals = {
+        'sum': sum([t.amount for t in transactions])
+    }
+    orders = Order.objects.filter(customer=request.user.pk)
+    orders_totals = {
+        'sum': sum([o.order_sum for o in orders])
+    }
+
+    #order_lines = OrderLine.objects.filter(order__customer__pk=1).order_by("order__created")
+    order_report = _orders_monthly(filter_by={'customer': request.user.pk})
+    top_months = order_report.order_by('-sum')[:5]
+    return render(request, 'profile.html', locals())
+
+
+def stats_products_per_user(request, user_id=None):
+    if not user_id:
+        return HttpResponse(
+            json.dumps({'error': 'Missing param user_id'}),
+            content_type='application/javascript; charset=utf8')
+
+    order_lines = OrderLine.objects.filter(order__customer__pk=user_id).order_by("order__created")
+    products = {}
+    for order_line in order_lines:
+        order_time_in_milliseconds = int(time.mktime(order_line.order.created.timetuple()) * 1000)
+        if order_line.product not in products:
+            products[order_line.product] = [[order_time_in_milliseconds, order_line.amount]]
+        else:
+            prev_entry = products[order_line.product][-1]
+            products[order_line.product].append([order_time_in_milliseconds, prev_entry[1] + order_line.amount])
+
+    serialized_products = []
+    for product, value in products.iteritems():
+        serialized_products.append({
+            'name': product.name,
+            'data': value
+        })
+    return HttpResponse(json.dumps(serialized_products), content_type='application/javascript; charset=utf8')
+
+
+def _orders_monthly(filter_by={}, order_by='month'):
+
+    truncate_date = connection.ops.date_trunc_sql('month', 'created')
+    qs = Order.objects.filter(**filter_by).extra({'month': truncate_date})
+    order_report = qs.values('month').annotate(sum=Sum('order_sum'), num=Count('pk')).order_by(order_by)
+
+    return order_report

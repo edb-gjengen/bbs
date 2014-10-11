@@ -40,6 +40,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ user.get_profile.profile_image_url }}" /><span class="name">{{ user.first_name }}</span> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            {% if request.user.is_authenticated %}<li class="{% block active_profile %}{% endblock %}"><a href="{% url 'profile' %}"><i class="glyphicon glyphicon-user"></i> Profil</a></li>{% endif %}
                             <li class="{% block active_create_user %}{% endblock %}"><a href="{% url 'create-user' %}"><i class="glyphicon glyphicon-plus"></i> Ny bruker</a></li>
                             {% if request.user.is_superuser %}<li><a href="/admin"><i class="glyphicon glyphicon-cog"></i> Administrasjon</a></li>{% endif %}
                             {% if request.user.is_superuser %}<li class="{% block active_inventory %}{% endblock %}"><a href="{% url 'inventory' %}"><i class="glyphicon glyphicon-briefcase"></i> Varebeholdning</a></li>{% endif %}

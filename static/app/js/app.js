@@ -105,6 +105,13 @@ $(document).ready(function() {
         update_total(this);
     });
 
+    /* Set Global Highcharts options */
+
+    Highcharts.setOptions({
+        credits: {
+            enabled: false
+        }
+    });
 
     /*
      * View: Register
@@ -163,9 +170,6 @@ $(document).ready(function() {
 
             // define the options
             var options =  {
-                credits: {
-                    enabled: false
-                },
                 chart: {
                     renderTo: render_to,
                     plotBackgroundColor: null,
@@ -211,9 +215,6 @@ $(document).ready(function() {
                 var series_data = products[i].counts;
                 // define the options
                 var options =  {
-                    credits: {
-                        enabled: false
-                    },
                     chart: {
                         renderTo: render_to,
                         plotBackgroundColor: null,
@@ -257,9 +258,6 @@ $(document).ready(function() {
 
             // define the options
             var options =  {
-                credits: {
-                    enabled: false
-                },
                 chart: {
                     renderTo: render_to,
                     type: 'column'
@@ -443,4 +441,40 @@ $(document).ready(function() {
     }).on('changeDate', function(e) {
         start_field.datepicker('setEndDate', e.date);
     });
+
+    /*
+     * View: Profile
+     */
+    if( $('#user-profile').length ) {
+        var products_by_user_url = '/stats/products/by_user/';
+        var user_id = $('#user-profile').attr('data-user-id');
+
+        $.getJSON(products_by_user_url + user_id, function(data) {
+            if(data.hasOwnProperty('error')) {
+                return;
+            }
+            $(".profile-stats-orderline").highcharts({
+                title: {
+                    text: false
+                },
+                xAxis: {
+                    type: "datetime"
+                },
+                yAxis: {
+                    title: {
+                        text: "Kjøp"
+                    }            
+                },
+                
+                plotOptions: {
+                    series: {
+                        marker: {
+                            radius: 3
+                        }
+                    }
+                },
+                series: data
+            });
+        });
+    }
 }); 
