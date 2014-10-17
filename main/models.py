@@ -39,7 +39,10 @@ class Product(models.Model):
             if self.inventory_amount <= sum_units:
                 return up['unit_price']
 
-        return unit_prices[0]['unit_price']
+        if len(unit_prices) > 0:
+            return unit_prices[0]['unit_price']
+
+        return 0
 
     @property
     def wholesale_value(self):
