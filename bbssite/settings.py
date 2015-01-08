@@ -1,10 +1,7 @@
 # Django settings for bbs project.
-from os.path import dirname, join
 
-
-def map_path(target_name):
-    # Enables path names to be decided at runtime.
-    return join(dirname(__file__), target_name).replace('\\', '/')
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -17,8 +14,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'dev.db',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'db.sqlite3',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -78,7 +75,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    map_path('static'),
+    os.path.join(BASE_DIR, 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -87,7 +84,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
-    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -97,7 +94,7 @@ SECRET_KEY = 'osv$uy-ea$*%lc)+xiwt5@2b7au%u*c!pa6hmh#vl)*+tp%fss'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-    # 'django.template.loaders.eggs.Loader',
+#     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -108,13 +105,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'bbssite.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    map_path('templates'),
+    os.path.join(BASE_DIR, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -130,6 +127,7 @@ INSTALLED_APPS = (
     'south',
     'bootstrapform',
     'compressor',
+#    'django_extensions',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -160,10 +158,16 @@ AUTH_PROFILE_MODULE = 'main.UserProfile'
 
 LOGIN_REDIRECT_URL = '/'
 
-SESSION_COOKIE_AGE = 900  # 15 minutes
+SESSION_COOKIE_AGE = 1209600  # 15 minutes
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 BBS_SALDO_MAX = 600
 BBS_LIMIT_DEPOSITS = False
 
-COMPRESS_ENABLED = True
+if not DEBUG:
+    COMPRESS_ENABLED = True
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
