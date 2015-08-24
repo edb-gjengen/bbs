@@ -386,39 +386,6 @@ $(document).ready(function() {
     }
 
     /* 
-     * View: Add user
-     */
-    var input_selector = "#id_facebook_username";
-    /* Facebook username check */
-    $(input_selector).on('keyup', _.debounce(function(event) {
-        var user_id = event.target.value;
-        if(user_id.trim().length === 0) {
-            $(input_selector).parent().removeClass('has-success has-feedback has-error');
-            $(input_selector).parent().find(".facebook-image img").attr('src', no_picture_url);
-            return;
-        }
-        var picture_url = "https://graph.facebook.com/" + user_id + "/picture";
-        var static_url = $("meta[name=x-django-static-url]").attr('content');
-        var no_picture_url = static_url +"img/unknown_person.png";
-        $.ajax({
-            url: picture_url,
-            statusCode: {
-                200: function() {
-                    $(input_selector).parent().addClass('has-success has-feedback');
-                    $(input_selector).parent().removeClass('has-error');
-                    $(input_selector).parent().find(".facebook-image img").attr('src', picture_url);
-                    
-                },
-                404: function() {
-                    $(input_selector).parent().addClass('has-error has-feedback');
-                    $(input_selector).parent().removeClass('has-success');
-                    $(input_selector).parent().find(".facebook-image img").attr('src', no_picture_url);
-                }
-            }
-        });
-    }, 300)); // Only every 300ms
-
-    /* 
      * View: Inventory report
      */
     var start_field = $(".inventory-report-form #id_start_time");
