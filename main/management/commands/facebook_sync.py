@@ -33,7 +33,7 @@ class Command(BaseCommand):
         names = []  # to fuzzy search for a name
         name_lookup = {}  # to update the matching UserProfile object
         for u in User.objects.all().order_by('id'):
-            fullname = '{} {}'.format(u.first_name, u.last_name)
+            fullname = u'{} {}'.format(u.first_name, u.last_name)
             names.append(fullname)
             name_lookup[fullname] = u.id
 
