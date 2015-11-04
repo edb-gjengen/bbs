@@ -67,7 +67,7 @@ def register(request):
             if not order.is_external():
                 profile = order.customer.get_profile()
                 # can she afford it?
-                if order_sum > profile.balance:
+                if order_sum >= profile.balance:
                     messages.error(request, u'{0} {1} har ikke råd, mangler {2} kr.'.format(
                         order.customer.first_name,
                         order.customer.last_name,
