@@ -1,18 +1,19 @@
 # coding: utf-8
+from __future__ import unicode_literals
 from django import forms
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
-from models import *
-
-import utils
+from main.models import Order, Transaction, InventoryTransaction, Product
+from main.utils import format_username
 
 
 class OrderForm(forms.ModelForm):
     customer_name = forms.CharField(required=False)
 
     def clean(self):
-        if self.cleaned_data['customer'] is None and self.cleaned_data['customer_name'] != u"Ekstern":
-            raise forms.ValidationError(_(u"Du har ikke valgt hvem som skal kjøpe."))
+        if self.cleaned_data['customer'] is None and self.cleaned_data['customer_name'] != "Ekstern":
+            raise forms.ValidationError(_("Du har ikke valgt hvem som skal kjøpe."))
 
         return self.cleaned_data
 
@@ -20,8 +21,8 @@ class OrderForm(forms.ModelForm):
         if self.cleaned_data['customer'] is None:
             return self.cleaned_data['customer']
 
-        if self.cleaned_data['customer'].get_profile().balance <= 0:
-            raise forms.ValidationError(_(u"Du har negativ saldo og kan ikke kjøpe noe."))
+        if self.cleaned_data['customer'].profile.balance <= 0:
+            raise forms.ValidationError(_("Du har negativ saldo og kan ikke kjøpe noe."))
 
         return self.cleaned_data['customer']
 
@@ -41,6 +42,7 @@ class DepositForm(forms.ModelForm):
 
     class Meta:
         model = Transaction
+        fields = ['user', 'amount']
 
 
 class SimpleCreateUserForm(forms.Form):
@@ -55,12 +57,12 @@ class SimpleCreateUserForm(forms.Form):
         return "https://graph.facebook.com/{0}/picture".format(self.cleaned_data['facebook_username'])
 
     def save(self, commit=True):   
-        username = utils.format_username(self.cleaned_data['first_name'], self.cleaned_data['last_name'])
+        username = format_username(self.cleaned_data['first_name'], self.cleaned_data['last_name'])
         user = User.objects.create_user(username, email=self.cleaned_data['email'])
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
 
-        profile = user.get_profile()
+        profile = user.profile
         profile.image = self._get_facebook_url()
 
         if commit:

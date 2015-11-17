@@ -117,7 +117,7 @@ class InventoryTransaction(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name='profile')
     balance = models.FloatField(default=0.0)
     #image = models.ImageField(upload_to='users', blank=True)
     image = models.URLField(blank=True)

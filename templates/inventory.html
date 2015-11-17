@@ -66,7 +66,7 @@
                     <td>{{ t.created }}</td>
                     <td>{{ t.product }}</td>
                     <td>{{ t.amount }}</td>
-                    <td>{% if t.user.get_profile.image %}<img src="{{ t.user.get_profile.image }}" class="customer" title="{{ t.user.first_name }} {{ t.user.last_name|slice:":1"}}" />{% else %}{{ t.user.first_name }} {{ t.user.last_name|slice:":1"}}{% endif %}</td>
+                    <td>{% if t.user.profile.image %}<img src="{{ t.user.profile.image }}" class="customer" title="{{ t.user.first_name }} {{ t.user.last_name|slice:":1"}}" />{% else %}{{ t.user.first_name }} {{ t.user.last_name|slice:":1"}}{% endif %}</td>
                 </tr>
                 {% endfor %}
                 </tbody>

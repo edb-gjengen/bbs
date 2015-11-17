@@ -5,7 +5,7 @@
 <section id="user-profile" data-user-id="{{request.user.pk}}">
     <div class="row">
         <div class="col-md-12">
-        	<h1 class="profile-name"><img src="{{ request.user.get_profile.profile_image_url }}" class="profile-image" /> {{user.first_name}}</h1>
+        	<h1 class="profile-name"><img src="{{ request.user.profile.profile_image_url }}" class="profile-image" /> {{user.first_name}}</h1>
         </div>
     </div>
     <div class="row">
@@ -13,7 +13,7 @@
 	        <div class="panel panel-default">
 			    <div class="panel-heading">Saldo</div>
 				<div class="panel-body">
-				<h2>{{request.user.get_profile.balance }} kr</h2>
+				<h2>{{request.user.profile.balance }} kr</h2>
 				</div>
 			</div>
 	        <div class="panel panel-default">

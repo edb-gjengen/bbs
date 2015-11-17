@@ -20,7 +20,7 @@
             <p>Spør en av disse om de kan hjelpe deg:</p>
             <ul>
             {% for u in allowed_users %}
-                <li style="padding-bottom: 8px;"><img src="{{u.get_profile.image }}" />{{u.first_name }} {{u.last_name }}</li>
+                <li style="padding-bottom: 8px;"><img src="{{u.profile.image }}" />{{u.first_name }} {{u.last_name }}</li>
             {% endfor %}
             </ul>
         </div>
@@ -48,9 +48,9 @@
                     <ul class="well">
                         {% for user in users %}
                         <li class="customer">{% spaceless %}
-                        <img class="profile" src="{{ user.get_profile.profile_image_url }}" alt="Profile picture"/><br />
+                        <img class="profile" src="{{ user.profile.profile_image_url }}" alt="Profile picture"/><br />
                         <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span><br />
-                        <span class="balance">{{ user.get_profile.balance }}</span>
+                        <span class="balance">{{ user.profile.balance }}</span>
                         <span class="id" style="display:none;">{{ user.id }}</span>
                         {% endspaceless %}</li>
                         {% endfor %}

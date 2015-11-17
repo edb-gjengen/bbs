@@ -1,13 +1,13 @@
 <!doctype html>
-{% load compress %}
+{% load compress staticfiles %}
 <html>
 <head>
     <title>{%block title%}BBS{%endblock%}</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="x-django-static-url" content="{{ STATIC_URL }}">
+    <meta name="x-django-static-url" content="{% static "" %}">
     {% compress css %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}dist/styles/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="{% static "dist/styles/screen.css" %}" type="text/css" media="screen, projection">
     {% endcompress %}
     {%block headinc %}{%endblock%}
 </head>
@@ -38,7 +38,7 @@
                     <li><a href="{% url 'login' %}">Logg inn</a></li>
                     {% else %}
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ user.get_profile.profile_image_url }}" /><span class="name">{{ user.first_name }}</span> <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ user.profile.profile_image_url }}" /><span class="name">{{ user.first_name }}</span> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             {% if request.user.is_authenticated %}<li class="{% block active_profile %}{% endblock %}"><a href="{% url 'profile' %}"><i class="glyphicon glyphicon-user"></i> Profil</a></li>{% endif %}
                             <li class="{% block active_create_user %}{% endblock %}"><a href="{% url 'create-user' %}"><i class="glyphicon glyphicon-plus"></i> Ny bruker</a></li>
@@ -63,7 +63,7 @@
                 {%block footer %}
                 <div class="credits">
                     Laget med <span class="love" title="kærlighed">♥</span> av <a href="http://edb.neuf.no/">EDB-gjengen i KAK</a><br/>
-                     <a href="http://edb.neuf.no/"><img src="{{ STATIC_URL }}dist/images/edb_brick.png" alt="EDB" /></a>
+                     <a href="http://edb.neuf.no/"><img src="{% static "dist/images/edb_brick.png" %}" alt="EDB" /></a>
                 </div>
                 {%endblock%}
             </div>
@@ -72,15 +72,15 @@
 
     
     {% compress js %}
-    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/collapse.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.nb.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/highcharts/highcharts.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}app/bower_components/underscore/underscore-min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}dist/js/app.js"></script>
+    <script type="text/javascript" src="{% static "app/bower_components/jquery/dist/jquery.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/collapse.js" %}"></script>
+    <script type="text/javascript" src="{% static "app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js" %}"></script>
+    <script type="text/javascript" src="{% static "app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js" %}"></script>
+    <script type="text/javascript" src="{% static "app/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js" %}"></script>
+    <script type="text/javascript" src="{% static "app/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.nb.js" %}"></script>
+    <script type="text/javascript" src="{% static "app/bower_components/highcharts/highcharts.js" %}"></script>
+    <script type="text/javascript" src="{% static "app/bower_components/underscore/underscore-min.js" %}"></script>
+    <script type="text/javascript" src="{% static "dist/js/app.js" %}"></script>
     {% endcompress %}
     {%block tailinc %}{%endblock%}
 </body>

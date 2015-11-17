@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block active_register %}active{% endblock %}
 
 {% block content %}
@@ -40,14 +41,14 @@
                     <div class="col-md-12">
                         <ul class="well">
                             <li class="customer">{% spaceless %}
-                                <img class="profile" src="{{ STATIC_URL }}dist/images/unknown_person.png" alt="Profile picture" /><br />
+                                <img class="profile" src="{% static "dist/images/unknown_person.png" %}" alt="Profile picture" /><br />
                                 <span class="name">Ekstern</span><br />
                                 <span class="balance">&nbsp;</span>
                             {% endspaceless %}</li>
-                            {% for user in users %}<li class="customer{% if user.get_profile.last_purchase_date < half_a_year_ago and not user.get_profile.last_purchase == None %} infrequent hidden{% endif %}">{% spaceless %}
-                                <img class="profile" src="{{ user.get_profile.profile_image_url }}" alt="Profile picture" /><br />
+                            {% for user in users %}<li class="customer{% if user.profile.last_purchase_date < half_a_year_ago and not user.profile.last_purchase == None %} infrequent hidden{% endif %}">{% spaceless %}
+                                <img class="profile" src="{{ user.profile.profile_image_url }}" alt="Profile picture" /><br />
                                 <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span><br />
-                                <span class="balance">{{ user.get_profile.balance }}</span>
+                                <span class="balance">{{ user.profile.balance }}</span>
                                 <span class="id" style="display:none;">{{ user.id }}</span>
                                 {% endspaceless %}</li>{% endfor %}
                         </ul>
@@ -77,9 +78,9 @@
                                 <input type="hidden" name="form-{{ forloop.counter0 }}-unit_price_ext" value="{{product.sale_price_ext }}" />
                                 <span class="qty">0</span>
                                 {% if product.image %}
-                                        <img class="product" src="{{ product.image.url }}" /><br />
+                                        <img class="product" src="{{ product.image.url }}" /><br />
                                 {% else %}
-                                        <img class="product" src="{{ STATIC_URL }}dist/images/product.png" /><br />
+                                        <img class="product" src="{% static "dist/images/product.png" %}" /><br />
                                 {% endif %}
                                 <span class="name">{{ product.name }}</span> - <span class="sale_price_ext">{{product.sale_price_ext|floatformat:0}}</span>/<span class="sale_price_int">{{product.sale_price_int|floatformat:0}}</span>
                                 </li>
