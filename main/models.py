@@ -125,17 +125,18 @@ class UserProfile(models.Model):
     def last_purchase(self):
         if len(self.user.orders.all()) == 0:
             return None
-        return self.user.orders.order_by('created').reverse()[0]
+
+        return self.user.orders.order_by('-created')[0]
 
     def last_purchase_date(self):
         last = self.last_purchase()
-        if last:
-            return last.created
-        else:
-            return datetime.min
+        last_p = last.created if last else datetime.min
+        print(self.user, last_p)
+        return last_p
 
     def profile_image_url(self):
         from django.templatetags.static import static
+
         if not self.image:
             return static('dist/images/unknown_person.png')
 

@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from datetime import datetime, timedelta
 
-import settings
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -18,7 +18,8 @@ from main.utils import users_format_js, users_with_perm
 
 def register(request):
     products = Product.objects.filter(active=True)
-    cheapest_product_price = products.aggregate(Min('sale_price_int')).values()[0] or 0
+    cheapest_product_price = list(products.aggregate(Min('sale_price_int')).values())[0] or 0
+
     half_a_year_ago = datetime.now() - timedelta(days=180)
     users = User.objects.filter(profile__balance__gte=cheapest_product_price)
     # sort users after user's last purchase time
@@ -109,11 +110,7 @@ def deposit(request):
     allowed_users = users_with_perm('add_transaction')
     error_message_template = '{0} {1} kan ikke sette inn {2} kr, det overskrider maks saldo ({3} kr) med {4} kr'
 
-    # FIXME: dont need this
-    try:
-        limit_deposists = settings.BBS_LIMIT_DEPOSITS
-    except:
-        pass
+    limit_deposists = settings.BBS_LIMIT_DEPOSITS
 
     if request.method == "POST":
         form = DepositForm(request.POST)

@@ -45,7 +45,7 @@
                                 <span class="name">Ekstern</span><br />
                                 <span class="balance">&nbsp;</span>
                             {% endspaceless %}</li>
-                            {% for user in users %}<li class="customer{% if user.profile.last_purchase_date < half_a_year_ago and not user.profile.last_purchase == None %} infrequent hidden{% endif %}">{% spaceless %}
+                            {% for user in users %}<li class="customer{% if user.profile.last_purchase_date < half_a_year_ago %} infrequent hidden{% endif %}">{% spaceless %}
                                 <img class="profile" src="{{ user.profile.profile_image_url }}" alt="Profile picture" /><br />
                                 <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span><br />
                                 <span class="balance">{{ user.profile.balance }}</span>

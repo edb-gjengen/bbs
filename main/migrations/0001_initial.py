@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             name='Order',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('order_sum', models.FloatField(db_column=b'sum')),
+                ('order_sum', models.FloatField(db_column='sum')),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('customer', models.ForeignKey(related_name='orders', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(max_length=256, blank=True)),
                 ('volume_liter', models.FloatField(null=True)),
                 ('alcohol_percent', models.FloatField(null=True)),
-                ('image', models.ImageField(upload_to=b'products', blank=True)),
+                ('image', models.ImageField(upload_to='products', blank=True)),
                 ('customer_support', models.CharField(max_length=32, blank=True)),
                 ('inventory_amount', models.FloatField(default=0)),
                 ('active', models.BooleanField(default=True)),

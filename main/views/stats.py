@@ -122,7 +122,7 @@ def stats_orders_hourly(request):
 
     response = {
         'start': str(orders[0].created),
-        'hourly': [[k, v] for k, v in f_hourly.iteritems()],
+        'hourly': [[k, v] for k, v in f_hourly.items()],
         'total': sum(f_hourly.values()),
     }
     return JsonResponse(response)
@@ -143,7 +143,7 @@ def stats_products_realtime(request):
             products[order_line.product].append([order_time_in_milliseconds, prev_entry[1] + order_line.amount])
 
     serialized_products = {}
-    for product, value in products.iteritems():
+    for product, value in products.items():
         serialized_products[product.name] = value
 
     response = {
@@ -168,9 +168,9 @@ def stats_products_per_user(request, user_id=None):
             products[order_line.product].append([order_time_in_milliseconds, prev_entry[1] + order_line.amount])
 
     serialized_products = []
-    for product, value in products.iteritems():
+    for product, value in products.items():
         serialized_products.append({
             'name': product.name,
             'data': value
         })
-    return JsonResponse(serialized_products)
+    return JsonResponse(serialized_products, safe=False)

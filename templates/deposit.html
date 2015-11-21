@@ -49,8 +49,8 @@
                         {% for user in users %}
                         <li class="customer">{% spaceless %}
                         <img class="profile" src="{{ user.profile.profile_image_url }}" alt="Profile picture"/><br />
-                        <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1"}}</span><br />
-                        <span class="balance">{{ user.profile.balance }}</span>
+                        <span class="name">{{ user.first_name }} {{ user.last_name|slice:":1" }}</span><br />
+                        <span class="balance">{{ user.profile.balance }}</span>
                         <span class="id" style="display:none;">{{ user.id }}</span>
                         {% endspaceless %}</li>
                         {% endfor %}
