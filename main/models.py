@@ -1,16 +1,14 @@
-from django.contrib.auth.models import User
-from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.utils.translation import ugettext_lazy as _
+from __future__ import unicode_literals
 from datetime import datetime
 
+from django.conf import settings
+from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
 
+
+@python_2_unicode_compatible
 class Product(models.Model):
-
-    def __unicode__(self):
-        return self.name
-
     name = models.CharField(max_length=64)
     sale_price_int = models.FloatField()
     sale_price_ext = models.FloatField()
@@ -48,12 +46,16 @@ class Product(models.Model):
     def wholesale_value(self):
         return self.wholesale_unit_price * self.inventory_amount
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         ordering = ['name']
 
 
+@python_2_unicode_compatible
 class Order(models.Model):
-    customer = models.ForeignKey(User, null=True, blank=True, related_name='orders')
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='orders')
     order_sum = models.FloatField(db_column='sum')
     created = models.DateTimeField(auto_now_add=True)
 
@@ -61,12 +63,13 @@ class Order(models.Model):
         return self.customer is None
 
     def reciept(self):
-        return u"{0}".format(u", ".join([str(ol) for ol in self.orderlines.all()]))
+        return "{}".format(", ".join([str(ol) for ol in self.orderlines.all()]))
 
-    def __unicode__(self):
-        return u"{0}: {1} kr".format(self.customer or u"Ekstern", self.order_sum)
+    def __str__(self):
+        return "{}: {} kr".format(self.customer or "Ekstern", self.order_sum)
 
 
+@python_2_unicode_compatible
 class OrderLine(models.Model):
     order = models.ForeignKey('main.Order', related_name='orderlines')
     product = models.ForeignKey('main.Product', related_name='orderlines')
@@ -77,26 +80,28 @@ class OrderLine(models.Model):
     def price(self):
         return self.amount * self.unit_price
 
-    def __unicode__(self):
-        return u"{0} {1} ({2} kr per)".format(self.amount, self.product, self.unit_price)
+    def __str__(self):
+        return "{} {} ({} kr per)".format(self.amount, self.product, self.unit_price)
 
     class Meta:
         unique_together = ('order', 'product')
 
 
+@python_2_unicode_compatible
 class Transaction(models.Model):
     """ Money """
-    user = models.ForeignKey(User, related_name='transactions')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='transactions')
     amount = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
 
-    def __unicode__(self):
-        return u"{0}: {1}: {2}".format(self.id, self.user, self.amount)
+    def __str__(self):
+        return "{}: {}: {}".format(self.id, self.user, self.amount)
 
 
+@python_2_unicode_compatible
 class InventoryTransaction(models.Model):
     """ Goods """
-    user = models.ForeignKey(User, related_name='inventory_transactions')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='inventory_transactions')
     product = models.ForeignKey('main.Product', related_name='transactions', verbose_name=_('Produkt'))
     amount = models.FloatField(verbose_name=_('Antall'))
     unit_price = models.FloatField(verbose_name=_('Enhetspris'))
@@ -107,8 +112,8 @@ class InventoryTransaction(models.Model):
     def price(self):
         return self.amount * self.unit_price
 
-    def __unicode__(self):
-        return u"{0}: {1}: {2} ({3} kr per)".format(
+    def __str__(self):
+        return "{}: {}: {} ({} kr per)".format(
             self.id,
             self.user,
             self.product,
@@ -116,10 +121,10 @@ class InventoryTransaction(models.Model):
             self.unit_price)
 
 
+@python_2_unicode_compatible
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, related_name='profile')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='profile')
     balance = models.FloatField(default=0.0)
-    #image = models.ImageField(upload_to='users', blank=True)
     image = models.URLField(blank=True)
 
     def last_purchase(self):
@@ -131,7 +136,6 @@ class UserProfile(models.Model):
     def last_purchase_date(self):
         last = self.last_purchase()
         last_p = last.created if last else datetime.min
-        print(self.user, last_p)
         return last_p
 
     def profile_image_url(self):
@@ -142,12 +146,5 @@ class UserProfile(models.Model):
 
         return self.image
 
-    def __unicode__(self):
-        return u"{0}".format(self.user)
-
-
-# Create a new UserProfile object when we create a new User.
-@receiver(post_save, sender=User, dispatch_uid='randomz')
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
+    def __str__(self):
+        return "{}".format(self.user)

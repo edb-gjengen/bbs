@@ -6,15 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.db import connection
 from django.db.models import Sum, Count
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout as auth_logout
 from main.forms import SimpleCreateUserForm
 from main.models import Order
 from main.models import Transaction
-
-
-def logout(request):
-    auth_logout(request)
-    return render(request, 'registration/logout.html')
 
 
 def create_user(request):
@@ -22,7 +16,7 @@ def create_user(request):
         form = SimpleCreateUserForm(data=request.POST)
         if form.is_valid():
             user = form.save()
-            messages.success(request, "Hurra! {0} {1} er lagt til".format(user.first_name, user.last_name))
+            messages.success(request, "Hurra! {} {} er lagt til".format(user.first_name, user.last_name))
             return redirect('create-user')
 
         else:

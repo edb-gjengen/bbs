@@ -21,5 +21,5 @@ def users_format_js(users):
     users_js = []
     for user in users:
         users_js.append('"' + user.first_name + ' ' + user.last_name[:1] + '"')
-    users_js = "[{0}]".format(u",".join(users_js))
+    users_js = "[{}]".format(u",".join(users_js))
     return users_js

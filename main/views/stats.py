@@ -1,10 +1,12 @@
 from __future__ import unicode_literals
-from datetime import datetime, timedelta, time
+import time
+from datetime import datetime, timedelta
 from django.db.models import Sum, Count
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from itertools import groupby
 
+from django.utils import six
 from main.models import Product, OrderLine, Order
 
 
@@ -61,7 +63,7 @@ def stats_product(product):
         f_per_user.append([who, num])
 
     response = {
-        'product': serialize_product(Product.objects.get(pk=product)) if type(product) is unicode else serialize_product(product),
+        'product': serialize_product(Product.objects.get(pk=product)) if type(product) in six.string_types else serialize_product(product),
         'counts': f_per_user,
         'total_counts': sum([row['num'] for row in per_user]),
     }
