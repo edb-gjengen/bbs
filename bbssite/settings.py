@@ -87,6 +87,7 @@ INSTALLED_APPS = (
     'bootstrapform',
     'compressor',
     'django_extensions',
+    'rest_framework',
 )
 LOCAL_APPS = (
     'main',

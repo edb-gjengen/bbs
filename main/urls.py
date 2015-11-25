@@ -1,10 +1,11 @@
 from django.conf.urls import url
-
+from main.api.views import ProductViewSet
 from main.views.stats import stats_list, stats_orders, stats_orders_hourly, stats_products_realtime, stats_products, \
     stats_products_per_user, products_json
 from main.views.general import register, deposit, log
 from main.views.reports import inventory, inventory_add, report
 from main.views.users import create_user, profile
+from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     url(r'^$', register, name='home'),
@@ -31,3 +32,8 @@ urlpatterns = [
     url(r'^inventory/add/$', inventory_add, name='inventory-add'),
     url(r'^report$', report, name='report'),
 ]
+
+# API
+router = DefaultRouter()
+router.register(r'api/products', ProductViewSet)
+urlpatterns += router.urls
