@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load staticfiles thumbnail %}
 {% block active_register %}active{% endblock %}
 
 {% block content %}
@@ -78,7 +78,7 @@
                             <input type="hidden" name="form-{{ forloop.counter0 }}-unit_price_ext" value="{{product.sale_price_ext }}" />
                             <span class="qty">0</span>
                             {% if product.image %}
-                                    <img class="product" src="{{ product.image.url }}" /><br />
+                                    <img class="product" src="{{ product.image|thumbnail_url:'product' }}" /><br />
                             {% else %}
                                     <img class="product" src="{% static "dist/images/product.png" %}" /><br />
                             {% endif %}

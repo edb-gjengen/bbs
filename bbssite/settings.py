@@ -86,6 +86,7 @@ INSTALLED_APPS = (
     'bootstrapform',
     'django_extensions',
     'rest_framework',
+    'easy_thumbnails',
 )
 LOCAL_APPS = (
     'main',
@@ -99,6 +100,13 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 BBS_SALDO_MAX = 600
 BBS_LIMIT_DEPOSITS = False
+
+# Thumbnails
+THUMBNAIL_ALIASES = {
+    '': {
+        'product': {'size': (64, 64), 'crop': True},
+    },
+}
 
 try:
     from .local_settings import *
