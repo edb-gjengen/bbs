@@ -10,6 +10,7 @@ class ProductSerializer(ModelSerializer):
         model = Product
 
 
+
 class ProductStatSerializer(ModelSerializer):
     EXTERNAL_USER = 'Ekstern'
     counts = serializers.SerializerMethodField()
@@ -28,11 +29,9 @@ class ProductStatSerializer(ModelSerializer):
         return per_user
 
     def get_counts(self, obj):
-        per_user = OrderLine.objects\
-            .filter(product=obj)\
-            .values('order__customer__first_name', 'order__customer__last_name')\
-            .annotate(amount_total=Sum('amount'))\
-            .order_by('-amount_total')
+        name_fields = ['order__customer__first_name', 'order__customer__last_name']
+        per_user = OrderLine.objects.filter(product=obj)
+        per_user = per_user.values(*name_fields).annotate(amount_total=Sum('amount')).order_by('-amount_total')
 
         return self._format_counts(per_user)
 

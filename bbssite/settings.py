@@ -37,7 +37,6 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -85,7 +84,6 @@ INSTALLED_APPS = (
 
     'widget_tweaks',
     'bootstrapform',
-    'compressor',
     'django_extensions',
     'rest_framework',
 )
@@ -101,9 +99,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 BBS_SALDO_MAX = 600
 BBS_LIMIT_DEPOSITS = False
-
-if not DEBUG:
-    COMPRESS_ENABLED = True
 
 try:
     from .local_settings import *

@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, patterns
 from main.api.views import ProductViewSet
 from main.views.stats import stats_list, stats_orders, stats_orders_hourly, stats_products_realtime, stats_products_per_user
 from main.views.general import register, deposit, log
@@ -25,7 +25,13 @@ urlpatterns = [
     url(r'^inventory/$', inventory, name='inventory'),
     url(r'^inventory/add/$', inventory_add, name='inventory-add'),
     url(r'^report$', report, name='report'),
+
 ]
+# Root level service-worker.js
+urlpatterns += patterns(
+    'django.contrib.staticfiles.views',
+    url(r'^service-worker\.js$', 'serve', kwargs={'path': 'dist/service-worker.js'})
+)
 
 # API
 router = DefaultRouter()

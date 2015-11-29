@@ -1,14 +1,12 @@
 <!doctype html>
-{% load compress staticfiles %}
+{% load staticfiles %}
 <html>
 <head>
     <title>{%block title%}BBS{%endblock%}</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="x-django-static-url" content="{% static "" %}">
-    {% compress css %}
     <link rel="stylesheet" href="{% static "dist/styles/screen.css" %}" type="text/css" media="screen, projection">
-    {% endcompress %}
     {%block headinc %}{%endblock%}
 </head>
 <body>
@@ -70,18 +68,19 @@
         </div>
     </div>
 
-    
-    {% compress js %}
-    <script type="text/javascript" src="{% static "app/bower_components/jquery/dist/jquery.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/collapse.js" %}"></script>
-    <script type="text/javascript" src="{% static "app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js" %}"></script>
-    <script type="text/javascript" src="{% static "app/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js" %}"></script>
-    <script type="text/javascript" src="{% static "app/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js" %}"></script>
-    <script type="text/javascript" src="{% static "app/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.nb.js" %}"></script>
-    <script type="text/javascript" src="{% static "app/bower_components/highcharts/highcharts.js" %}"></script>
-    <script type="text/javascript" src="{% static "app/bower_components/underscore/underscore-min.js" %}"></script>
-    <script type="text/javascript" src="{% static "dist/js/app.js" %}"></script>
-    {% endcompress %}
+    <script type="text/javascript" src="{% static "dist/js/app.min.js" %}"></script>
+    <script>
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+        .then(function(registration) {
+            console.log("Service Worker Registered");
+        });
+
+        navigator.serviceWorker.ready.then(function(registration) {
+            console.log("Service Worker Ready");
+        });
+    }
+    </script>
     {%block tailinc %}{%endblock%}
 </body>
 </html>

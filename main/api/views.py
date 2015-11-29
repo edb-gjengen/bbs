@@ -1,12 +1,15 @@
+from rest_framework import mixins
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 from main.api.serializers import ProductSerializer, ProductStatSerializer
 from main.models import Product
+from rest_framework.viewsets import GenericViewSet
 
 
-class ProductViewSet(ModelViewSet):
+class ProductViewSet(mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin,
+                     GenericViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
