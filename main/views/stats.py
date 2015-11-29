@@ -1,133 +1,97 @@
 from __future__ import unicode_literals
+
 import time
 from datetime import datetime, timedelta
-from django.db.models import Sum, Count
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from django.utils import timezone
 from itertools import groupby
 
-from django.utils import six
+from django.views.generic import View
 from main.models import Product, OrderLine, Order
 
 
 def stats_list(request):
     products = Product.objects.filter(active=True)
+    order_groups = ['hourly', 'daily', 'monthly', 'yearly']
 
-    return render(request, 'stats.html', {'products': products})
-
-
-def serialize_product(product):
-    f_product = {}
-    for attr in Product._meta.get_all_field_names():
-        if attr in ["transactions", "orderlines", "image"]:
-            continue
-
-        if hasattr(product, attr) and product.__getattribute__(attr):
-            if type(product.__getattribute__(attr)) is datetime:
-                f_product[attr] = str(product.__getattribute__(attr))
-            else:
-                f_product[attr] = product.__getattribute__(attr)
-    return f_product
+    return render(request, 'stats.html', {'products': products, 'order_groups': order_groups})
 
 
-def products_json(request, product_id=None):
-    if product_id:
-        # single
-        products = get_object_or_404(Product, pk=product_id)
-    else:
-        # many
-        products = Product.objects.filter(active=True)
+class OrdersView(View):
+    grouping = 'orders'
 
-    if product_id:
-        f_products = serialize_product(products)
-    else:
-        f_products = [serialize_product(product) for product in products]
+    def get_range(self):
+        raise NotImplementedError
 
-    return JsonResponse(f_products)
+    def get_key(self, order):
+        raise NotImplementedError
 
+    def group_by(self, orders):
+        orders_grouped = dict([(key, 0) for key in self.get_range()])  # init
+        for key, values in groupby(orders, key=self.get_key):
+            count = len(list(values))
+            orders_grouped[key] += count
 
-def stats_product(product):
-    # reverse lookup via order, customer
-    per_user = OrderLine.objects\
-        .filter(product=product)\
-        .values('order__customer__first_name', 'order__customer__last_name')\
-        .annotate(num=Sum('amount'))\
-        .order_by('-num')
-    f_per_user = []
-    for row in per_user:
-        if row['order__customer__first_name'] is not None:
-            who = row['order__customer__first_name'] + " " + row['order__customer__last_name']
-        else:
-            who = "Ekstern"
-        num = row['num']
-        f_per_user.append([who, num])
+        return orders_grouped
 
-    response = {
-        'product': serialize_product(Product.objects.get(pk=product)) if type(product) in six.string_types else serialize_product(product),
-        'counts': f_per_user,
-        'total_counts': sum([row['num'] for row in per_user]),
-    }
+    def get(self, request):
+        orders = Order.objects.all()
+        if not orders.exists():
+            return JsonResponse({})
 
-    return response
-
-
-def stats_products(request, product=None):
-    if product:
-        # single
-        f_products = [stats_product(product)]
-        sales = OrderLine.objects.filter(product=product)
-    else:
-        # all
-        sales = OrderLine.objects.filter(product__active=True)
-        f_products = [stats_product(p) for p in Product.objects.filter(active=True)]
-
-    totals = float(sum([sale.amount for sale in sales]))
-    response = {
-        'request': 'all' if not product else product,
-        'response': {
-            'products': f_products,
-            'total_count': totals,
+        orders_grouped = self.group_by(orders)
+        data = {
+            'start': str(orders[0].created),
+            'orders': [[k, v] for k, v in orders_grouped.items()],
+            'total': sum(orders_grouped.values()),
+            'grouping': self.grouping
         }
-    }
-    return JsonResponse(response)
+        return JsonResponse(data)
 
 
-def stats_orders(request):
-    num_external_orders = Order.objects.filter(customer=None).count()
-    per_user = Order.objects\
-        .values('customer__first_name', 'customer__last_name')\
-        .annotate(num=Count('customer'))\
-        .order_by('num').reverse()
-    f_per_user = []
-    for row in per_user:
-        if row['customer__first_name'] is not None:
-            who = row['customer__first_name'] + " " + row['customer__last_name']
-            num = row['num']
-        else:
-            who = "Ekstern"
-            num = num_external_orders
-        f_per_user.append([who, num])
+class OrdersHourlyView(OrdersView):
+    grouping = 'hourly'
 
-    return JsonResponse(f_per_user, safe=False)
+    def get_range(self):
+        return range(0, 24)
+
+    def get_key(self, order):
+        return order.created.hour
 
 
-def stats_orders_hourly(request):
-    orders = Order.objects.all()
-    f_hourly = dict([(key, 0) for key in range(0, 24)])  # init
-    # group by hour
-    for key, values in groupby(orders, key=lambda row: row.created.hour):
-        count = len(list(values))
-        f_hourly[key] += count
+class OrdersDailyView(OrdersView):
+    grouping = 'daily'
 
-    if len(orders) == 0:
-        return JsonResponse({})
+    def get_range(self):
+        return range(0, 7)
 
-    response = {
-        'start': str(orders[0].created),
-        'hourly': [[k, v] for k, v in f_hourly.items()],
-        'total': sum(f_hourly.values()),
-    }
-    return JsonResponse(response)
+    def get_key(self, order):
+        return order.created.weekday()
+
+
+class OrdersMonthlyView(OrdersView):
+    grouping = 'monthly'
+
+    def get_range(self):
+        return range(1, 13)
+
+    def get_key(self, order):
+        return order.created.month
+
+
+class OrdersYearlyView(OrdersView):
+    grouping = 'yearly'
+
+    def get_range(self):
+        first = Order.objects.order_by('created').first()
+        last = timezone.now().year
+        first = first.created.year if first else last
+
+        return range(first, last+1)
+
+    def get_key(self, order):
+        return order.created.year
 
 
 def stats_products_realtime(request):

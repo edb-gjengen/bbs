@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load staticfiles thumbnail %}
 {% block active_register %}active{% endblock %}
 
 {% block content %}
@@ -72,29 +72,30 @@
                     <h2>Kjøper hva?</h2>
                     <ul class="well">
                         {% for product in products %}
-                                <li id="form-{{forloop.counter0}}" class="product"><input type="hidden" name="form-{{ forloop.counter0 }}-product" value="{{product.id }}" />
-                                <input type="hidden" id="form-{{ forloop.counter0 }}-amount" name="form-{{ forloop.counter0 }}-amount" value="0" class="span2" size="2" />
-                                <input type="hidden" name="form-{{ forloop.counter0 }}-unit_price_int" value="{{product.sale_price_int }}" />
-                                <input type="hidden" name="form-{{ forloop.counter0 }}-unit_price_ext" value="{{product.sale_price_ext }}" />
-                                <span class="qty">0</span>
-                                {% if product.image %}
-                                        <img class="product" src="{{ product.image.url }}" /><br />
-                                {% else %}
-                                        <img class="product" src="{% static "dist/images/product.png" %}" /><br />
-                                {% endif %}
-                                <span class="name">{{ product.name }}</span> - <span class="sale_price_ext">{{product.sale_price_ext|floatformat:0}}</span>/<span class="sale_price_int">{{product.sale_price_int|floatformat:0}}</span>
-                                </li>
+                            <li id="form-{{forloop.counter0}}" class="product"><input type="hidden" name="form-{{ forloop.counter0 }}-product" value="{{product.id }}" />
+                            <input type="hidden" id="form-{{ forloop.counter0 }}-amount" name="form-{{ forloop.counter0 }}-amount" value="0" class="span2" size="2" />
+                            <input type="hidden" name="form-{{ forloop.counter0 }}-unit_price_int" value="{{product.sale_price_int }}" />
+                            <input type="hidden" name="form-{{ forloop.counter0 }}-unit_price_ext" value="{{product.sale_price_ext }}" />
+                            <span class="qty">0</span>
+                            {% if product.image %}
+                                    <img class="product" src="{{ product.image|thumbnail_url:'product' }}" /><br />
+                            {% else %}
+                                    <img class="product" src="{% static "dist/images/product.png" %}" /><br />
+                            {% endif %}
+                            <span class="name">{{ product.name }}</span><br>
+                            <span class="sale_price_ext">{{product.sale_price_ext|floatformat:0}}</span>/<span class="sale_price_int">{{product.sale_price_int|floatformat:0}}</span>
+                            </li>
                         {% endfor %}
                     </ul>
                 </div>
             </section>
         </fieldset>
         <div class="form-actions">
-                <div class="col-xs-3 total">
-                    <h2>Totalt: <span class="total_text"></span></h2>
-                </div>
-                <button type="submit" class="btn btn-lg btn-primary" name="submit_order">Kjøp</button>
-                <button type="reset" class="btn btn-default">Start på nytt</button>
+            <div class="col-xs-3 total">
+                <h2>Totalt: <span class="total_text"></span></h2>
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary" name="submit_order">Kjøp</button>
+            <button type="reset" class="btn btn-default">Start på nytt</button>
         </div>
     </form>
 </section>
