@@ -1,57 +1,97 @@
 from __future__ import unicode_literals
+
 import time
 from datetime import datetime, timedelta
-from django.db.models import Sum, Count
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from django.utils import timezone
 from itertools import groupby
 
-from django.utils import six
+from django.views.generic import View
 from main.models import Product, OrderLine, Order
 
 
 def stats_list(request):
     products = Product.objects.filter(active=True)
+    order_groups = ['hourly', 'daily', 'monthly', 'yearly']
 
-    return render(request, 'stats.html', {'products': products})
-
-
-def stats_orders(request):
-    num_external_orders = Order.objects.filter(customer=None).count()
-    per_user = Order.objects\
-        .values('customer__first_name', 'customer__last_name')\
-        .annotate(num=Count('customer'))\
-        .order_by('num').reverse()
-    f_per_user = []
-    for row in per_user:
-        if row['customer__first_name'] is not None:
-            who = row['customer__first_name'] + " " + row['customer__last_name']
-            num = row['num']
-        else:
-            who = "Ekstern"
-            num = num_external_orders
-        f_per_user.append([who, num])
-
-    return JsonResponse(f_per_user, safe=False)
+    return render(request, 'stats.html', {'products': products, 'order_groups': order_groups})
 
 
-def stats_orders_hourly(request):
-    orders = Order.objects.all()
-    f_hourly = dict([(key, 0) for key in range(0, 24)])  # init
-    # group by hour
-    for key, values in groupby(orders, key=lambda row: row.created.hour):
-        count = len(list(values))
-        f_hourly[key] += count
+class OrdersView(View):
+    grouping = 'orders'
 
-    if len(orders) == 0:
-        return JsonResponse({})
+    def get_range(self):
+        raise NotImplementedError
 
-    response = {
-        'start': str(orders[0].created),
-        'hourly': [[k, v] for k, v in f_hourly.items()],
-        'total': sum(f_hourly.values()),
-    }
-    return JsonResponse(response)
+    def get_key(self, order):
+        raise NotImplementedError
+
+    def group_by(self, orders):
+        orders_grouped = dict([(key, 0) for key in self.get_range()])  # init
+        for key, values in groupby(orders, key=self.get_key):
+            count = len(list(values))
+            orders_grouped[key] += count
+
+        return orders_grouped
+
+    def get(self, request):
+        orders = Order.objects.all()
+        if not orders.exists():
+            return JsonResponse({})
+
+        orders_grouped = self.group_by(orders)
+        data = {
+            'start': str(orders[0].created),
+            'orders': [[k, v] for k, v in orders_grouped.items()],
+            'total': sum(orders_grouped.values()),
+            'grouping': self.grouping
+        }
+        return JsonResponse(data)
+
+
+class OrdersHourlyView(OrdersView):
+    grouping = 'hourly'
+
+    def get_range(self):
+        return range(0, 24)
+
+    def get_key(self, order):
+        return order.created.hour
+
+
+class OrdersDailyView(OrdersView):
+    grouping = 'daily'
+
+    def get_range(self):
+        return range(0, 7)
+
+    def get_key(self, order):
+        return order.created.weekday()
+
+
+class OrdersMonthlyView(OrdersView):
+    grouping = 'monthly'
+
+    def get_range(self):
+        return range(1, 13)
+
+    def get_key(self, order):
+        return order.created.month
+
+
+class OrdersYearlyView(OrdersView):
+    grouping = 'yearly'
+
+    def get_range(self):
+        first = Order.objects.order_by('created').first()
+        last = timezone.now().year
+        first = first.created.year if first else last
+
+        return range(first, last+1)
+
+    def get_key(self, order):
+        return order.created.year
 
 
 def stats_products_realtime(request):

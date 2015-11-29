@@ -6,8 +6,7 @@ var products_realtime_chart = null;
 var products_url = '/api/products/';
 var products_stat_url = '/api/products/group_by_user';
 
-var order_url = '/stats/orders/';
-var order_hourly_url = '/stats/orders/hourly';
+var order_base_url = '/stats/orders/{group}/';
 var products_realtime_url = '/stats/orders/products_realtime';
 
 function productFormatter() {
@@ -93,47 +92,29 @@ function renderProductCharts(products) {
         });
     }
 }
-function renderOrdersChart(data) {
-    var render_to = 'order_chart';
 
-    new Highcharts.Chart({
-        chart: {
-            renderTo: render_to,
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false
-        },
-        title: {
-            text: 'Fordeling av ordre på person'
-        },
-        tooltip: {
-            formatter: function () {
-                return '<b>' + this.point.name + '</b>: ' + Highcharts.numberFormat(this.percentage, 1) + ' %';
-            }
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: true,
-                    color: '#000000',
-                    connectorColor: '#000000',
-                    formatter: function () {
-                        return '<b>' + this.point.name + '</b>: ' + this.y;
-                    }
-                }
-            }
-        },
-        series: [{
-            type: 'pie',
-            name: 'Orders',
-            data: data
-        }]
-    });
-}
-function renderOrdersHourlyChart(data) {
-    var render_to = 'order_hourly_chart';
+var orderFormatters = {
+    hourly: function() {
+        return this.value + ":00";
+    },
+    daily: function() {
+        var days = {0: 'Mandag', 1: 'Tirsdag', 2: 'Onsdag', 3: 'Torsdag', 4: 'Fredag', 5: 'Lørdag', 6: 'Søndag'};
+        return days[this.value];
+    },
+    monthly: function() {
+        var months = {
+            1: 'Januar', 2: 'Februar', 3: 'Mars', 4: 'April', 5: 'Mai', 6: 'Juni', 7: 'Juli',
+            8: 'August', 9: 'September', 10: 'Oktober', 11: 'November', 12: 'Desember'};
+        return months[this.value];
+    },
+    yearly: function() {
+        return this.value;
+    }
+};
+
+function renderOrdersGroupedChart(data) {
+    var grouping = data.grouping;
+    var render_to = 'order_chart_' + grouping;
 
     new Highcharts.Chart({
         chart: {
@@ -141,7 +122,7 @@ function renderOrdersHourlyChart(data) {
             type: 'column'
         },
         title: {
-            text: 'Ordre - time for time'
+            text: 'Ordre - ' + grouping
         },
         tooltip: {
             formatter: function() {
@@ -155,17 +136,16 @@ function renderOrdersHourlyChart(data) {
         },
         xAxis: {
             title: {
-                text: 'Tid (h)'
+                text: 'Tid'
             },
             labels: {
-                formatter: function() {
-                    return this.value + ":00";
-                }
+                formatter: orderFormatters[grouping]
             }
         },
         plotOptions: {
             column: {
-                minPointLength: 3
+                minPointLength: 3,
+                colorByPoint: true
             },
             series: {
                 groupPadding: 0,
@@ -174,7 +154,7 @@ function renderOrdersHourlyChart(data) {
         },
         series: [{
             name: 'Ordre',
-            data: data.hourly
+            data: data.orders
         }]
     });
 }
@@ -188,11 +168,12 @@ $(document).ready(function() {
             products = data;
             renderProductCharts(data);
         });
-        /* Orders */
-        $.getJSON(order_url, renderOrdersChart);
 
-        /* Orders, hourly */
-        $.getJSON(order_hourly_url, renderOrdersHourlyChart);
+        /* Orders, grouped */
+        $('[data-group]').each(function () {
+            var url = order_base_url.replace('{group}', $(this).data('group'));
+            $.getJSON(url, renderOrdersGroupedChart);
+        });
 
         /* Realtime purchases */
         products_realtime_chart = new Highcharts.Chart({

@@ -8,6 +8,17 @@ var runSequence = require('run-sequence').use(gulp);
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
 
+var vendorSources = [
+    'bower_components/jquery/dist/jquery.min.js',
+    'bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/collapse.js',
+    'bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js',
+    'bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js',
+    'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
+    'bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.nb.js',
+    'bower_components/highcharts/highcharts.js',
+    'bower_components/underscore/underscore-min.js'
+];
+
 gulp.task('styles', function () {
     return gulp.src('app/styles/*.scss')
         .pipe($.sass({
@@ -18,10 +29,14 @@ gulp.task('styles', function () {
 });
 
 gulp.task('scripts', function () {
-    return gulp.src('app/js/**/*.js')
+    var myAppScripts = ['app/js/**/*.js'];
+    var myFilter = $.filter(myAppScripts, {restore: true});
+    return gulp.src(vendorSources.concat(myAppScripts))
+        .pipe(myFilter)
         .pipe($.jshint())
         .pipe($.jshint.reporter(require('jshint-stylish')))
-        .pipe($.concat('app.js'))
+        .pipe(myFilter.restore)
+        .pipe($.concat('app.min.js'))
         .pipe(gulp.dest('dist/js'))
 });
 
@@ -40,16 +55,6 @@ gulp.task('diststyles', function () {
 });
 
 gulp.task('distscripts', function () {
-    var vendorSources = [
-        'bower_components/jquery/dist/jquery.min.js',
-        'bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/collapse.js',
-        'bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js',
-        'bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js',
-        'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
-        'bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.nb.js',
-        'bower_components/highcharts/highcharts.js',
-        'bower_components/underscore/underscore-min.js'
-    ];
     return gulp.src(vendorSources.concat(['app/js/**/*.js']))
         .pipe($.concat('app.min.js'))
         .pipe($.uglify())

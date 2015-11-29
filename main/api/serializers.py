@@ -1,14 +1,13 @@
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from main.models import Product, OrderLine
+from main.models import Product, OrderLine, Order
 
 
 class ProductSerializer(ModelSerializer):
     class Meta:
         model = Product
-
 
 
 class ProductStatSerializer(ModelSerializer):

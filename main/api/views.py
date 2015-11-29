@@ -19,3 +19,4 @@ class ProductViewSet(mixins.ListModelMixin,
         serializer = ProductStatSerializer(products, many=True)
 
         return Response(serializer.data)
+
