@@ -1,5 +1,6 @@
 from rest_framework import mixins
 from rest_framework.decorators import list_route
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from main.api.serializers import ProductSerializer, ProductStatSerializer
@@ -12,6 +13,7 @@ class ProductViewSet(mixins.ListModelMixin,
                      GenericViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
+    permission_classes = [AllowAny]
 
     @list_route(methods=['get'])
     def group_by_user(self, request):
