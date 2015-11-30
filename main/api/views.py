@@ -15,7 +15,7 @@ class ProductViewSet(mixins.ListModelMixin,
     queryset = Product.objects.all()
     permission_classes = [AllowAny]
 
-    @list_route(methods=['get'])
+    @list_route(methods=['get'], permission_classes=[AllowAny])
     def group_by_user(self, request):
         products = self.get_queryset().filter(active=True)
         serializer = ProductStatSerializer(products, many=True)
