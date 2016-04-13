@@ -6,5 +6,5 @@ class BBSAppConfig(AppConfig):
     verbose_name = 'Biceps Bar System'
 
     def ready(self):
-        # all models are loaded, now attach signals
-        import main.signals
+        # all models are loaded, could attach signals
+        pass

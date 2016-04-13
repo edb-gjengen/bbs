@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from main.models import Order, Transaction, InventoryTransaction, Product
+from main.models import Order, Transaction, InventoryTransaction, Product, UserProfile
 from main.utils import format_username
 
 
@@ -62,7 +62,7 @@ class SimpleCreateUserForm(forms.Form):
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
 
-        profile = user.profile
+        profile = UserProfile.objects.create(user=user)
         profile.image = self._get_facebook_url()
 
         if commit:
