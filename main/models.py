@@ -113,7 +113,7 @@ class InventoryTransaction(models.Model):
         return self.amount * self.unit_price
 
     def __str__(self):
-        return "{}: {}: {}. {} stykker ({} kr per)".format(
+        return "{}: {}: {}. {:.0f} stykker ({} kr per)".format(
             self.id,
             self.user,
             self.product,
