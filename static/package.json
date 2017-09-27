@@ -5,27 +5,34 @@
   "private": true,
   "devDependencies": {
     "browser-sync": "^2.10.0",
-    "del": "^2.1.0",
-    "glob": "^6.0.1",
+    "del": "^3.0.0",
+    "glob": "^7.1.2",
     "gulp": "^3.9.0",
-    "gulp-autoprefixer": "3.1.0",
-    "gulp-cache": "^0.1.11",
+    "gulp-autoprefixer": "4.0.0",
+    "gulp-cache": "^0.4.6",
     "gulp-concat": "^2.6.0",
-    "gulp-csso": "^0.2.6",
-    "gulp-filter": "^3.0.1",
-    "gulp-flatten": "0.0.2",
+    "gulp-csso": "^3.0.0",
+    "gulp-filter": "^5.0.1",
+    "gulp-flatten": "0.3.1",
     "gulp-if": "^2.0.0",
-    "gulp-imagemin": "^2.4.0",
+    "gulp-imagemin": "^3.3.0",
     "gulp-jshint": "^2.0.0",
     "gulp-load-plugins": "^1.1.0",
-    "gulp-sass": "^2.1.0",
+    "gulp-sass": "^3.1.0",
     "gulp-size": "^2.0.0",
-    "gulp-uglify": "^1.5.1",
+    "gulp-uglify": "^3.0.0",
     "gulp-uncss": "^1.0.4",
     "jshint-stylish": "^2.1.0",
-    "main-bower-files": "^2.9.0",
-    "run-sequence": "^1.1.5",
-    "sw-precache": "^2.2.0"
+    "run-sequence": "^2.2.0",
+    "sw-precache": "^5.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "bootstrap-datepicker": "^1.7.1",
+    "bootstrap-sass": "^3.3.7",
+    "highcharts": "^5.0.14",
+    "jquery": "^3.2.1",
+    "jshint": "^2.9.5",
+    "sw-toolbox": "^3.6.0",
+    "underscore": "^1.8.3"
+  }
 }

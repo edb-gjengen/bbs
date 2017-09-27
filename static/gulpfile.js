@@ -2,21 +2,20 @@
 var gulp = require('gulp');
 
 var $ = require('gulp-load-plugins')();
-var bowerFiles = require('main-bower-files');
 var del = require('del');
 var runSequence = require('run-sequence').use(gulp);
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
 
 var vendorSources = [
-    'bower_components/jquery/dist/jquery.min.js',
-    'bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/collapse.js',
-    'bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js',
-    'bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js',
-    'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
-    'bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.nb.js',
-    'bower_components/highcharts/highcharts.js',
-    'bower_components/underscore/underscore-min.js'
+    'node_modules/jquery/dist/jquery.min.js',
+    'node_modules/bootstrap-sass/assets/javascripts/bootstrap/collapse.js',
+    'node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown.js',
+    'node_modules/bootstrap-sass/assets/javascripts/bootstrap/tooltip.js',
+    'node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js',
+    'node_modules/bootstrap-datepicker/js/locales/bootstrap-datepicker.nb.js',
+    'node_modules/highcharts/js/highcharts.min.js',
+    'node_modules/underscore/underscore-min.js'
 ];
 
 gulp.task('styles', function () {
@@ -44,11 +43,6 @@ gulp.task('diststyles', function () {
     return gulp.src('app/styles/*.scss')
         .pipe($.sass()
             .on('error', $.sass.logError))
-        // TODO: do this with a custom django-compressor filter, too much maintenance otherwise
-        // .pipe($.uncss({
-        //     html: glob.sync('../templates/**/*.html'),
-        //     ignore: [/.*\.dropdown-menu/, /\.tooltip.*/, /\.datepicker.*/, /#inventory-report.*/]
-        // }))
         .pipe($.autoprefixer('last 1 version'))
         .pipe($.csso())
         .pipe(gulp.dest('dist/styles'))
@@ -72,7 +66,7 @@ gulp.task('images', function () {
 });
 
 gulp.task('fonts', function () {
-    return gulp.src(bowerFiles())
+    return gulp.src(['node_modules/bootstrap-sass/assets/fonts/**/*'])
         .pipe($.filter('**/*.{eot,svg,ttf,woff,woff2}'))
         .pipe($.flatten())
         .pipe(gulp.dest('dist/fonts'))
@@ -119,7 +113,7 @@ gulp.task('generate-service-worker', function(callback) {
     var rootDir = 'dist';
     var srvRootDir = '/static/'+rootDir;
 
-    gulp.src(['bower_components/sw-toolbox/sw-toolbox.js', 'app/sw/sw-toolbox-config.js'])
+    gulp.src(['node_modules/sw-toolbox/sw-toolbox.js', 'app/sw/sw-toolbox-config.js'])
         .pipe(gulp.dest('dist/sw'));
 
     swPrecache.write(path.join(rootDir, 'service-worker.js'), {

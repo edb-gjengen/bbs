@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Google Inc. All rights reserved.
+ * Copyright 2016 Google Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+*/
+
+// DO NOT EDIT THIS GENERATED OUTPUT DIRECTLY!
+// This file should be overwritten as part of your build process.
+// If you need to extend the behavior of the generated service worker, the best approach is to write
+// additional code and include it using the importScripts option:
+//   https://github.com/GoogleChrome/sw-precache#importscripts-arraystring
+//
+// Alternatively, it's possible to make changes to the underlying template file and then use that as the
+// new base for generating output, via the templateFilePath option:
+//   https://github.com/GoogleChrome/sw-precache#templatefilepath-string
+//
+// If you go that route, make sure that whenever you update your sw-precache dependency, you reconcile any
+// changes made to this original template file with your modified copy.
 
 // This generated service worker JavaScript will precache your site's resources.
 // The code needs to be saved in a .js file at the top-level of your site, and registered
@@ -21,20 +34,14 @@
 // for an example of how you can register this script and handle various service worker events.
 
 /* eslint-env worker, serviceworker */
-/* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren */
+/* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
 'use strict';
 
-
-importScripts("/static/dist/sw/sw-toolbox.js","/static/dist/sw/sw-toolbox-config.js");
-
-
-/* eslint-disable quotes, comma-spacing */
-var PrecacheConfig = [["/static/dist/images/edb_brick.png","a749f9537bf3e20403474fcadbf5a0ab"],["/static/dist/images/glyphicons-halflings-white.png","9bbc6e9602998a385c2ea13df56470fd"],["/static/dist/images/glyphicons-halflings.png","180b8ed9ed811c62d74be57249bcb023"],["/static/dist/images/grid.png","f0fc02ae7a6a36a27a25070ea6e1be99"],["/static/dist/images/product.png","5f928b37e652601f70b8218c1203c24d"],["/static/dist/images/unknown_person.png","d8fdf8972e28cbdc12bbdb0faa9c6180"],["/static/dist/js/app.min.js","c2413f712d1c916ff9df7f3eba30ceb6"],["/static/dist/styles/screen.css","7109e9dfa53c059aef435cdc223a7b57"]];
-/* eslint-enable quotes, comma-spacing */
-var CacheNamePrefix = 'sw-precache-v1--' + (self.registration ? self.registration.scope : '') + '-';
+var precacheConfig = [["/static/dist/images/edb_brick.png","75041f9210c3ea1acba1803f084554c2"],["/static/dist/images/glyphicons-halflings-white.png","9bbc6e9602998a385c2ea13df56470fd"],["/static/dist/images/glyphicons-halflings.png","180b8ed9ed811c62d74be57249bcb023"],["/static/dist/images/grid.png","f0fc02ae7a6a36a27a25070ea6e1be99"],["/static/dist/images/product.png","5f928b37e652601f70b8218c1203c24d"],["/static/dist/images/unknown_person.png","e35b26c92725c362cd4f9ed477e9ad4f"],["/static/dist/js/app.min.js","1a817b64d448f2dca550dc0d59f11bcf"],["/static/dist/styles/screen.css","6325d1c5d658d523d65e8c3ed86a215d"]];
+var cacheName = 'sw-precache-v3--' + (self.registration ? self.registration.scope : '');
 
 
-var IgnoreUrlParametersMatching = [/^utm_/];
+var ignoreUrlParametersMatching = [/^utm_/];
 
 
 
@@ -46,25 +53,62 @@ var addDirectoryIndex = function (originalUrl, index) {
     return url.toString();
   };
 
-var populateCurrentCacheNames = function (precacheConfig, cacheNamePrefix, baseUrl) {
-    var absoluteUrlToCacheName = {};
-    var currentCacheNamesToAbsoluteUrl = {};
+var cleanResponse = function (originalResponse) {
+    // If this is not a redirected response, then we don't have to do anything.
+    if (!originalResponse.redirected) {
+      return Promise.resolve(originalResponse);
+    }
 
-    precacheConfig.forEach(function(cacheOption) {
-      var absoluteUrl = new URL(cacheOption[0], baseUrl).toString();
-      var cacheName = cacheNamePrefix + absoluteUrl + '-' + cacheOption[1];
-      currentCacheNamesToAbsoluteUrl[cacheName] = absoluteUrl;
-      absoluteUrlToCacheName[absoluteUrl] = cacheName;
+    // Firefox 50 and below doesn't support the Response.body stream, so we may
+    // need to read the entire body to memory as a Blob.
+    var bodyPromise = 'body' in originalResponse ?
+      Promise.resolve(originalResponse.body) :
+      originalResponse.blob();
+
+    return bodyPromise.then(function(body) {
+      // new Response() is happy when passed either a stream or a Blob.
+      return new Response(body, {
+        headers: originalResponse.headers,
+        status: originalResponse.status,
+        statusText: originalResponse.statusText
+      });
     });
-
-    return {
-      absoluteUrlToCacheName: absoluteUrlToCacheName,
-      currentCacheNamesToAbsoluteUrl: currentCacheNamesToAbsoluteUrl
-    };
   };
 
-var stripIgnoredUrlParameters = function (originalUrl, ignoreUrlParametersMatching) {
+var createCacheKey = function (originalUrl, paramName, paramValue,
+                           dontCacheBustUrlsMatching) {
+    // Create a new URL object to avoid modifying originalUrl.
     var url = new URL(originalUrl);
+
+    // If dontCacheBustUrlsMatching is not set, or if we don't have a match,
+    // then add in the extra cache-busting URL parameter.
+    if (!dontCacheBustUrlsMatching ||
+        !(url.pathname.match(dontCacheBustUrlsMatching))) {
+      url.search += (url.search ? '&' : '') +
+        encodeURIComponent(paramName) + '=' + encodeURIComponent(paramValue);
+    }
+
+    return url.toString();
+  };
+
+var isPathWhitelisted = function (whitelist, absoluteUrlString) {
+    // If the whitelist is empty, then consider all URLs to be whitelisted.
+    if (whitelist.length === 0) {
+      return true;
+    }
+
+    // Otherwise compare each path regex to the path of the URL passed in.
+    var path = (new URL(absoluteUrlString)).pathname;
+    return whitelist.some(function(whitelistedPathRegex) {
+      return path.match(whitelistedPathRegex);
+    });
+  };
+
+var stripIgnoredUrlParameters = function (originalUrl,
+    ignoreUrlParametersMatching) {
+    var url = new URL(originalUrl);
+    // Remove the hash; see https://github.com/GoogleChrome/sw-precache/issues/290
+    url.hash = '';
 
     url.search = url.search.slice(1) // Exclude initial '?'
       .split('&') // Split into an array of 'key=value' strings
@@ -85,138 +129,142 @@ var stripIgnoredUrlParameters = function (originalUrl, ignoreUrlParametersMatchi
   };
 
 
-var mappings = populateCurrentCacheNames(PrecacheConfig, CacheNamePrefix, self.location);
-var AbsoluteUrlToCacheName = mappings.absoluteUrlToCacheName;
-var CurrentCacheNamesToAbsoluteUrl = mappings.currentCacheNamesToAbsoluteUrl;
+var hashParamName = '_sw-precache';
+var urlsToCacheKeys = new Map(
+  precacheConfig.map(function(item) {
+    var relativeUrl = item[0];
+    var hash = item[1];
+    var absoluteUrl = new URL(relativeUrl, self.location);
+    var cacheKey = createCacheKey(absoluteUrl, hashParamName, hash, false);
+    return [absoluteUrl.toString(), cacheKey];
+  })
+);
 
-function deleteAllCaches() {
-  return caches.keys().then(function(cacheNames) {
-    return Promise.all(
-      cacheNames.map(function(cacheName) {
-        return caches.delete(cacheName);
-      })
-    );
+function setOfCachedUrls(cache) {
+  return cache.keys().then(function(requests) {
+    return requests.map(function(request) {
+      return request.url;
+    });
+  }).then(function(urls) {
+    return new Set(urls);
   });
 }
 
 self.addEventListener('install', function(event) {
-  var now = Date.now();
-
   event.waitUntil(
-    caches.keys().then(function(allCacheNames) {
-      return Promise.all(
-        Object.keys(CurrentCacheNamesToAbsoluteUrl).filter(function(cacheName) {
-          return allCacheNames.indexOf(cacheName) === -1;
-        }).map(function(cacheName) {
-          var url = new URL(CurrentCacheNamesToAbsoluteUrl[cacheName]);
-          // Put in a cache-busting parameter to ensure we're caching a fresh response.
-          if (url.search) {
-            url.search += '&';
-          }
-          url.search += 'sw-precache=' + now;
-          var urlWithCacheBusting = url.toString();
-
-          console.log('Adding URL "%s" to cache named "%s"', urlWithCacheBusting, cacheName);
-          return caches.open(cacheName).then(function(cache) {
-            var request = new Request(urlWithCacheBusting, {credentials: 'same-origin'});
-            return fetch(request.clone()).then(function(response) {
-              if (response.ok) {
-                return cache.put(request, response);
-              }
-
-              console.error('Request for %s returned a response with status %d, so not attempting to cache it.',
-                urlWithCacheBusting, response.status);
-              // Get rid of the empty cache if we can't add a successful response to it.
-              return caches.delete(cacheName);
-            });
-          });
-        })
-      ).then(function() {
+    caches.open(cacheName).then(function(cache) {
+      return setOfCachedUrls(cache).then(function(cachedUrls) {
         return Promise.all(
-          allCacheNames.filter(function(cacheName) {
-            return cacheName.indexOf(CacheNamePrefix) === 0 &&
-                   !(cacheName in CurrentCacheNamesToAbsoluteUrl);
-          }).map(function(cacheName) {
-            console.log('Deleting out-of-date cache "%s"', cacheName);
-            return caches.delete(cacheName);
+          Array.from(urlsToCacheKeys.values()).map(function(cacheKey) {
+            // If we don't have a key matching url in the cache already, add it.
+            if (!cachedUrls.has(cacheKey)) {
+              var request = new Request(cacheKey, {credentials: 'same-origin'});
+              return fetch(request).then(function(response) {
+                // Bail out of installation unless we get back a 200 OK for
+                // every request.
+                if (!response.ok) {
+                  throw new Error('Request for ' + cacheKey + ' returned a ' +
+                    'response with status ' + response.status);
+                }
+
+                return cleanResponse(response).then(function(responseToCache) {
+                  return cache.put(cacheKey, responseToCache);
+                });
+              });
+            }
           })
         );
       });
     }).then(function() {
-      if (typeof self.skipWaiting === 'function') {
-        // Force the SW to transition from installing -> active state
-        self.skipWaiting();
-      }
+      
+      // Force the SW to transition from installing -> active state
+      return self.skipWaiting();
+      
     })
   );
 });
 
-if (self.clients && (typeof self.clients.claim === 'function')) {
-  self.addEventListener('activate', function(event) {
-    event.waitUntil(self.clients.claim());
-  });
-}
+self.addEventListener('activate', function(event) {
+  var setOfExpectedUrls = new Set(urlsToCacheKeys.values());
 
-self.addEventListener('message', function(event) {
-  if (event.data.command === 'delete_all') {
-    console.log('About to delete all caches...');
-    deleteAllCaches().then(function() {
-      console.log('Caches deleted.');
-      event.ports[0].postMessage({
-        error: null
+  event.waitUntil(
+    caches.open(cacheName).then(function(cache) {
+      return cache.keys().then(function(existingRequests) {
+        return Promise.all(
+          existingRequests.map(function(existingRequest) {
+            if (!setOfExpectedUrls.has(existingRequest.url)) {
+              return cache.delete(existingRequest);
+            }
+          })
+        );
       });
-    }).catch(function(error) {
-      console.log('Caches not deleted:', error);
-      event.ports[0].postMessage({
-        error: error
-      });
-    });
-  }
+    }).then(function() {
+      
+      return self.clients.claim();
+      
+    })
+  );
 });
 
 
 self.addEventListener('fetch', function(event) {
   if (event.request.method === 'GET') {
-    var urlWithoutIgnoredParameters = stripIgnoredUrlParameters(event.request.url,
-      IgnoreUrlParametersMatching);
+    // Should we call event.respondWith() inside this fetch event handler?
+    // This needs to be determined synchronously, which will give other fetch
+    // handlers a chance to handle the request if need be.
+    var shouldRespond;
 
-    var cacheName = AbsoluteUrlToCacheName[urlWithoutIgnoredParameters];
+    // First, remove all the ignored parameters and hash fragment, and see if we
+    // have that URL in our cache. If so, great! shouldRespond will be true.
+    var url = stripIgnoredUrlParameters(event.request.url, ignoreUrlParametersMatching);
+    shouldRespond = urlsToCacheKeys.has(url);
+
+    // If shouldRespond is false, check again, this time with 'index.html'
+    // (or whatever the directoryIndex option is set to) at the end.
     var directoryIndex = 'index.html';
-    if (!cacheName && directoryIndex) {
-      urlWithoutIgnoredParameters = addDirectoryIndex(urlWithoutIgnoredParameters, directoryIndex);
-      cacheName = AbsoluteUrlToCacheName[urlWithoutIgnoredParameters];
+    if (!shouldRespond && directoryIndex) {
+      url = addDirectoryIndex(url, directoryIndex);
+      shouldRespond = urlsToCacheKeys.has(url);
     }
 
+    // If shouldRespond is still false, check to see if this is a navigation
+    // request, and if so, whether the URL matches navigateFallbackWhitelist.
     var navigateFallback = '';
-    // Ideally, this would check for event.request.mode === 'navigate', but that is not widely
-    // supported yet:
-    // https://code.google.com/p/chromium/issues/detail?id=540967
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=1209081
-    if (!cacheName && navigateFallback && event.request.headers.has('accept') &&
-        event.request.headers.get('accept').includes('text/html')) {
-      var navigateFallbackUrl = new URL(navigateFallback, self.location);
-      cacheName = AbsoluteUrlToCacheName[navigateFallbackUrl.toString()];
+    if (!shouldRespond &&
+        navigateFallback &&
+        (event.request.mode === 'navigate') &&
+        isPathWhitelisted([], event.request.url)) {
+      url = new URL(navigateFallback, self.location).toString();
+      shouldRespond = urlsToCacheKeys.has(url);
     }
 
-    if (cacheName) {
+    // If shouldRespond was set to true at any point, then call
+    // event.respondWith(), using the appropriate cache key.
+    if (shouldRespond) {
       event.respondWith(
-        // We can't call cache.match(event.request) since the entry in the cache will contain the
-        // cache-busting parameter. Instead, rely on the fact that each cache should only have one
-        // entry, and return that.
         caches.open(cacheName).then(function(cache) {
-          return cache.keys().then(function(keys) {
-            return cache.match(keys[0]).then(function(response) {
-              return response || fetch(event.request).catch(function(e) {
-                console.error('Fetch for "%s" failed: %O', urlWithoutIgnoredParameters, e);
-              });
-            });
+          return cache.match(urlsToCacheKeys.get(url)).then(function(response) {
+            if (response) {
+              return response;
+            }
+            throw Error('The cached response that was expected is missing.');
           });
         }).catch(function(e) {
-          console.error('Couldn\'t serve response for "%s" from cache: %O', urlWithoutIgnoredParameters, e);
+          // Fall back to just fetch()ing the request if some unexpected error
+          // prevented the cached response from being valid.
+          console.warn('Couldn\'t serve response for "%s" from cache: %O', event.request.url, e);
           return fetch(event.request);
         })
       );
     }
   }
 });
+
+
+
+
+
+
+
+importScripts("/static/dist/sw/sw-toolbox.js","/static/dist/sw/sw-toolbox-config.js");
 
