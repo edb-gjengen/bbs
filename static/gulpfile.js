@@ -14,7 +14,7 @@ var vendorSources = [
     'node_modules/bootstrap-sass/assets/javascripts/bootstrap/tooltip.js',
     'node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js',
     'node_modules/bootstrap-datepicker/js/locales/bootstrap-datepicker.nb.js',
-    'node_modules/highcharts/js/highcharts.min.js',
+    'node_modules/highcharts/js/highcharts.js',
     'node_modules/underscore/underscore-min.js'
 ];
 

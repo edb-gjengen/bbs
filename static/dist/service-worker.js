@@ -37,7 +37,7 @@
 /* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
 'use strict';
 
-var precacheConfig = [["/static/dist/images/edb_brick.png","75041f9210c3ea1acba1803f084554c2"],["/static/dist/images/glyphicons-halflings-white.png","9bbc6e9602998a385c2ea13df56470fd"],["/static/dist/images/glyphicons-halflings.png","180b8ed9ed811c62d74be57249bcb023"],["/static/dist/images/grid.png","f0fc02ae7a6a36a27a25070ea6e1be99"],["/static/dist/images/product.png","5f928b37e652601f70b8218c1203c24d"],["/static/dist/images/unknown_person.png","e35b26c92725c362cd4f9ed477e9ad4f"],["/static/dist/js/app.min.js","1a817b64d448f2dca550dc0d59f11bcf"],["/static/dist/styles/screen.css","6325d1c5d658d523d65e8c3ed86a215d"]];
+var precacheConfig = [["/static/dist/images/edb_brick.png","75041f9210c3ea1acba1803f084554c2"],["/static/dist/images/glyphicons-halflings-white.png","9bbc6e9602998a385c2ea13df56470fd"],["/static/dist/images/glyphicons-halflings.png","180b8ed9ed811c62d74be57249bcb023"],["/static/dist/images/grid.png","f0fc02ae7a6a36a27a25070ea6e1be99"],["/static/dist/images/product.png","5f928b37e652601f70b8218c1203c24d"],["/static/dist/images/unknown_person.png","e35b26c92725c362cd4f9ed477e9ad4f"],["/static/dist/js/app.min.js","8e4d3e861763f4a056c370326df96e36"],["/static/dist/styles/screen.css","6325d1c5d658d523d65e8c3ed86a215d"]];
 var cacheName = 'sw-precache-v3--' + (self.registration ? self.registration.scope : '');
 
 
