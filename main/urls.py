@@ -1,7 +1,9 @@
-from django.conf.urls import url, patterns
+from django.conf.urls import url
+from django.contrib.staticfiles.views import serve
+
 from main.api.views import ProductViewSet
-from main.views.stats import stats_list, stats_products_realtime, stats_products_per_user, \
-    OrdersHourlyView, OrdersDailyView, OrdersMonthlyView, OrdersYearlyView
+from main.views.stats import (stats_list, stats_products_realtime, stats_products_per_user,
+                              OrdersHourlyView, OrdersDailyView, OrdersMonthlyView, OrdersYearlyView)
 from main.views.general import register, deposit, log
 from main.views.reports import inventory, inventory_add, report
 from main.views.users import create_user, profile
@@ -13,9 +15,11 @@ urlpatterns = [
     url(r'^deposit/$', deposit, name='deposit'),
     url(r'^log/$', log, name='log'),
     url(r'^log/all$', log, kwargs={'limit': None}, name='log-all'),
+
     # Users
     url(r'^user/create/$', create_user, name='create-user'),
     url(r'^profile/$', profile, name='profile'),
+
     # Reports
     url(r'^inventory/$', inventory, name='inventory'),
     url(r'^inventory/add/$', inventory_add, name='inventory-add'),
@@ -33,10 +37,9 @@ urlpatterns += [
     url(r'^stats/products/by_user/(?P<user_id>[0-9]+)/$', stats_products_per_user, name='stats-products-per-user'),
 ]
 # Root level service-worker.js
-urlpatterns += patterns(
-    'django.contrib.staticfiles.views',
-    url(r'^service-worker\.js$', 'serve', kwargs={'path': 'dist/service-worker.js'})
-)
+urlpatterns += [
+    url(r'^service-worker\.js$', serve, kwargs={'path': 'dist/service-worker.js'})
+]
 
 # API
 router = DefaultRouter()
