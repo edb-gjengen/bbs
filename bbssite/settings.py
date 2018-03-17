@@ -73,7 +73,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'bbssite.urls'
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -87,10 +87,11 @@ INSTALLED_APPS = (
     'django_extensions',
     'rest_framework',
     'easy_thumbnails',
-)
-LOCAL_APPS = (
+    'raven.contrib.django.raven_compat',
+]
+LOCAL_APPS = [
     'main',
-)
+]
 INSTALLED_APPS += LOCAL_APPS
 
 LOGIN_REDIRECT_URL = '/'
@@ -105,6 +106,48 @@ BBS_LIMIT_DEPOSITS = False
 THUMBNAIL_ALIASES = {
     '': {
         'product': {'size': (64, 64), 'crop': True},
+    },
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'root': {
+        'level': 'INFO',
+        'handlers': ['console', 'sentry'],
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'sentry': {
+            'level': 'WARNING',
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'raven': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+            'propagate': False,
+        },
     },
 }
 
