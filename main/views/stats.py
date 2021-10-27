@@ -1,5 +1,3 @@
-
-
 import time
 from datetime import datetime, timedelta
 from django.http import JsonResponse
@@ -13,13 +11,13 @@ from main.models import Product, OrderLine, Order
 
 def stats_list(request):
     products = Product.objects.filter(active=True)
-    order_groups = ['hourly', 'daily', 'monthly', 'yearly']
+    order_groups = ["hourly", "daily", "monthly", "yearly"]
 
-    return render(request, 'stats.html', {'products': products, 'order_groups': order_groups})
+    return render(request, "stats.html", {"products": products, "order_groups": order_groups})
 
 
 class OrdersView(View):
-    grouping = 'orders'
+    grouping = "orders"
 
     def get_range(self):
         raise NotImplementedError
@@ -42,16 +40,16 @@ class OrdersView(View):
 
         orders_grouped = self.group_by(orders)
         data = {
-            'start': str(orders[0].created),
-            'orders': [[k, v] for k, v in orders_grouped.items()],
-            'total': sum(orders_grouped.values()),
-            'grouping': self.grouping
+            "start": str(orders[0].created),
+            "orders": [[k, v] for k, v in orders_grouped.items()],
+            "total": sum(orders_grouped.values()),
+            "grouping": self.grouping,
         }
         return JsonResponse(data)
 
 
 class OrdersHourlyView(OrdersView):
-    grouping = 'hourly'
+    grouping = "hourly"
 
     def get_range(self):
         return range(0, 24)
@@ -61,7 +59,7 @@ class OrdersHourlyView(OrdersView):
 
 
 class OrdersDailyView(OrdersView):
-    grouping = 'daily'
+    grouping = "daily"
 
     def get_range(self):
         return range(0, 7)
@@ -71,7 +69,7 @@ class OrdersDailyView(OrdersView):
 
 
 class OrdersMonthlyView(OrdersView):
-    grouping = 'monthly'
+    grouping = "monthly"
 
     def get_range(self):
         return range(1, 13)
@@ -81,14 +79,14 @@ class OrdersMonthlyView(OrdersView):
 
 
 class OrdersYearlyView(OrdersView):
-    grouping = 'yearly'
+    grouping = "yearly"
 
     def get_range(self):
-        first = Order.objects.order_by('created').first()
+        first = Order.objects.order_by("created").first()
         last = timezone.now().year
         first = first.created.year if first else last
 
-        return range(first, last+1)
+        return range(first, last + 1)
 
     def get_key(self, order):
         return order.created.year
@@ -112,16 +110,14 @@ def stats_products_realtime(request):
     for product, value in products.items():
         serialized_products[product.name] = value
 
-    response = {
-        'products': serialized_products
-    }
+    response = {"products": serialized_products}
 
     return JsonResponse(response)
 
 
 def stats_products_per_user(request, user_id=None):
     if not user_id:
-        return JsonResponse({'error': 'Missing param user_id'})
+        return JsonResponse({"error": "Missing param user_id"})
 
     order_lines = OrderLine.objects.filter(order__customer__pk=user_id).order_by("order__created")
     products = {}
@@ -135,8 +131,5 @@ def stats_products_per_user(request, user_id=None):
 
     serialized_products = []
     for product, value in products.items():
-        serialized_products.append({
-            'name': product.name,
-            'data': value
-        })
+        serialized_products.append({"name": product.name, "data": value})
     return JsonResponse(serialized_products, safe=False)

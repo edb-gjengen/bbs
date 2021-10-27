@@ -15,6 +15,7 @@ Django = "==3.2.*"
 Pillow = "==8.*"
 
 [dev-packages]
+black = "==21.9b0"
 
 [requires]
 python_version = "3.9"
