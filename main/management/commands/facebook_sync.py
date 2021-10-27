@@ -1,5 +1,4 @@
-# coding: utf-8
-from django.contrib.auth.models import User
+xfrom django.contrib.auth.models import User
 
 import difflib
 from django.core.management.base import BaseCommand, CommandError
