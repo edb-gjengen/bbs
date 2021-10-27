@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class BBSAppConfig(AppConfig):
-    name = 'bbs'
+    name = 'main'
     verbose_name = 'Biceps Bar System'
 
     def ready(self):

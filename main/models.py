@@ -3,11 +3,10 @@ from datetime import datetime
 
 from django.conf import settings
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 
-@python_2_unicode_compatible
+
 class Product(models.Model):
     name = models.CharField(max_length=64)
     sale_price_int = models.FloatField()
@@ -53,9 +52,9 @@ class Product(models.Model):
         ordering = ['name']
 
 
-@python_2_unicode_compatible
+
 class Order(models.Model):
-    customer = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, related_name='orders')
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True, related_name='orders')
     order_sum = models.FloatField(db_column='sum')
     created = models.DateTimeField(auto_now_add=True)
 
@@ -69,10 +68,10 @@ class Order(models.Model):
         return "{}: {} kr".format(self.customer or "Ekstern", self.order_sum)
 
 
-@python_2_unicode_compatible
+
 class OrderLine(models.Model):
-    order = models.ForeignKey('main.Order', related_name='orderlines')
-    product = models.ForeignKey('main.Product', related_name='orderlines')
+    order = models.ForeignKey('main.Order', on_delete=models.CASCADE, related_name='orderlines')
+    product = models.ForeignKey('main.Product', on_delete=models.CASCADE, related_name='orderlines')
     amount = models.IntegerField()
     unit_price = models.FloatField(verbose_name=_('Enhetspris'))
 
@@ -87,10 +86,10 @@ class OrderLine(models.Model):
         unique_together = ('order', 'product')
 
 
-@python_2_unicode_compatible
+
 class Transaction(models.Model):
     """ Money """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='transactions')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='transactions')
     amount = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
 
@@ -98,11 +97,11 @@ class Transaction(models.Model):
         return "{}: {}: {}".format(self.id, self.user, self.amount)
 
 
-@python_2_unicode_compatible
+
 class InventoryTransaction(models.Model):
     """ Goods """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='inventory_transactions')
-    product = models.ForeignKey('main.Product', related_name='transactions', verbose_name=_('Produkt'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='inventory_transactions')
+    product = models.ForeignKey('main.Product', on_delete=models.CASCADE, related_name='transactions', verbose_name=_('Produkt'))
     amount = models.FloatField(verbose_name=_('Antall'))
     unit_price = models.FloatField(verbose_name=_('Enhetspris'))
     comment = models.TextField(verbose_name=_('Kommentar'), blank=True)
@@ -121,9 +120,9 @@ class InventoryTransaction(models.Model):
             self.unit_price)
 
 
-@python_2_unicode_compatible
+
 class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='profile')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     balance = models.FloatField(default=0.0)
     image = models.URLField(blank=True)
 

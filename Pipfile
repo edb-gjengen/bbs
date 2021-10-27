@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django-extensions = "==3.1.*"
+easy-thumbnails = "==2.7.*"
+facebook-sdk = "==3.0.0"
+gunicorn = "==20.1.*"
+mysqlclient = "==2.0.*"
+djangorestframework = "==3.12.*"
+sentry-sdk = "==1.*"
+Django = "==3.2.*"
+Pillow = "==8.*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
