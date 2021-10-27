@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('order_sum', models.FloatField(db_column='sum')),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('customer', models.ForeignKey(related_name='orders', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('customer', models.ForeignKey(related_name='orders', on_delete=models.CASCADE, blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('amount', models.IntegerField()),
                 ('unit_price', models.FloatField(verbose_name='Enhetspris')),
-                ('order', models.ForeignKey(related_name='orderlines', to='main.Order')),
+                ('order', models.ForeignKey(on_delete=models.CASCADE, related_name='orderlines', to='main.Order')),
             ],
         ),
         migrations.CreateModel(
@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('amount', models.FloatField()),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(related_name='transactions', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(on_delete=models.CASCADE, related_name='transactions', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -76,23 +76,23 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('balance', models.FloatField(default=0.0)),
                 ('image', models.URLField(blank=True)),
-                ('user', models.OneToOneField(related_name='profile', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(on_delete=models.CASCADE, related_name='profile', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.AddField(
             model_name='orderline',
             name='product',
-            field=models.ForeignKey(related_name='orderlines', to='main.Product'),
+            field=models.ForeignKey(on_delete=models.CASCADE, related_name='orderlines', to='main.Product'),
         ),
         migrations.AddField(
             model_name='inventorytransaction',
             name='product',
-            field=models.ForeignKey(related_name='transactions', verbose_name='Produkt', to='main.Product'),
+            field=models.ForeignKey(on_delete=models.CASCADE, related_name='transactions', verbose_name='Produkt', to='main.Product'),
         ),
         migrations.AddField(
             model_name='inventorytransaction',
             name='user',
-            field=models.ForeignKey(related_name='inventory_transactions', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(on_delete=models.CASCADE, related_name='inventory_transactions', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterUniqueTogether(
             name='orderline',
