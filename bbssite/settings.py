@@ -86,7 +86,6 @@ INSTALLED_APPS = [
     "django_extensions",
     "rest_framework",
     "easy_thumbnails",
-    "raven.contrib.django.raven_compat",
 ]
 LOCAL_APPS = [
     "main",
@@ -113,16 +112,12 @@ LOGGING = {
     "disable_existing_loggers": False,
     "root": {
         "level": "INFO",
-        "handlers": ["console", "sentry"],
+        "handlers": ["console"],
     },
     "formatters": {
         "verbose": {"format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"},
     },
     "handlers": {
-        "sentry": {
-            "level": "WARNING",
-            "class": "raven.contrib.django.raven_compat.handlers.SentryHandler",
-        },
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
@@ -132,16 +127,6 @@ LOGGING = {
     "loggers": {
         "django.db.backends": {
             "level": "ERROR",
-            "handlers": ["console"],
-            "propagate": False,
-        },
-        "raven": {
-            "level": "WARNING",
-            "handlers": ["console"],
-            "propagate": False,
-        },
-        "sentry.errors": {
-            "level": "WARNING",
             "handlers": ["console"],
             "propagate": False,
         },
