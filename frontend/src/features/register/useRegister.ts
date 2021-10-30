@@ -1,11 +1,19 @@
 import { parseISO, subDays } from "date-fns";
 import { useState } from "react";
 
-import { useAllProductsQuery, useAllUsersQuery, User } from "../types";
+import { useAllProductsQuery, useAllUsersQuery, User, Product } from "../../types";
 
 const activeLimitDays = 365 / 2;
 
-export const useRegister = () => {
+type useRegisterType = {
+  users: User[];
+  products: Product[];
+  loading: boolean;
+  showAll: boolean;
+  setShowAll: CallableFunction;
+};
+
+export const useRegister = (): useRegisterType => {
   const [showAll, setShowAll] = useState(false);
   const { data, loading } = useAllProductsQuery({ variables: { active: true } });
   const { data: usersData, loading: usersLoading } = useAllUsersQuery();

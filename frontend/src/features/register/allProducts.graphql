@@ -2,6 +2,7 @@ query allProducts($active: Boolean!) {
   allProducts(filters: {active: $active}) {
     id
     name
+    imageUrl
     salePriceExt
     salePriceInt
   }

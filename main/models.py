@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.conf import settings
 from django.db import models
+from django.templatetags.static import static
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -42,6 +43,10 @@ class Product(models.Model):
     @property
     def wholesale_value(self):
         return self.wholesale_unit_price * self.inventory_amount
+
+    @property
+    def image_url(self):
+        return self.image.url if self.image else ""
 
     def __str__(self):
         return self.name

@@ -19,6 +19,7 @@ export type Scalars = {
 export type Product = {
   __typename?: 'Product';
   id: Scalars['ID'];
+  imageUrl: Scalars['String'];
   name: Scalars['String'];
   salePriceExt: Scalars['Float'];
   salePriceInt: Scalars['Float'];
@@ -61,7 +62,7 @@ export type AllProductsQueryVariables = Exact<{
 }>;
 
 
-export type AllProductsQuery = { __typename?: 'Query', allProducts: Array<{ __typename?: 'Product', id: string, name: string, salePriceExt: number, salePriceInt: number }> };
+export type AllProductsQuery = { __typename?: 'Query', allProducts: Array<{ __typename?: 'Product', id: string, name: string, imageUrl: string, salePriceExt: number, salePriceInt: number }> };
 
 export type AllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -74,6 +75,7 @@ export const AllProductsDocument = gql`
   allProducts(filters: {active: $active}) {
     id
     name
+    imageUrl
     salePriceExt
     salePriceInt
   }

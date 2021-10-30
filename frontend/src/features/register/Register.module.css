@@ -1,0 +1,19 @@
+.productList {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+}
+.product {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.productText {
+    padding-top: 8px;
+}
+.productImage {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
