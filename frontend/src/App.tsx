@@ -1,20 +1,18 @@
-import {ApolloProvider} from "@apollo/client";
-import React from 'react'
+import { ApolloProvider } from "@apollo/client";
+import React from "react";
 
-import logo from './assets/brick.svg';
-import styles from './App.module.css'
-import {Register} from "./features/Register";
+import styles from "./App.module.css";
+import logo from "./assets/brick.svg";
 import client from "./client";
+import { Register } from "./features/Register";
 
-function App() {
-  return (
-      <ApolloProvider client={client}>
+const App: React.FC = () => (
+  <ApolloProvider client={client}>
     <div className={styles.app}>
-        <img src={logo} className={styles.logo} alt="logo" />
-        <Register />
+      <img src={logo} className={styles.logo} alt="logo" />
+      <Register />
     </div>
-      </ApolloProvider>
-  )
-}
+  </ApolloProvider>
+);
 
-export default App
+export default App;
