@@ -81,8 +81,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.admin",
-    "widget_tweaks",
-    "bootstrapform",
     "django_extensions",
     "rest_framework",
     "easy_thumbnails",

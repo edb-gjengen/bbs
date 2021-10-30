@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load widget_tweaks %}
 {% block active_deposit %}active{% endblock %}
 
 {% block content %}
@@ -28,7 +27,7 @@
 
     {% else %}
     <form id="order" method="post" class="form-stacked" autocomplete="off">
-        {% csrf_token %}
+        {% csrf_token %}
         <section id="customer">
             <div class="row">
                 <div class="col-md-12">
@@ -66,7 +65,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    {{form.amount|add_class:"form-control"}}
+                    {{form.amount }}
                     {{form.amount.errors}}<br />
                 </div>
             </div>
@@ -74,7 +73,7 @@
         <div class="row">
             <div class="col-md-12">
                 <button type="submit" class="btn btn-lg btn-primary" name="submit_order">Sett inn</button>
-                <a href="{% url 'register' %}" class="btn btn-default">Avbryt</a>
+               <a href="{% url 'register' %}" class="btn btn-default">Avbryt</a>
             </div>
         </div>
     </form>

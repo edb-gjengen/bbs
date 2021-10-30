@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load bootstrap %}
 {% block active_report %}active{% endblock %}
 
 {% block content %}
@@ -7,7 +6,7 @@
     <div class="col-md-7">
         <h2>Varerapport</h2>
         <form class="inventory-report-form">
-            {{ form|bootstrap_horizontal }} ({{ start_time|timesince:end_time}})
+            {{ form }} ({{ start_time|timesince:end_time}})
             <button type="submit" class="btn btn-default">Oppdater</button>
         </form>
         <h2>Beholdning</h2>
