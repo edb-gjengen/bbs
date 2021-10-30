@@ -1,0 +1,12 @@
+{
+  "name": "bbs-schema",
+  "schemaPath": "schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "default": {
+        "url": "http://localhost:8000/graphql/",
+        "introspect": false
+      }
+    }
+  }
+}

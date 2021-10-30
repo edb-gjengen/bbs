@@ -64,6 +64,7 @@ TEMPLATES = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -84,6 +85,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "rest_framework",
     "easy_thumbnails",
+    "corsheaders",
 ]
 LOCAL_APPS = [
     "main",
@@ -132,6 +134,12 @@ LOGGING = {
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+CORS_ALLOWED_ORIGINS = [
+    "https://bbs.neuf.no",
+    "http://localhost:8000",
+    "http://localhost:3000",
+]
 
 try:
     from .local_settings import *
