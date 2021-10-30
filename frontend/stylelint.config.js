@@ -5,5 +5,5 @@ module.exports = {
     // Useful?
     "no-descending-specificity": null,
   },
-  ignoreFiles: ["**/*.md", "**/*.svg", "**/*.jpg", "**/*.graphql"],
+  ignoreFiles: ["**/*.md", "**/*.svg", "**/*.jpg", "**/*.graphql", "**/*.tsx", "**/*.ts"],
 };
