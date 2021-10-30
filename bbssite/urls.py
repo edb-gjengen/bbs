@@ -1,12 +1,12 @@
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.contrib.staticfiles.views import serve
 from django.urls import path, re_path, include
+from strawberry.django.views import GraphQLView
 
 from main import urls as main_urls
-
+from main.api.schema import schema
 
 admin.autodiscover()
 
@@ -16,19 +16,11 @@ urlpatterns = [
     path(
         "accounts/logout/",
         LogoutView.as_view(),
-        name="django.contrib.auth.views.logout",
+        name="django.contrib.auth.views.logout"
     ),
     path("admin/", admin.site.urls),
+    path("graphql/", GraphQLView.as_view(schema=schema)),
 ]
-urlpatterns += staticfiles_urlpatterns()
 
-if settings.DEBUG:
-    urlpatterns += [
-        re_path(
-            r"^media/(?P<path>.*)$",
-            serve,
-            {
-                "document_root": settings.MEDIA_ROOT,
-            },
-        )
-    ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
