@@ -7,6 +7,6 @@ import { Register } from "./features/register/Register";
 export const Routes: React.FC = () => (
   <Switch>
     <Route path="/deposit" component={Deposit} />
-    <Route path="/" component={Register} />
+    <Route path="/" exact component={Register} />
   </Switch>
 );

@@ -1,0 +1,17 @@
+.active {
+    background: green;
+}
+.product {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.productText {
+    padding-top: 8px;
+}
+.productImage {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}

@@ -1,0 +1,13 @@
+.logo {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin: 0 8px;
+  position: relative;
+  top: -1px
+}
+
+.navIcon {
+  position: relative;
+  top: -2px;
+}
