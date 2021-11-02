@@ -1,6 +1,6 @@
 .userList {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(12, 128px);
     row-gap: 16px;
 }
 
