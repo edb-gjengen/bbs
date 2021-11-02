@@ -13,7 +13,7 @@ type UserCardProps = {
 
 /** If user is null, then it's the special external user */
 export const UserCard: React.FC<UserCardProps> = ({ user, onUser, active = false }) => {
-  const classes = clsx(styles.card, { [styles.active]: active });
+  const classes = clsx(styles.user, { [styles.active]: active });
   return (
     <button className={classes} onClick={onUser} type="button">
       {user?.profile?.image && (
@@ -24,7 +24,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, onUser, active = false
           <PersonFill />
         </span>
       )}
-      <span className={styles.name}>{user?.firstName || "External"}</span>
+      <span className={styles.name}>{user?.firstName || "Ekstern"}</span>
       <span className={styles.balance}>{user?.profile?.balance || ""}</span>
     </button>
   );

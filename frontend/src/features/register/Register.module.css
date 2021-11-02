@@ -1,17 +1,22 @@
 .userList {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    gap: 16px;
-
+    row-gap: 16px;
 }
+
 .productList {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(8, 150px);
+    row-gap: 16px;
 }
+.productListSection {
+    margin-top: 2rem;
+}
+
 .checkout {
     margin-top: 32px;
 }
+
 .total {
     display: inline-block;
     margin-right: 8px;

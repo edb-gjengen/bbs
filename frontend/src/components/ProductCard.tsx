@@ -15,9 +15,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onProduct, am
   const classes = clsx(styles.product, { [styles.active]: active });
   return (
     <button className={classes} type="button" onClick={onProduct}>
-      <span>{amount}</span>
-      {product.imageUrl && <img src={product.imageUrl} className={styles.productImage} alt={product.name} />}
-      <span className={styles.productText}>{product.name}</span>
+      <div className={styles.wrap}>
+        <span className={styles.amount}>{amount}</span>
+        {product.imageUrl && <img src={product.imageUrl} className={styles.productImage} alt={product.name} />}
+        {!product.imageUrl && <div className={styles.noProductImage} />}
+        <span className={styles.productText}>{product.name}</span>
+      </div>
     </button>
   );
 };

@@ -1,17 +1,57 @@
-.active {
-    background: green;
-}
 .product {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: transparent;
+    border: 4px solid transparent;
+    border-radius: 8px;
+    transition: background-color 0.1s ease-out, border 0.1s ease-out;
+    overflow: hidden;
+}
+.product:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(25, 135, 84, 0.6);
+}
+.active {
+    background: rgba(25, 135, 84, 0.2);
+    border-color: rgba(25, 135, 84, 0.6);
+}
+.active:hover {
+    background: rgba(25, 135, 84, 0.2);
 }
 .productText {
-    padding-top: 8px;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-weight: bold;
+    padding: 4px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 8px;
 }
 .productImage {
-    width: 80px;
-    height: 80px;
+    width: 140px;
+    height: 140px;
     object-fit: contain;
+}
+.noProductImage {
+    width: 140px;
+    height: 140px;
+}
+.amount {
+    font-weight: bold;
+    font-size: 2rem;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border-radius: 8px;
+    padding: 4px;
+    line-height: 1;
+}
+.wrap {
+    position: relative;
 }

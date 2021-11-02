@@ -78,7 +78,7 @@ export const Register: React.FC = () => {
           {showAll ? "Skjul gamliser" : "Vis alle"}
         </button>
       </section>
-      <section>
+      <section className={styles.productListSection}>
         <h2>Kjøper hva?</h2>
         <div className={styles.productList}>
           {products.map((product: Product) => (
