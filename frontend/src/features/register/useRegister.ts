@@ -1,7 +1,8 @@
+import { useQuery } from "@apollo/client";
 import { parseISO, subDays } from "date-fns";
 import { useState } from "react";
 
-import { useAllProductsQuery, useAllUsersQuery, User, Product } from "../../types";
+import { User, Product, AllProductsDocument, AllUsersDocument } from "../../types";
 
 const activeLimitDays = 365 / 2;
 
@@ -15,8 +16,8 @@ type useRegisterType = {
 
 export const useRegister = (): useRegisterType => {
   const [showAll, setShowAll] = useState(false);
-  const { data, loading } = useAllProductsQuery({ variables: { active: true } });
-  const { data: usersData, loading: usersLoading } = useAllUsersQuery();
+  const { data, loading } = useQuery(AllProductsDocument, { variables: { active: true } });
+  const { data: usersData, loading: usersLoading } = useQuery(AllUsersDocument);
 
   const allUsers = usersData?.allUsers || [];
   const users = showAll

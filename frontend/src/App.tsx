@@ -7,14 +7,19 @@ import styles from "./App.module.css";
 import { Routes } from "./Routes";
 import client from "./client";
 import { Header } from "./components/Header";
+import { Toast } from "./components/Toast";
+import { ToastProvider } from "./components/ToastProvider";
 
 const App: React.FC = () => (
   <ApolloProvider client={client}>
     <Router>
-      <Header />
-      <div className={styles.app}>
-        <Routes />
-      </div>
+      <ToastProvider>
+        <Header />
+        <div className={styles.app}>
+          <Routes />
+        </div>
+        <Toast />
+      </ToastProvider>
     </Router>
   </ApolloProvider>
 );

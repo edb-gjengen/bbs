@@ -1,0 +1,80 @@
+union CreateOrderResponse = CreateOrderSuccess | InsufficientFunds | FormErrors
+
+type CreateOrderSuccess {
+  order: Order!
+}
+
+"""Date with time (isoformat)"""
+scalar DateTime
+
+interface Error {
+  message: String!
+  error: Boolean!
+}
+
+type FieldError implements Error {
+  message: String!
+  error: Boolean!
+  field: String!
+}
+
+type FormErrors {
+  fields: [FieldError!]!
+  message: String!
+  error: Boolean!
+}
+
+type InsufficientFunds implements Error {
+  message: String!
+  error: Boolean!
+  amountLacking: Float!
+}
+
+type Mutation {
+  createOrder(customerId: ID!, orderLines: [OrderLineInput!]!, isExternal: Boolean! = false): CreateOrderResponse!
+}
+
+type Order {
+  id: ID!
+  customer: User
+  orderSum: Float!
+  created: DateTime!
+}
+
+input OrderLineInput {
+  productId: ID!
+  amount: Int!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  imageUrl: String!
+  salePriceInt: Float!
+  salePriceExt: Float!
+}
+
+input ProductFilter {
+  id: ID
+  active: Boolean
+}
+
+type Query {
+  allProducts(filters: ProductFilter): [Product!]!
+  allUsers: [User!]!
+  allOrders: [Order!]!
+}
+
+type User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  profile: UserProfile
+}
+
+type UserProfile {
+  id: ID!
+  balance: Float!
+  image: String!
+  lastPurchaseDate: DateTime!
+}

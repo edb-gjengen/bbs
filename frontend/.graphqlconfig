@@ -1,6 +1,6 @@
 {
   "name": "bbs-schema",
-  "schemaPath": "schema.graphql",
+  "schemaPath": "../schema.graphql",
   "extensions": {
     "endpoints": {
       "default": {

@@ -1,0 +1,26 @@
+mutation CreateOrder($customerId: ID!, $orderLines:[OrderLineInput!]!) {
+  createOrder(customerId: $customerId, orderLines: $orderLines) {
+    ... on CreateOrderSuccess {
+      order {
+        id
+        customer {
+          id
+        }
+        orderSum
+      }
+    }
+    ... on InsufficientFunds {
+      error
+      message
+      amountLacking
+    }
+    ... on FormErrors {
+      error
+      message
+      fields {
+        field
+        message
+      }
+    }
+  }
+}

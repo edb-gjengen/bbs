@@ -43,3 +43,11 @@ class User:
     last_name: auto
     profile: UserProfile
     # todo
+
+
+@strawberry_django.type(models.Order)
+class Order:
+    id: auto
+    customer: 'User'
+    order_sum: auto
+    created: auto
