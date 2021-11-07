@@ -1,5 +1,5 @@
-mutation CreateOrder($customerId: ID!, $orderLines:[OrderLineInput!]!) {
-  createOrder(customerId: $customerId, orderLines: $orderLines) {
+mutation CreateOrder($customerId: ID!, $orderLines:[OrderLineInput!]!, $isExternal: Boolean) {
+  createOrder(customerId: $customerId, orderLines: $orderLines, isExternal: $isExternal) {
     ... on CreateOrderSuccess {
       order {
         id

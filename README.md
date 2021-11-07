@@ -7,6 +7,11 @@ Before starting, make sure you have a working python and nodejs setup with pyenv
  poetry shell
  python manage.py migrate
  python manage.py runserver
+
+ # in another terminal
+ cd frontend
+ npm install
+ npm start
  ```
 
 ## References:

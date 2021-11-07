@@ -45,6 +45,12 @@ def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external
             message=message,
             fields=[FieldError(field="customer_id", message=message)],
         )
+    if not order_lines:
+        message = "Du har ikke valgt hva du skal kjøpe."
+        return FormErrors(
+            message=message,
+            fields=[FieldError(field="order_lines", message=message)],
+        )
 
     ols = []
     order_sum = 0
@@ -55,7 +61,7 @@ def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external
         order_sum += ol.amount * price
 
     if not is_external and customer.profile.balance <= order_sum:
-        return InsufficientFunds(amount_lacking=abs(order_sum - customer.profile.balance))
+        return InsufficientFunds(message='Du har ikke nok penger på bok.', amount_lacking=abs(order_sum - customer.profile.balance))
 
     # create
     order = models.Order.objects.create(customer=customer, order_sum=order_sum)

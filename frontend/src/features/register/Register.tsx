@@ -29,7 +29,7 @@ export const Register: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState("");
   const [order, setOrder] = useState<OrderLine[]>([]);
   const [createOrderMutation, { loading: mutateLoading }] = useMutation(CreateOrderDocument, {
-    variables: { customerId: selectedUser, orderLines: order },
+    variables: { customerId: selectedUser, isExternal: selectedUser === USER_EXTERNAL, orderLines: order },
   });
   const { showToast } = useToast();
 
@@ -70,11 +70,21 @@ export const Register: React.FC = () => {
       return;
     }
     const { data } = res;
-    if (data?.createOrder?.__typename === "CreateOrderSuccess") {
+    const createOrderResponse = data?.createOrder;
+    if (createOrderResponse?.__typename === "CreateOrderSuccess") {
       showToast("Woop");
+      reset();
       return;
     }
-    showToast("booo");
+
+    if (createOrderResponse?.__typename === "FormErrors") {
+      showToast(createOrderResponse.message);
+      return;
+    }
+
+    if (createOrderResponse?.__typename === "InsufficientFunds") {
+      showToast(`${createOrderResponse.message} Du mangler ${createOrderResponse.amountLacking},-`);
+    }
   };
   return (
     <div>
