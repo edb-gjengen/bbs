@@ -15,9 +15,7 @@ const App: React.FC = () => (
     <Router>
       <ToastProvider>
         <Header />
-        <div className={styles.app}>
-          <Routes />
-        </div>
+        <div className={styles.app}></div>
         <Toast />
       </ToastProvider>
     </Router>
