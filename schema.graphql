@@ -1,3 +1,16 @@
+type AboveMaxSaldo implements Error {
+  message: String!
+  error: Boolean!
+  maxSaldo: Float!
+  above: Float!
+}
+
+union CreateDepositResponse = CreateDepositSuccess | AboveMaxSaldo | FormErrors
+
+type CreateDepositSuccess {
+  transaction: Transaction!
+}
+
 union CreateOrderResponse = CreateOrderSuccess | InsufficientFunds | FormErrors
 
 type CreateOrderSuccess {
@@ -32,6 +45,7 @@ type InsufficientFunds implements Error {
 
 type Mutation {
   createOrder(customerId: ID!, orderLines: [OrderLineInput!]!, isExternal: Boolean! = false): CreateOrderResponse!
+  createDeposit(userId: ID!, amount: Int!): CreateDepositResponse!
 }
 
 type Order {
@@ -63,6 +77,13 @@ type Query {
   allProducts(filters: ProductFilter): [Product!]!
   allUsers: [User!]!
   allOrders: [Order!]!
+}
+
+type Transaction {
+  id: ID!
+  user: User!
+  amount: Float!
+  created: DateTime!
 }
 
 type User {

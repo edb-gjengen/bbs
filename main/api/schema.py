@@ -15,6 +15,7 @@ class Query:
 @strawberry.type
 class Mutation:
     create_order = mutations.create_order
+    create_deposit = mutations.create_deposit
 
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)

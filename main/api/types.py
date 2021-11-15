@@ -48,6 +48,14 @@ class User:
 @strawberry_django.type(models.Order)
 class Order:
     id: auto
-    customer: 'User'
+    customer: "User"
     order_sum: auto
+    created: auto
+
+
+@strawberry_django.type(models.Transaction)
+class Transaction:
+    id: auto
+    user: "User"
+    amount: auto
     created: auto

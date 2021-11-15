@@ -1,4 +1,5 @@
 import strawberry
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -6,7 +7,7 @@ from strawberry import ID
 
 from main import models
 from main.api.errors import Error, FormErrors, FieldError
-from main.api.types import Order
+from main.api.types import Order, Transaction, UserProfile
 
 UserModel = get_user_model()
 
@@ -27,12 +28,12 @@ class InsufficientFunds(Error):
     amount_lacking: float
 
 
-Response = strawberry.union("CreateOrderResponse", [CreateOrderSuccess, InsufficientFunds, FormErrors])
+CreateOrderResponse = strawberry.union("CreateOrderResponse", [CreateOrderSuccess, InsufficientFunds, FormErrors])
 
 
 @strawberry.mutation
 @transaction.atomic
-def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external: bool = False) -> Response:
+def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external: bool = False) -> CreateOrderResponse:
     # clean and validate
     try:
         customer = UserModel.objects.get(pk=customer_id)
@@ -61,7 +62,9 @@ def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external
         order_sum += ol.amount * price
 
     if not is_external and customer.profile.balance <= order_sum:
-        return InsufficientFunds(message='Du har ikke nok penger på bok.', amount_lacking=abs(order_sum - customer.profile.balance))
+        return InsufficientFunds(
+            message="Du har ikke nok penger på bok.", amount_lacking=abs(order_sum - customer.profile.balance)
+        )
 
     # create
     order = models.Order.objects.create(customer=customer, order_sum=order_sum)
@@ -70,3 +73,51 @@ def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external
     models.OrderLine.objects.bulk_create(ols)
 
     return CreateOrderSuccess(order=order)
+
+
+@strawberry.type
+class CreateDepositSuccess:
+    transaction: Transaction
+
+
+@strawberry.type
+class AboveMaxSaldo(Error):
+    max_saldo: float
+    above: float
+
+
+CreateDepositResponse = strawberry.union("CreateDepositResponse", [CreateDepositSuccess, AboveMaxSaldo, FormErrors])
+
+
+@strawberry.mutation
+@transaction.atomic
+def create_deposit(user_id: ID, amount: int) -> CreateDepositResponse:
+    # clean and validate
+    try:
+        user = UserModel.objects.get(pk=user_id)
+    except (UserModel.DoesNotExist, ValueError):
+        message = "Du har ikke valgt hvem som sette inn penger."
+        return FormErrors(
+            message=message,
+            fields=[FieldError(field="user_id", message=message)],
+        )
+    if amount <= 0:
+        message = "Du har ikke valgt beløp som skal settes inn."
+        return FormErrors(
+            message=message,
+            fields=[FieldError(field="amount", message=message)],
+        )
+    # 1337 is special <3
+    if amount + user.profile.balance > settings.BBS_SALDO_MAX and amount + user.profile.balance != 1337:
+        return AboveMaxSaldo(
+            message='Du prøver å sette inn for mye penger',
+            max_saldo=settings.BBS_SALDO_MAX,
+            above=amount + user.profile.balance - settings.BBS_SALDO_MAX,
+        )
+
+    trans = models.Transaction.objects.create(user=user, amount=amount)
+    profile = trans.user.profile
+    profile.balance += trans.amount
+    profile.save()
+
+    return CreateDepositSuccess(transaction=trans)

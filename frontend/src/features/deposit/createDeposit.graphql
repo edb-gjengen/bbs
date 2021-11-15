@@ -1,0 +1,32 @@
+mutation CreateDeposit($userId: ID!, $amount: Int!) {
+  createDeposit(userId: $userId, amount:$amount) {
+    ... on CreateDepositSuccess {
+      transaction {
+        id
+        amount
+        user {
+          id
+          firstName
+          lastName
+          profile {
+            balance
+          }
+        }
+      }
+    }
+    ... on AboveMaxSaldo {
+      error
+      message
+      maxSaldo
+      above
+    }
+    ... on FormErrors {
+      error
+      message
+      fields {
+        field
+        message
+      }
+    }
+  }
+}

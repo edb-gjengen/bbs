@@ -131,7 +131,7 @@ export const Register: React.FC = () => {
         <button type="button" className="btn btn-primary btn-lg" onClick={onSubmit}>
           Kjøp
         </button>{" "}
-        <button type="button" className="btn btn-outline-secondary" onClick={reset}>
+        <button type="button" className="btn btn-outline-secondary btn-lg" onClick={reset}>
           Start på nytt
         </button>
       </section>
