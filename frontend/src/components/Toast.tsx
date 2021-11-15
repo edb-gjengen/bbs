@@ -7,9 +7,10 @@ import { useToast } from "./ToastProvider";
 
 export const Toast: React.FC = () => {
   const ref = useRef<HTMLInputElement>(null);
-  const { visible, showToast, message } = useToast();
+  const { visible, showToast, message, background } = useToast();
 
-  const classes = clsx("toast align-items-center text-white bg-primary border-0", styles.toast);
+  const backgroundColor = `bg-${background}`;
+  const classes = clsx("toast align-items-center text-white bg-primary border-0", backgroundColor, styles.toast);
 
   useEffect(() => {
     if (!ref.current) return;

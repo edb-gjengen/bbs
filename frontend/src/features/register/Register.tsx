@@ -78,12 +78,12 @@ export const Register: React.FC = () => {
     }
 
     if (createOrderResponse?.__typename === "FormErrors") {
-      showToast(createOrderResponse.message);
+      showToast(createOrderResponse.message, "danger");
       return;
     }
 
     if (createOrderResponse?.__typename === "InsufficientFunds") {
-      showToast(`${createOrderResponse.message} Du mangler ${createOrderResponse.amountLacking},-`);
+      showToast(`${createOrderResponse.message} Du mangler ${createOrderResponse.amountLacking},-`, "danger");
     }
   };
   return (
