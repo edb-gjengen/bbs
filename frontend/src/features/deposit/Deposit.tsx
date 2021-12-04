@@ -11,7 +11,10 @@ export const Deposit: React.FC = () => {
   const [createDeposit] = useMutation(CreateDepositDocument);
   const [selectedUser, setSelectedUser] = useState("");
   const [amount, setAmount] = useState("");
-  const allUsers = data?.allUsers || [];
+  const [userQuery, setUserQuery] = useState("");
+  const filteredUsers = (data?.allUsers || []).filter((user) =>
+    `${user.firstName.toLowerCase()} ${user.lastName.toLowerCase()}`.includes(userQuery.toLowerCase())
+  );
   const { showToast } = useToast();
 
   const onSubmit = async () => {
@@ -48,16 +51,26 @@ export const Deposit: React.FC = () => {
   const reset = () => {
     setSelectedUser("");
     setAmount("");
+    setUserQuery("");
   };
 
   return (
     <div>
       <section>
         <h2>Hvem skal sette inn penger?</h2>
-        {/* TODO: search as you type */}
-        <input name="userQuery" />
+        <input
+          name="userQuery"
+          onChange={(event: React.FormEvent<HTMLInputElement>) => setUserQuery(event.currentTarget.value)}
+          value={userQuery}
+          placeholder="Filtrér på navn"
+        />
+        {userQuery !== "" && (
+          <button className="btn btn-link" type="button" onClick={() => setUserQuery("")}>
+            Vis alle
+          </button>
+        )}
         <div className={styles.userList}>
-          {allUsers.map((user: User) => (
+          {filteredUsers.map((user: User) => (
             <UserCard
               key={user.id}
               active={selectedUser === user.id}
@@ -71,7 +84,7 @@ export const Deposit: React.FC = () => {
       </section>
       <section className={styles.amountSection}>
         <h2>Hvor mye?</h2>
-        <input name="amount" value={amount} onChange={(event) => setAmount(event.target.value)} />
+        <input name="amount" value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="0" />
       </section>
       <section className={styles.checkout}>
         <button type="button" className="btn btn-primary btn-lg" onClick={onSubmit}>

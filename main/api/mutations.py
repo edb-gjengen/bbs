@@ -65,7 +65,7 @@ def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external
 
     if not is_external and user.profile.balance <= order_sum:
         return InsufficientFunds(
-            message="Du har ikke nok penger på bok.", amount_lacking=abs(order_sum - profile.balance)
+            message="Du har ikke nok penger på bok.", amount_lacking=abs(order_sum - user.profile.balance)
         )
 
     # create
