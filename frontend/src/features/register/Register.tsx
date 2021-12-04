@@ -10,13 +10,13 @@ import { useRegister } from "./useRegister";
 
 const USER_EXTERNAL = "external";
 
-type OrderLine = {
+type OrderLineInput = {
   productId: string;
   amount: number;
 };
 
-const sumTotal = (products: Product[], order: OrderLine[], isExternal: boolean) => {
-  const prices = order.map((orderLine: OrderLine) => {
+const sumTotal = (products: Product[], order: OrderLineInput[], isExternal: boolean) => {
+  const prices = order.map((orderLine: OrderLineInput) => {
     const product = products.find((product: Product) => product.id === orderLine.productId);
     if (!product) return 0;
     return orderLine.amount * (isExternal ? product.salePriceExt : product.salePriceInt);
@@ -27,7 +27,7 @@ const sumTotal = (products: Product[], order: OrderLine[], isExternal: boolean) 
 export const Register: React.FC = () => {
   const { users, products, loading, showAll, setShowAll } = useRegister();
   const [selectedUser, setSelectedUser] = useState("");
-  const [order, setOrder] = useState<OrderLine[]>([]);
+  const [order, setOrder] = useState<OrderLineInput[]>([]);
   const [createOrderMutation, { loading: mutateLoading }] = useMutation(CreateOrderDocument, {
     variables: { customerId: selectedUser, isExternal: selectedUser === USER_EXTERNAL, orderLines: order },
   });
@@ -39,7 +39,7 @@ export const Register: React.FC = () => {
   };
   const addToOrder = (productId: string) => {
     let added = false;
-    const newOrder = order.map((orderLine: OrderLine) => {
+    const newOrder = order.map((orderLine: OrderLineInput) => {
       if (orderLine.productId === productId) {
         added = true;
         return { ...orderLine, amount: orderLine.amount + 1 };
@@ -53,8 +53,6 @@ export const Register: React.FC = () => {
   };
 
   const total = sumTotal(products, order, selectedUser === USER_EXTERNAL);
-
-  console.log(selectedUser, order);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -72,7 +70,12 @@ export const Register: React.FC = () => {
     const { data } = res;
     const createOrderResponse = data?.createOrder;
     if (createOrderResponse?.__typename === "CreateOrderSuccess") {
-      showToast("Woop");
+      const { order } = createOrderResponse;
+      const orderLines = (order?.orderlines || [])
+        .map((orderLine) => `${orderLine.amount} ${orderLine.product.name}`)
+        .join(", ");
+      const who = !order.customer ? "Ekstern" : `${order.customer?.firstName} ${order.customer?.lastName}`;
+      showToast(`${who} kjøpte: ${orderLines}`);
       reset();
       return;
     }
@@ -118,8 +121,8 @@ export const Register: React.FC = () => {
               key={product.id}
               product={product}
               onProduct={() => addToOrder(product.id)}
-              amount={order.find((orderLine: OrderLine) => orderLine.productId === product.id)?.amount || 0}
-              active={order.some((orderLine: OrderLine) => orderLine.productId === product.id)}
+              amount={order.find((orderLine: OrderLineInput) => orderLine.productId === product.id)?.amount || 0}
+              active={order.some((orderLine: OrderLineInput) => orderLine.productId === product.id)}
             />
           ))}
         </div>

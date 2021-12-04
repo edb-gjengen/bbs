@@ -36,11 +36,11 @@ CreateOrderResponse = strawberry.union("CreateOrderResponse", [CreateOrderSucces
 def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external: bool = False) -> CreateOrderResponse:
     # clean and validate
     try:
-        customer = UserModel.objects.get(pk=customer_id)
+        user = UserModel.objects.get(pk=customer_id)
     except (UserModel.DoesNotExist, ValueError):
-        customer = None
+        user = None
 
-    if customer is None and not is_external:
+    if user is None and not is_external:
         message = "Du har ikke valgt hvem som skal kjøpe."
         return FormErrors(
             message=message,
@@ -60,17 +60,24 @@ def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external
         price = product.sale_price_ext if is_external else product.sale_price_int
         ols.append(models.OrderLine(product=product, amount=ol.amount, unit_price=price))
         order_sum += ol.amount * price
+        product.inventory_amount -= ol.amount
+        product.save()
 
-    if not is_external and customer.profile.balance <= order_sum:
+    if not is_external and user.profile.balance <= order_sum:
         return InsufficientFunds(
-            message="Du har ikke nok penger på bok.", amount_lacking=abs(order_sum - customer.profile.balance)
+            message="Du har ikke nok penger på bok.", amount_lacking=abs(order_sum - profile.balance)
         )
 
     # create
-    order = models.Order.objects.create(customer=customer, order_sum=order_sum)
+    order = models.Order.objects.create(customer=user, order_sum=order_sum)
     for ol in ols:
         ol.order = order
     models.OrderLine.objects.bulk_create(ols)
+
+    # update balance
+    if not is_external:
+        user.profile.balance -= order_sum
+        user.profile.save()
 
     return CreateOrderSuccess(order=order)
 
@@ -110,7 +117,7 @@ def create_deposit(user_id: ID, amount: int) -> CreateDepositResponse:
     # 1337 is special <3
     if amount + user.profile.balance > settings.BBS_SALDO_MAX and amount + user.profile.balance != 1337:
         return AboveMaxSaldo(
-            message='Du prøver å sette inn for mye penger',
+            message="Du prøver å sette inn for mye penger",
             max_saldo=settings.BBS_SALDO_MAX,
             above=amount + user.profile.balance - settings.BBS_SALDO_MAX,
         )

@@ -51,6 +51,17 @@ class Order:
     customer: "User"
     order_sum: auto
     created: auto
+    orderlines: list["OrderLine"]
+    is_external: bool
+
+
+@strawberry_django.type(models.OrderLine)
+class OrderLine:
+    id: auto
+    order: "Order"
+    product: "Product"
+    amount: auto
+    unit_price: auto
 
 
 @strawberry_django.type(models.Transaction)

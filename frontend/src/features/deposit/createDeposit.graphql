@@ -9,6 +9,7 @@ mutation CreateDeposit($userId: ID!, $amount: Int!) {
           firstName
           lastName
           profile {
+            id
             balance
           }
         }

@@ -1,10 +1,28 @@
-mutation CreateOrder($customerId: ID!, $orderLines:[OrderLineInput!]!, $isExternal: Boolean) {
+mutation CreateOrder($customerId: ID!, $orderLines:[OrderLineInput!]!, $isExternal: Boolean!) {
   createOrder(customerId: $customerId, orderLines: $orderLines, isExternal: $isExternal) {
     ... on CreateOrderSuccess {
       order {
         id
+        isExternal
         customer {
           id
+          firstName
+          lastName
+          profile {
+            id
+            balance
+          }
+        }
+        orderlines {
+          id
+          amount
+          unitPrice
+          product {
+            id
+            name
+            salePriceExt
+            salePriceInt
+          }
         }
         orderSum
       }

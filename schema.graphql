@@ -53,6 +53,16 @@ type Order {
   customer: User
   orderSum: Float!
   created: DateTime!
+  orderlines: [OrderLine!]
+  isExternal: Boolean!
+}
+
+type OrderLine {
+  id: ID!
+  order: Order!
+  product: Product!
+  amount: Int!
+  unitPrice: Float!
 }
 
 input OrderLineInput {
