@@ -10,3 +10,5 @@ node_modules/
 CACHE/
 media/
 tmp/
+frontend/dist
+static/modern

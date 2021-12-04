@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.contrib.staticfiles.views import serve
+from django.urls import path
 
 from main.api.views import ProductViewSet
 from main.views.stats import (
@@ -29,6 +30,8 @@ urlpatterns = [
     url(r"^inventory/$", inventory, name="inventory"),
     url(r"^inventory/add/$", inventory_add, name="inventory-add"),
     url(r"^report$", report, name="report"),
+    # FIXME: Serve the modern stack from here until rest of views are ported
+    url(r"^modern/", serve, kwargs={"path": "modern/index.html"}, name="modern"),
 ]
 # Stats
 urlpatterns += [
