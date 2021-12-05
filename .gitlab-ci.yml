@@ -1,21 +1,26 @@
+variables:
+  PIP_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/pip"
+
 default:
   image: nikolaik/python-nodejs:python3.9-nodejs16
   cache:
     paths:
-      - ~/.cache/pip/
+      - .cache/pip
+      - .venv
   before_script:
+    - poetry config settings.virtualenvs.in-project true
     - poetry install
 
 django-migrations:
   stage: build
   script:
-    - python3 manage.py migrate
-    - python3 manage.py check
+    - poetry run python manage.py migrate
+    - poetry run python manage.py check
 
 tests:
   stage: test
   script:
-    - pytest -v
+    - poetry run pytest -v
 
 deploy:
   stage: deploy
