@@ -11,7 +11,7 @@ default:
     - poetry config virtualenvs.in-project true
     - poetry install
 
-django-migrations:
+django-checks:
   stage: build
   script:
     - poetry run python manage.py migrate
@@ -20,7 +20,12 @@ django-migrations:
 tests:
   stage: test
   script:
-    - poetry run pytest -v
+    - poetry run bin/test
+
+lint:
+  stage: test
+  script:
+    - poetry run bin/lint
 
 deploy:
   stage: deploy
