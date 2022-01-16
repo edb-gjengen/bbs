@@ -1,12 +1,13 @@
 import time
 from datetime import datetime, timedelta
+from itertools import groupby
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
-from itertools import groupby
-
 from django.views.generic import View
-from main.models import Product, OrderLine, Order
+
+from main.models import Order, OrderLine, Product
 
 
 def stats_list(request):

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.urls import path, re_path, include
+from django.urls import include, path, re_path
 from strawberry.django.views import GraphQLView
 
 from main import urls as main_urls

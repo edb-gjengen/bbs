@@ -1,21 +1,21 @@
 from django.conf.urls import url
 from django.contrib.staticfiles.views import serve
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from main.api.views import ProductViewSet
+from main.views.general import deposit, log, register
+from main.views.reports import inventory, inventory_add, report
 from main.views.stats import (
-    stats_list,
-    stats_products_realtime,
-    stats_products_per_user,
-    OrdersHourlyView,
     OrdersDailyView,
+    OrdersHourlyView,
     OrdersMonthlyView,
     OrdersYearlyView,
+    stats_list,
+    stats_products_per_user,
+    stats_products_realtime,
 )
-from main.views.general import register, deposit, log
-from main.views.reports import inventory, inventory_add, report
 from main.views.users import create_user, profile
-from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     url(r"^$", register, name="home"),

@@ -5,8 +5,9 @@ Before starting, make sure you have a working python and nodejs setup with pyenv
 apt-get install libmysqlclient-dev
 poetry install
 poetry shell
+pre-commit install
 python manage.py migrate
-python manage.py runserver
+bin/run
 
 # in another terminal
 cd frontend

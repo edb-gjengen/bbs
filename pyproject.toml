@@ -5,6 +5,10 @@ DJANGO_SETTINGS_MODULE = "bbssite.settings"
 line-length = 120
 target_version = ['py39']
 
+[tool.isort]
+profile = "black"
+line_length = 120
+
 [tool.poetry]
 name = "bbs"
 version = "0.1.0"
@@ -31,6 +35,8 @@ django-cors-headers = "^3.10.0"
 pytest = "^6.2.5"
 black = "^21.9b0"
 pytest-django = "^4.5.1"
+pre-commit = "^2.16.0"
+isort = "^5.10.1"
 
 
 [build-system]

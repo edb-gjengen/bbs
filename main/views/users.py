@@ -1,11 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import connection
-from django.db.models import Sum, Count
-from django.shortcuts import render, redirect
+from django.db.models import Count, Sum
+from django.shortcuts import redirect, render
+
 from main.forms import SimpleCreateUserForm
-from main.models import Order
-from main.models import Transaction
+from main.models import Order, Transaction
 
 
 def create_user(request):

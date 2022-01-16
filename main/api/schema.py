@@ -2,7 +2,7 @@ import strawberry
 import strawberry_django
 
 from main.api import mutations
-from main.api.types import Product, User, Order
+from main.api.types import Order, Product, User
 
 
 @strawberry.type

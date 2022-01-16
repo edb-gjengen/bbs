@@ -1,10 +1,10 @@
 from rest_framework import mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from main.api.serializers import ProductSerializer, ProductStatSerializer
 from main.models import Product
-from rest_framework.viewsets import GenericViewSet
 
 
 class ProductViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):

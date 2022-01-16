@@ -1,15 +1,14 @@
 from dataclasses import dataclass
+from typing import Any, Iterable, Type
 
-from django.contrib.auth.models import User
-from graphql.pyutils import snake_to_camel
 import strawberry
+from django.contrib.auth.models import User
+from django.test.client import RequestFactory
+from graphql.pyutils import snake_to_camel
 from strawberry.arguments import is_unset
 from strawberry.types import ExecutionResult
 
 from main.api.schema import schema
-from typing import Any, Iterable, Type
-
-from django.test.client import RequestFactory
 
 
 def lowercase_first_letter(text: str):

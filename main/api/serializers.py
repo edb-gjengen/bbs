@@ -1,8 +1,8 @@
-from django.db.models import Sum, Count
+from django.db.models import Count, Sum
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from main.models import Product, OrderLine, Order
+from main.models import Order, OrderLine, Product
 
 
 class ProductSerializer(ModelSerializer):

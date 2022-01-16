@@ -6,11 +6,11 @@ from django.contrib.auth.models import User
 from django.db.models import Min
 from django.forms import formset_factory
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from main.forms import OrderLineForm, OrderForm, DepositForm
-from main.models import Product, OrderLine, Order, Transaction
+from main.forms import DepositForm, OrderForm, OrderLineForm
+from main.models import Order, OrderLine, Product, Transaction
 from main.utils import users_format_js, users_with_perm
 
 

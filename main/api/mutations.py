@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from strawberry import ID
 
 from main import models
-from main.api.errors import Error, FormErrors, FieldError
+from main.api.errors import Error, FieldError, FormErrors
 from main.api.types import Order, Transaction, UserProfile
 
 UserModel = get_user_model()

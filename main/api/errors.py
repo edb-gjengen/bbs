@@ -18,5 +18,5 @@ class FieldError(Error):
 @strawberry.type
 class FormErrors:
     fields: list[FieldError]
-    message: str = ''
+    message: str = ""
     error: bool = True

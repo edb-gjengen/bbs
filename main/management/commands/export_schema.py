@@ -11,13 +11,13 @@ class Command(BaseCommand):
     help = " Write graphql schema to file or stdout"
 
     def add_arguments(self, parser: CommandParser):
-        parser.add_argument("--filename", default='schema.graphql', help='`-` prints to stdout')
+        parser.add_argument("--filename", default="schema.graphql", help="`-` prints to stdout")
 
     def handle(self, *args, filename=None, **options):
         schema_output = print_schema(schema_symbol)
-        if filename != '-':
+        if filename != "-":
             with Path(BASE_DIR, filename).open("w+") as fp:
                 fp.write(schema_output)
-            self.stdout.write(self.style.SUCCESS('OK'))
+            self.stdout.write(self.style.SUCCESS("OK"))
         else:
             print(schema_output)

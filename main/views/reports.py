@@ -2,9 +2,10 @@ from datetime import datetime, timedelta
 from itertools import groupby
 
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
+
 from main.forms import DateRangeForm, InventoryTransactionForm
-from main.models import Product, InventoryTransaction, UserProfile, Transaction, Order
+from main.models import InventoryTransaction, Order, Product, Transaction, UserProfile
 
 
 def report(request):

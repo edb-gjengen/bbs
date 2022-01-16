@@ -1,8 +1,8 @@
-from django.contrib.auth.models import User
-
 import difflib
-from django.core.management.base import BaseCommand, CommandError
+
 import facebook
+from django.contrib.auth.models import User
+from django.core.management.base import BaseCommand, CommandError
 
 from main.models import UserProfile
 
