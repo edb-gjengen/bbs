@@ -13,14 +13,10 @@ admin.autodiscover()
 urlpatterns = [
     re_path(r"", include(main_urls)),
     path("accounts/login/", LoginView.as_view(), name="django.contrib.auth.views.login"),
-    path(
-        "accounts/logout/",
-        LogoutView.as_view(),
-        name="django.contrib.auth.views.logout"
-    ),
+    path("accounts/logout/", LogoutView.as_view(), name="django.contrib.auth.views.logout"),
     path("admin/", admin.site.urls),
-    path("graphql/", GraphQLView.as_view(schema=schema)),
+    path("graphql/", GraphQLView.as_view(schema=schema), name="graphql"),
 ]
 
-urlpatterns += static('/media', document_root=settings.MEDIA_ROOT)
+urlpatterns += static("/media", document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
