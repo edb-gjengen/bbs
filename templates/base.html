@@ -26,8 +26,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="{% block active_register %}{% endblock %}"><a href="/register"><i class="glyphicon glyphicon-home white"></i> Kjøp drikke</a></li>
-                    <li class="{% block active_deposit %}{% endblock %}"><a href="/deposit">Sett inn penger</a></li>
+                    <li class="{% block active_register %}{% endblock %}"><a href="{% url "home" %}"><i class="glyphicon glyphicon-home white"></i> Kjøp drikke</a></li>
+                    <li class="{% block active_deposit %}{% endblock %}"><a href="{% url "deposit" %}">Sett inn penger</a></li>
                     <li class="{% block active_log %}{% endblock %}"><a href="/log"><i class="glyphicon glyphicon-list-alt"></i> Logg</a></li>
                     <li class="{% block active_stats %}{% endblock %}"><a href="/stats"><i class="glyphicon glyphicon-stats"></i> Statistikk</a></li>
                 </ul>

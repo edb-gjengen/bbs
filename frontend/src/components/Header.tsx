@@ -44,20 +44,20 @@ export const Header: React.FC = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/log" className="nav-link" activeClassName="active">
+              <a href="/log" className="nav-link">
                 <span className={styles.navIcon}>
                   <CardList />
                 </span>{" "}
                 Logg
-              </NavLink>
+              </a>
             </li>
             <li className="nav-item">
-              <NavLink to="/stats" className="nav-link" activeClassName="active">
+              <a href="/stats" className="nav-link">
                 <span className={styles.navIcon}>
                   <BarChart />
                 </span>{" "}
                 Statistikk
-              </NavLink>
+              </a>
             </li>
           </ul>
         </div>

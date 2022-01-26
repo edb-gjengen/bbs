@@ -1,4 +1,5 @@
 # Getting started
+
 Before starting, make sure you have a working python and nodejs setup with pyenv and nvm.
 
 ```bash
@@ -15,12 +16,19 @@ npm install
 npm start
 ```
 
-## References:
- - We use JS code generation to work with queries/mutations in our graphql API: https://github.com/dotansimha/graphql-typed-document-node
+## References
 
-# TODO-old
- * Larger pictures
- * Compact GUI for max 768 vertical pixels
-     * Search right of in title
- * Light on dark colors
+- We use JS code generation to work with queries/mutations in our graphql API: https://github.com/dotansimha/graphql-typed-document-node
+
+## TODO
+
+- Log view
+- Remove everything facebook related. Use gravatars.
+- Light on dark colors
+
+## TODO-old
+
+- Larger pictures
+- Compact GUI for max 768 vertical pixels
+  - Search right of in title
 

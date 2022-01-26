@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.contrib.staticfiles.views import serve
-from django.urls import path
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from main.api.views import ProductViewSet
@@ -17,10 +17,17 @@ from main.views.stats import (
 )
 from main.views.users import create_user, profile
 
+spa_kwargs = {"path": "modern/index.html"}
+
+legacy_patterns = [
+    path("", register, name="home-legacy"),
+    path("deposit", deposit, name="deposit-legacy"),
+]
+
 urlpatterns = [
-    url(r"^$", register, name="home"),
-    url(r"^register/$", register, name="register"),
-    url(r"^deposit/$", deposit, name="deposit"),
+    path("", serve, kwargs=spa_kwargs, name="home"),
+    path("deposit", serve, kwargs=spa_kwargs, name="deposit"),
+    # TODO: migrate to SPA
     url(r"^log/$", log, name="log"),
     url(r"^log/all$", log, kwargs={"limit": None}, name="log-all"),
     # Users
@@ -30,9 +37,9 @@ urlpatterns = [
     url(r"^inventory/$", inventory, name="inventory"),
     url(r"^inventory/add/$", inventory_add, name="inventory-add"),
     url(r"^report$", report, name="report"),
-    # FIXME: Serve the modern stack from here until rest of views are ported
-    url(r"^modern/", serve, kwargs={"path": "modern/index.html"}, name="modern"),
+    path("legacy/", include(legacy_patterns)),
 ]
+
 # Stats
 urlpatterns += [
     url(r"^stats/$", stats_list, name="stats"),
