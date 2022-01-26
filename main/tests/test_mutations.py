@@ -4,7 +4,6 @@ from strawberry.django.test import GraphQLTestClient
 
 from main.api.mutations import create_order
 from main.models import Order, Product
-from main.testing import MutationTest
 
 
 @pytest.fixture(name="gql_client")
@@ -17,30 +16,28 @@ def product_fix(db):
     return Product.objects.create(name="borg", sale_price_ext=35, sale_price_int=30)
 
 
-@pytest.fixture(name="create_order_mutation")
-def create_order_mutation_fixture(product):
-    fields = """
-    ... on CreateOrderSuccess {
-      order {
-        id
-        orderSum
-        orderlines {
-          id
-          product {
+def test_create_order(product, gql_client):
+    assert Order.objects.count() == 0
+    variables = dict(customerId="external", isExternal=True, orderLines=[{"productId": product.id, "amount": 1}])
+    query = """
+    mutation CreateOrder($customerId: ID!, $isExternal: Boolean!, $orderLines: [OrderLineInput!]!) {
+      createOrder(customerId: $customerId, isExternal: $isExternal, orderLines: $orderLines) {
+        ... on CreateOrderSuccess {
+          order {
             id
+            orderSum
+            orderlines {
+              id
+              product {
+                id
+              }
+            }
           }
         }
       }
-    }"""
-    # FIXME: maybe drop this helper and just use GraphQLTestClient
-    return MutationTest(create_order, fields)
-
-
-def test_create_order(product, create_order_mutation):
-    assert Order.objects.count() == 0
-    res = create_order_mutation.mutate(
-        customerId="external", isExternal=True, orderLines=[{"productId": product.id, "amount": 1}]
-    )
+    }
+    """
+    res = gql_client.query(query, variables)
     assert res
     assert not res.errors
     assert res.data
