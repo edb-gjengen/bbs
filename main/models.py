@@ -3,7 +3,6 @@ from datetime import datetime
 from django.conf import settings
 from django.db import models
 from django.templatetags.static import static
-from django.utils.translation import ugettext_lazy as _
 
 
 class Product(models.Model):
@@ -80,7 +79,7 @@ class OrderLine(models.Model):
     order = models.ForeignKey("main.Order", on_delete=models.CASCADE, related_name="orderlines")
     product = models.ForeignKey("main.Product", on_delete=models.CASCADE, related_name="orderlines")
     amount = models.IntegerField()
-    unit_price = models.FloatField(verbose_name=_("Enhetspris"))
+    unit_price = models.FloatField(verbose_name="Enhetspris")
 
     @property
     def price(self):
@@ -116,11 +115,11 @@ class InventoryTransaction(models.Model):
         "main.Product",
         on_delete=models.CASCADE,
         related_name="transactions",
-        verbose_name=_("Produkt"),
+        verbose_name="Produkt",
     )
-    amount = models.FloatField(verbose_name=_("Antall"))
-    unit_price = models.FloatField(verbose_name=_("Enhetspris"))
-    comment = models.TextField(verbose_name=_("Kommentar"), blank=True)
+    amount = models.FloatField(verbose_name="Antall")
+    unit_price = models.FloatField(verbose_name="Enhetspris")
+    comment = models.TextField(verbose_name="Kommentar", blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     @property

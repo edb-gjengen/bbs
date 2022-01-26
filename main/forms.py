@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _
 
 from main.models import InventoryTransaction, Order, Product, Transaction, UserProfile
 from main.utils import format_username
@@ -11,7 +10,7 @@ class OrderForm(forms.ModelForm):
 
     def clean(self):
         if self.cleaned_data["customer"] is None and self.cleaned_data["customer_name"] != "Ekstern":
-            raise forms.ValidationError(_("Du har ikke valgt hvem som skal kjøpe."))
+            raise forms.ValidationError("Du har ikke valgt hvem som skal kjøpe.")
 
         return self.cleaned_data
 
@@ -20,7 +19,7 @@ class OrderForm(forms.ModelForm):
             return self.cleaned_data["customer"]
 
         if self.cleaned_data["customer"].profile.balance <= 0:
-            raise forms.ValidationError(_("Du har negativ saldo og kan ikke kjøpe noe."))
+            raise forms.ValidationError("Du har negativ saldo og kan ikke kjøpe noe.")
 
         return self.cleaned_data["customer"]
 
@@ -83,5 +82,5 @@ class InventoryTransactionForm(forms.ModelForm):
 
 
 class DateRangeForm(forms.Form):
-    start_time = forms.DateTimeField(required=False, label=_("Fra"))
-    end_time = forms.DateTimeField(required=False, label=_("Til"))
+    start_time = forms.DateTimeField(required=False, label="Fra")
+    end_time = forms.DateTimeField(required=False, label="Til")
