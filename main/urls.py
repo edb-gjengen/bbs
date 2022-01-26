@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.contrib.staticfiles.views import serve
-from django.urls import include, path
+from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
 
 from main.api.views import ProductViewSet
@@ -28,46 +28,46 @@ urlpatterns = [
     path("", serve, kwargs=spa_kwargs, name="home"),
     path("deposit", serve, kwargs=spa_kwargs, name="deposit"),
     # TODO: migrate to SPA
-    url(r"^log/$", log, name="log"),
-    url(r"^log/all$", log, kwargs={"limit": None}, name="log-all"),
+    re_path(r"^log/$", log, name="log"),
+    re_path(r"^log/all$", log, kwargs={"limit": None}, name="log-all"),
     # Users
-    url(r"^user/create/$", create_user, name="create-user"),
-    url(r"^profile/$", profile, name="profile"),
+    re_path(r"^user/create/$", create_user, name="create-user"),
+    re_path(r"^profile/$", profile, name="profile"),
     # Reports
-    url(r"^inventory/$", inventory, name="inventory"),
-    url(r"^inventory/add/$", inventory_add, name="inventory-add"),
-    url(r"^report$", report, name="report"),
+    re_path(r"^inventory/$", inventory, name="inventory"),
+    re_path(r"^inventory/add/$", inventory_add, name="inventory-add"),
+    re_path(r"^report$", report, name="report"),
     path("legacy/", include(legacy_patterns)),
 ]
 
 # Stats
 urlpatterns += [
-    url(r"^stats/$", stats_list, name="stats"),
-    url(
+    re_path(r"^stats/$", stats_list, name="stats"),
+    re_path(
         r"^stats/orders/hourly/$",
         OrdersHourlyView.as_view(),
         name="stats-orders-hourly",
     ),
-    url(r"^stats/orders/daily/", OrdersDailyView.as_view(), name="stats-orders-daily"),
-    url(
+    re_path(r"^stats/orders/daily/", OrdersDailyView.as_view(), name="stats-orders-daily"),
+    re_path(
         r"^stats/orders/monthly/",
         OrdersMonthlyView.as_view(),
         name="stats-orders-monthly",
     ),
-    url(r"^stats/orders/yearly/", OrdersYearlyView.as_view(), name="stats-orders-yearly"),
-    url(
+    re_path(r"^stats/orders/yearly/", OrdersYearlyView.as_view(), name="stats-orders-yearly"),
+    re_path(
         r"^stats/orders/products_realtime$",
         stats_products_realtime,
         name="stats-products-realtime",
     ),
-    url(
+    re_path(
         r"^stats/products/by_user/(?P<user_id>[0-9]+)/$",
         stats_products_per_user,
         name="stats-products-per-user",
     ),
 ]
 # Root level service-worker.js
-urlpatterns += [url(r"^service-worker\.js$", serve, kwargs={"path": "dist/service-worker.js"})]
+urlpatterns += [re_path(r"^service-worker\.js$", serve, kwargs={"path": "dist/service-worker.js"})]
 
 # API
 router = DefaultRouter()
