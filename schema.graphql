@@ -48,6 +48,11 @@ type Mutation {
   createDeposit(userId: ID!, amount: Int!): CreateDepositResponse!
 }
 
+input OffsetPaginationInput {
+  offset: Int! = 0
+  limit: Int! = -1
+}
+
 type Order {
   id: ID!
   customer: User
@@ -87,6 +92,8 @@ type Query {
   allProducts(filters: ProductFilter): [Product!]!
   allUsers: [User!]!
   allOrders: [Order!]!
+  orderList(pagination: OffsetPaginationInput): [Order!]!
+  transactionList(pagination: OffsetPaginationInput): [Transaction!]!
 }
 
 type Transaction {
