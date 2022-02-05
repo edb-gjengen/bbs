@@ -1,8 +1,7 @@
 /* svgs */
 declare module "*.svg" {
   import { ReactElement, SVGProps } from "react";
-  const content: (props: SVGProps<SVGElement>) => ReactElement;
-  export default content;
+  export const ReactComponent: (props: SVGProps<SVGElement>) => ReactElement;
 }
 /* CSS modules */
 declare module "*.module.css";

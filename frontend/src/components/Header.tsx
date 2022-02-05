@@ -1,10 +1,10 @@
-import BarChart from "bootstrap-icons/icons/bar-chart.svg";
-import CardList from "bootstrap-icons/icons/card-list.svg";
-import House from "bootstrap-icons/icons/house.svg";
+import { ReactComponent as BarChart } from "bootstrap-icons/icons/bar-chart.svg";
+import { ReactComponent as CardList } from "bootstrap-icons/icons/card-list.svg";
+import { ReactComponent as House } from "bootstrap-icons/icons/house.svg";
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import Logo from "../assets/brick.svg";
+import { ReactComponent as Logo } from "../assets/brick.svg";
 import styles from "./Header.module.css";
 
 export const Header: React.FC = () => {
@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <NavLink to="/" className="nav-link" activeClassName="active" exact>
+              <NavLink to="/" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")} end>
                 <span className={styles.navIcon}>
                   <House />
                 </span>{" "}
@@ -39,7 +39,7 @@ export const Header: React.FC = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/deposit" className="nav-link" activeClassName="active">
+              <NavLink to="/deposit" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
                 Sett inn penger
               </NavLink>
             </li>

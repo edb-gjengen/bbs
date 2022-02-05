@@ -1,14 +1,14 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes as ReactRouterRoutes } from "react-router-dom";
 
 import { Deposit } from "./features/deposit/Deposit";
 import { Log } from "./features/log/Log";
 import { Register } from "./features/register/Register";
 
 export const Routes: React.FC = () => (
-  <Switch>
-    <Route path="/deposit" component={Deposit} />
-    <Route path="/log" component={Log} />
-    <Route path="/" exact component={Register} />
-  </Switch>
+  <ReactRouterRoutes>
+    <Route path="/deposit" element={<Deposit />} />
+    <Route path="/log" element={<Log />} />
+    <Route path="/" element={<Register />} />
+  </ReactRouterRoutes>
 );

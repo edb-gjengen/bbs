@@ -1,4 +1,4 @@
-import PersonFill from "bootstrap-icons/icons/person-fill.svg";
+import { ReactComponent as PersonFill } from "bootstrap-icons/icons/person-fill.svg";
 import clsx from "clsx";
 import React, { MouseEventHandler } from "react";
 
