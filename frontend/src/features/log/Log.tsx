@@ -1,8 +1,11 @@
 import { useQuery } from "@apollo/client";
+import { parseISO, format } from "date-fns";
 import React from "react";
 
 import { Order, OrderLine, OrderListDocument, Transaction, TransactionListDocument } from "../../types";
 import styles from "./Log.module.css";
+
+const formatTime = (isoDateTime: string): string => format(parseISO(isoDateTime), "yyyy-MM-dd HH:mm");
 
 export const Log = () => {
   const { data: ordersData, loading: ordersLoading } = useQuery(OrderListDocument);
@@ -30,7 +33,7 @@ export const Log = () => {
           <tbody>
             {orders.map((order: Order) => (
               <tr key={order.id}>
-                <td>{order.created}</td>
+                <td>{formatTime(order.created)}</td>
                 <td>{order.isExternal ? "Ekstern" : `${order.customer?.firstName} ${order.customer?.lastName}`}</td>
                 <td>
                   {(order.orderlines ?? []).map((line: OrderLine) => (
@@ -58,7 +61,7 @@ export const Log = () => {
           <tbody>
             {transactions.map((trans: Transaction) => (
               <tr key={trans.id}>
-                <td>{trans.created}</td>
+                <td>{formatTime(trans.created)}</td>
                 <td>
                   {trans.user.firstName} {trans.user.lastName}
                 </td>
