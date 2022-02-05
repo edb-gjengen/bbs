@@ -75,6 +75,15 @@ input OrderLineInput {
   amount: Int!
 }
 
+input OrderOrdering {
+  created: Ordering
+}
+
+enum Ordering {
+  ASC
+  DESC
+}
+
 type Product {
   id: ID!
   name: String!
@@ -92,8 +101,8 @@ type Query {
   allProducts(filters: ProductFilter): [Product!]!
   allUsers: [User!]!
   allOrders: [Order!]!
-  orderList(pagination: OffsetPaginationInput): [Order!]!
-  transactionList(pagination: OffsetPaginationInput): [Transaction!]!
+  orderList(pagination: OffsetPaginationInput, order: OrderOrdering): [Order!]!
+  transactionList(pagination: OffsetPaginationInput, order: TransactionOrdering): [Transaction!]!
 }
 
 type Transaction {
@@ -101,6 +110,10 @@ type Transaction {
   user: User!
   amount: Float!
   created: DateTime!
+}
+
+input TransactionOrdering {
+  created: Ordering
 }
 
 type User {

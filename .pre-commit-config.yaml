@@ -5,7 +5,7 @@ repos:
   hooks:
   - id: black
     name: black
-    entry: pipenv run black
+    entry: black
     exclude: model_config.py
     args: [--check]
     language: system
@@ -13,7 +13,7 @@ repos:
     types: [python]
   - id: isort
     name: isort
-    entry: pipenv run isort
+    entry: isort
     args: [--check-only]
     language: system
     types: [python]

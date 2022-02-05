@@ -1,5 +1,5 @@
 query orderList($limit: Int = 10, $offset: Int = 0) {
-  orderList(pagination: {limit: $limit, offset: $offset}) {
+  orderList(order: {created: DESC}, pagination: {limit: $limit, offset: $offset}) {
     id
     isExternal
     created

@@ -42,7 +42,11 @@ class User:
     first_name: auto
     last_name: auto
     profile: UserProfile
-    # todo
+
+
+@strawberry_django.ordering.order(models.Order)
+class OrderOrdering:
+    created: auto
 
 
 @strawberry_django.type(models.Order)
@@ -62,6 +66,11 @@ class OrderLine:
     product: "Product"
     amount: auto
     unit_price: auto
+
+
+@strawberry_django.ordering.order(models.Transaction)
+class TransactionOrdering:
+    created: auto
 
 
 @strawberry_django.type(models.Transaction)
