@@ -30,4 +30,6 @@ lint:
 deploy:
   stage: deploy
   script:
-    - echo "TODO run the fabric script"
+    - ssh gitdeploy@dreamcast.neuf.no "$(< bin/deploy)"
+  only:
+    - main
