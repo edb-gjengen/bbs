@@ -1,4 +1,3 @@
-from django.conf.urls import url
 from django.contrib.staticfiles.views import serve
 from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
@@ -27,9 +26,9 @@ legacy_patterns = [
 urlpatterns = [
     path("", serve, kwargs=spa_kwargs, name="home"),
     path("deposit", serve, kwargs=spa_kwargs, name="deposit"),
+    path("log", serve, kwargs=spa_kwargs, name="log"),
+    path("stats", serve, kwargs=spa_kwargs, name="stats"),
     # TODO: migrate to SPA
-    re_path(r"^log/$", log, name="log"),
-    re_path(r"^log/all$", log, kwargs={"limit": None}, name="log-all"),
     # Users
     re_path(r"^user/create/$", create_user, name="create-user"),
     re_path(r"^profile/$", profile, name="profile"),
@@ -42,7 +41,6 @@ urlpatterns = [
 
 # Stats
 urlpatterns += [
-    re_path(r"^stats/$", stats_list, name="stats"),
     re_path(
         r"^stats/orders/hourly/$",
         OrdersHourlyView.as_view(),
