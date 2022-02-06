@@ -5,7 +5,7 @@ import { Product } from "../types";
 import styles from "./ProductCard.module.css";
 
 type ProductCardProps = {
-  product: Product;
+  product: Omit<Product, "userCounts">;
   onProduct: MouseEventHandler;
   active: boolean;
   amount: number;

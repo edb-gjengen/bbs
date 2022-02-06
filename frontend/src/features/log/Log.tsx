@@ -17,21 +17,20 @@ export const Log = () => {
     transactionOffset: Number,
   };
   const [params, setParams] = useUrlSearchParams({}, types);
+  const orderOffset = Number(params.orderOffset) || 0;
+  const transactionOffset = Number(params.transactionOffset) || 0;
   const { data: ordersData, loading: ordersLoading } = useQuery(OrderListDocument, {
-    variables: { offset: params.orderOffset },
+    variables: { offset: orderOffset },
   });
   const { data: transactionsData, loading: transactionsLoading } = useQuery(TransactionListDocument, {
-    variables: { offset: params.transactionOffset },
+    variables: { offset: transactionOffset },
   });
   const loading = ordersLoading || transactionsLoading;
 
-  const orderOffset = params.orderOffset || 0;
-  const transactionOffset = params.transactionOffset || 0;
-
   if (loading) return <div>Loading...</div>;
 
-  const { orderList: orders } = ordersData;
-  const { transactionList: transactions } = transactionsData;
+  const orders = ordersData?.orderList || [];
+  const transactions = transactionsData?.transactionList || [];
 
   return (
     <div className={styles.log}>
@@ -47,6 +46,7 @@ export const Log = () => {
             </tr>
           </thead>
           <tbody>
+            {/* @ts-expect-error The graphql query is not fetching all the fields, so the types are not overlapping */}
             {orders.map((order: Order) => (
               <tr key={order.id}>
                 <td>{formatTime(order.created)}</td>
@@ -99,6 +99,7 @@ export const Log = () => {
             </tr>
           </thead>
           <tbody>
+            {/* @ts-expect-error The graphql query is not fetching all the fields, so the types are not overlapping */}
             {transactions.map((trans: Transaction) => (
               <tr key={trans.id}>
                 <td>{formatTime(trans.created)}</td>

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "tsc && vite build",
+    "check-types": "tsc",
     "dev": "vite",
     "format:js": "eslint --fix src",
     "format:styles": "stylelint --fix src",

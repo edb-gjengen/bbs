@@ -54,6 +54,10 @@ export const Deposit: React.FC = () => {
     setUserQuery("");
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <section>

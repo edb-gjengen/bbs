@@ -15,9 +15,9 @@ type OrderLineInput = {
   amount: number;
 };
 
-const sumTotal = (products: Product[], order: OrderLineInput[], isExternal: boolean) => {
+const sumTotal = (products: Omit<Product, "userCounts">[], order: OrderLineInput[], isExternal: boolean) => {
   const prices = order.map((orderLine: OrderLineInput) => {
-    const product = products.find((product: Product) => product.id === orderLine.productId);
+    const product = products.find((product: Omit<Product, "userCounts">) => product.id === orderLine.productId);
     if (!product) return 0;
     return orderLine.amount * (isExternal ? product.salePriceExt : product.salePriceInt);
   });
@@ -116,7 +116,7 @@ export const Register: React.FC = () => {
       <section className={styles.productListSection}>
         <h2>Kjøper hva?</h2>
         <div className={styles.productList}>
-          {products.map((product: Product) => (
+          {products.map((product: Omit<Product, "userCounts">) => (
             <ProductCard
               key={product.id}
               product={product}

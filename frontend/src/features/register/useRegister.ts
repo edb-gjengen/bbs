@@ -8,7 +8,7 @@ const activeLimitDays = 365 / 2;
 
 type useRegisterType = {
   users: User[];
-  products: Product[];
+  products: Omit<Product, "userCounts">[];
   loading: boolean;
   showAll: boolean;
   setShowAll: CallableFunction;
