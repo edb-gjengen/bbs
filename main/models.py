@@ -2,7 +2,24 @@ from datetime import datetime
 
 from django.conf import settings
 from django.db import models
+from django.db.models import Sum
 from django.templatetags.static import static
+
+EXTERNAL_USER = "Ekstern"
+
+
+def _format_counts(per_user):
+    per_user = list(per_user)
+    for row in per_user:
+        if row.get("order__customer__first_name") is None:
+            who = EXTERNAL_USER
+        else:
+            first = row.pop("order__customer__first_name")
+            last_initial = row.pop("order__customer__last_name")[0]
+            who = f"{first} {last_initial}"
+        row["name"] = who
+
+    return per_user
 
 
 class Product(models.Model):
@@ -46,6 +63,13 @@ class Product(models.Model):
     @property
     def image_url(self):
         return self.image.url if self.image else ""
+
+    def user_counts(self):
+        name_fields = ["order__customer__first_name", "order__customer__last_name"]
+        per_user = OrderLine.objects.filter(product=self)
+        per_user = per_user.values(*name_fields).annotate(count=Sum("amount")).order_by("-count")
+
+        return _format_counts(per_user)
 
     def __str__(self):
         return self.name

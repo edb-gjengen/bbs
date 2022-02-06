@@ -1,0 +1,7 @@
+query productStats($active: Boolean!) {
+  allProducts(filters: {active: $active}) {
+    id
+    name
+    userCounts
+  }
+}

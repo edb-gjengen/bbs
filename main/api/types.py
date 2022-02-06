@@ -1,4 +1,6 @@
+import json
 from datetime import datetime
+from typing import Any, NewType
 
 import strawberry
 import strawberry_django
@@ -8,6 +10,13 @@ from strawberry_django import auto
 from main import models
 
 UserModel = get_user_model()
+
+JSONScalar = strawberry.scalar(
+    NewType("JSONScalar", Any),
+    serialize=lambda v: v,
+    parse_value=lambda v: json.loads(v),
+    description="The GenericScalar scalar type represents a generic GraphQL scalar value that could be: List or Object.",
+)
 
 
 @strawberry_django.filters.filter(models.Product)
@@ -23,6 +32,8 @@ class Product:
     image_url: str
     sale_price_int: auto
     sale_price_ext: auto
+    # FIXME: stricter types
+    user_counts: JSONScalar
 
 
 @strawberry_django.type(models.UserProfile)

@@ -43,6 +43,11 @@ type InsufficientFunds implements Error {
   amountLacking: Float!
 }
 
+"""
+The GenericScalar scalar type represents a generic GraphQL scalar value that could be: List or Object.
+"""
+scalar JSONScalar
+
 type Mutation {
   createOrder(customerId: ID!, orderLines: [OrderLineInput!]!, isExternal: Boolean! = false): CreateOrderResponse!
   createDeposit(userId: ID!, amount: Int!): CreateDepositResponse!
@@ -90,6 +95,7 @@ type Product {
   imageUrl: String!
   salePriceInt: Float!
   salePriceExt: Float!
+  userCounts: JSONScalar!
 }
 
 input ProductFilter {
