@@ -7,7 +7,7 @@ from strawberry import ID
 
 from main import models
 from main.api.errors import Error, FieldError, FormErrors
-from main.api.types import Order, Transaction, UserProfile
+from main.api.types import Order, Transaction
 
 UserModel = get_user_model()
 

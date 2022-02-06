@@ -1,19 +1,9 @@
 from django.contrib.staticfiles.views import serve
 from django.urls import include, path, re_path
-from rest_framework.routers import DefaultRouter
 
-from main.api.views import ProductViewSet
-from main.views.general import deposit, log, register
+from main.views.general import deposit, register
 from main.views.reports import inventory, inventory_add, report
-from main.views.stats import (
-    OrdersDailyView,
-    OrdersHourlyView,
-    OrdersMonthlyView,
-    OrdersYearlyView,
-    stats_list,
-    stats_products_per_user,
-    stats_products_realtime,
-)
+from main.views.stats import stats_products_per_user, stats_products_realtime
 from main.views.users import create_user, profile
 
 spa_kwargs = {"path": "modern/index.html"}
@@ -42,18 +32,6 @@ urlpatterns = [
 # Stats
 urlpatterns += [
     re_path(
-        r"^stats/orders/hourly/$",
-        OrdersHourlyView.as_view(),
-        name="stats-orders-hourly",
-    ),
-    re_path(r"^stats/orders/daily/", OrdersDailyView.as_view(), name="stats-orders-daily"),
-    re_path(
-        r"^stats/orders/monthly/",
-        OrdersMonthlyView.as_view(),
-        name="stats-orders-monthly",
-    ),
-    re_path(r"^stats/orders/yearly/", OrdersYearlyView.as_view(), name="stats-orders-yearly"),
-    re_path(
         r"^stats/orders/products_realtime$",
         stats_products_realtime,
         name="stats-products-realtime",
@@ -66,8 +44,3 @@ urlpatterns += [
 ]
 # Root level service-worker.js
 urlpatterns += [re_path(r"^service-worker\.js$", serve, kwargs={"path": "dist/service-worker.js"})]
-
-# API
-router = DefaultRouter()
-router.register(r"api/products", ProductViewSet)
-urlpatterns += router.urls

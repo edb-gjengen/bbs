@@ -2,7 +2,6 @@ import pytest
 from django.test import Client
 from strawberry.django.test import GraphQLTestClient
 
-from main.api.mutations import create_order
 from main.models import Order, Product
 
 

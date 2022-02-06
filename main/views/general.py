@@ -10,7 +10,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from main.forms import DepositForm, OrderForm, OrderLineForm
-from main.models import Order, OrderLine, Product, Transaction
+from main.models import OrderLine, Product
 from main.utils import users_format_js, users_with_perm
 
 
@@ -158,24 +158,3 @@ def deposit(request):
         form = DepositForm()
 
     return render(request, "deposit.html", locals())
-
-
-def log(request, limit=datetime.now() - timedelta(days=2)):
-    if limit:
-        # display last two days of orders and transactions
-        orders = Order.objects.filter(created__gte=limit).order_by("-created")
-        transactions = Transaction.objects.filter(created__gte=limit).order_by("-created")
-
-        # no action in the last two days?
-        # ...then display the last 5 items
-        if len(orders) == 0:
-            orders = Order.objects.all().order_by("-created")[:5]
-
-        if len(transactions) == 0:
-            transactions = Transaction.objects.all().order_by("-created")[:5]
-    else:
-        # display everything
-        orders = Order.objects.all().order_by("-created")
-        transactions = Transaction.objects.all().order_by("-created")
-
-    return render(request, "log.html", locals())
