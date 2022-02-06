@@ -28,7 +28,9 @@ const months = {
   12: "Desember",
 };
 export const Stats = () => {
-  const { data: productData, loading: productLoading } = useQuery(ProductStatsDocument);
+  const { data: productData, loading: productLoading } = useQuery(ProductStatsDocument, {
+    variables: { active: true },
+  });
   const { data: orderData, loading: orderLoading } = useQuery(OrderStatsDocument);
 
   const loading = orderLoading || productLoading;
