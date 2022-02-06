@@ -31,11 +31,11 @@ strawberry-graphql-django = "^0.2.5"
 django-cors-headers = "^3.10.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.5"
-black = "^21.9b0"
-pytest-django = "^4.5.1"
-pre-commit = "^2.16.0"
-isort = "^5.10.1"
+pytest = "*"
+black = "*"
+pytest-django = "*"
+pre-commit = "*"
+isort = "*"
 
 
 [build-system]
