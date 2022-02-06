@@ -67,8 +67,10 @@ export const Log = () => {
           <ul className="pagination">
             <li className={clsx("page-item", { disabled: orderOffset <= 0 })}>
               <a
+                href="#"
                 className="page-link"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   setParams({ orderOffset: orderOffset - PAGE_SIZE });
                 }}
               >
@@ -77,8 +79,10 @@ export const Log = () => {
             </li>
             <li className="page-item">
               <a
+                href="#"
                 className="page-link"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   setParams({ orderOffset: orderOffset + PAGE_SIZE });
                 }}
               >
@@ -115,8 +119,10 @@ export const Log = () => {
           <ul className="pagination">
             <li className={clsx("page-item", { disabled: transactionOffset <= 0 })}>
               <a
+                href="#"
                 className="page-link"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   setParams({ transactionOffset: transactionOffset - PAGE_SIZE });
                 }}
               >
@@ -125,8 +131,10 @@ export const Log = () => {
             </li>
             <li className="page-item">
               <a
+                href="#"
                 className="page-link"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   setParams({ transactionOffset: transactionOffset + PAGE_SIZE });
                 }}
               >
