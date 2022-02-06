@@ -79,6 +79,20 @@ class OrderLine:
     unit_price: auto
 
 
+@strawberry.type
+class OrderStatsByTime:
+    period: int
+    count: str
+
+
+@strawberry.type
+class OrderStats:
+    yearly: list[OrderStatsByTime]
+    monthly: list[OrderStatsByTime]
+    dayly: list[OrderStatsByTime]
+    hourly: list[OrderStatsByTime]
+
+
 @strawberry_django.ordering.order(models.Transaction)
 class TransactionOrdering:
     created: auto

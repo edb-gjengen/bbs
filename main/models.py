@@ -2,8 +2,8 @@ from datetime import datetime
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Sum
-from django.templatetags.static import static
+from django.db.models import Count, Sum
+from django.db.models.functions import ExtractHour, ExtractMonth, ExtractWeekDay, ExtractYear
 
 EXTERNAL_USER = "Ekstern"
 
@@ -79,6 +79,22 @@ class Product(models.Model):
         ordering = ["name"]
 
 
+class OrderManager(models.Manager):
+    def count_by_year(self):
+        return self.get_queryset().annotate(period=ExtractYear("created")).values("period").annotate(count=Count("id"))
+
+    def count_by_month(self):
+        return self.get_queryset().annotate(period=ExtractMonth("created")).values("period").annotate(count=Count("id"))
+
+    def count_by_weekday(self):
+        return (
+            self.get_queryset().annotate(period=ExtractWeekDay("created")).values("period").annotate(count=Count("id"))
+        )
+
+    def count_by_hour(self):
+        return self.get_queryset().annotate(period=ExtractHour("created")).values("period").annotate(count=Count("id"))
+
+
 class Order(models.Model):
     customer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -90,6 +106,8 @@ class Order(models.Model):
     order_sum = models.FloatField(db_column="sum")
     created = models.DateTimeField(auto_now_add=True)
 
+    objects = OrderManager()
+
     def is_external(self):
         return self.customer is None
 
@@ -97,7 +115,7 @@ class Order(models.Model):
         return "{}".format(", ".join([str(ol) for ol in self.orderlines.all()]))
 
     def __str__(self):
-        return "{}: {} kr".format(self.customer or "Ekstern", self.order_sum)
+        return "{}: {} kr".format(self.customer or EXTERNAL_USER, self.order_sum)
 
 
 class OrderLine(models.Model):

@@ -84,6 +84,18 @@ input OrderOrdering {
   created: Ordering
 }
 
+type OrderStats {
+  yearly: [OrderStatsByTime!]!
+  monthly: [OrderStatsByTime!]!
+  dayly: [OrderStatsByTime!]!
+  hourly: [OrderStatsByTime!]!
+}
+
+type OrderStatsByTime {
+  period: Int!
+  count: String!
+}
+
 enum Ordering {
   ASC
   DESC
@@ -109,6 +121,7 @@ type Query {
   allOrders: [Order!]!
   orderList(pagination: OffsetPaginationInput, order: OrderOrdering): [Order!]!
   transactionList(pagination: OffsetPaginationInput, order: TransactionOrdering): [Transaction!]!
+  orderStats: OrderStats!
 }
 
 type Transaction {

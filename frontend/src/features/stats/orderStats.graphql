@@ -1,0 +1,20 @@
+query orderStats {
+  orderStats {
+    yearly {
+      period
+      count
+    }
+    monthly {
+      period
+      count
+    }
+    dayly {
+      period
+      count
+    }
+    hourly {
+      period
+      count
+    }
+  }
+}
