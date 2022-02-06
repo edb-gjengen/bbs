@@ -77,7 +77,7 @@ export const Stats = () => {
       />
       <h3>Ordre per ukedag</h3>
       <Bar
-        data={(orderData?.orderStats?.dayly || []).map((stat: OrderStatsByTime) => ({
+        data={(orderData?.orderStats?.daily || []).map((stat: OrderStatsByTime) => ({
           /* @ts-expect-error Here, stat.period can only be a key in days range. */
           id: days[stat.period],
           label: stat.period,

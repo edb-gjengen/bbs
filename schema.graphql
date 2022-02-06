@@ -87,7 +87,7 @@ input OrderOrdering {
 type OrderStats {
   yearly: [OrderStatsByTime!]!
   monthly: [OrderStatsByTime!]!
-  dayly: [OrderStatsByTime!]!
+  daily: [OrderStatsByTime!]!
   hourly: [OrderStatsByTime!]!
 }
 

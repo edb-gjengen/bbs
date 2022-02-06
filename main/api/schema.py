@@ -26,10 +26,13 @@ class Query:
     @strawberry.field
     def order_stats(self) -> OrderStats:
         return OrderStats(
-            yearly=[OrderStatsByTime(**stat) for stat in models.Order.objects.count_by_year().order_by("period")],
-            monthly=[OrderStatsByTime(**stat) for stat in models.Order.objects.count_by_month().order_by("period")],
-            dayly=[OrderStatsByTime(**stat) for stat in models.Order.objects.count_by_weekday().order_by("period")],
-            hourly=[OrderStatsByTime(**stat) for stat in models.Order.objects.count_by_hour().order_by("period")],
+            **{
+                period: [
+                    OrderStatsByTime(**stat)
+                    for stat in models.Order.objects.count_by_created_period(period).order_by("period")
+                ]
+                for period in ["yearly", "monthly", "daily", "hourly"]
+            }
         )
 
 

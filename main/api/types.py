@@ -89,7 +89,7 @@ class OrderStatsByTime:
 class OrderStats:
     yearly: list[OrderStatsByTime]
     monthly: list[OrderStatsByTime]
-    dayly: list[OrderStatsByTime]
+    daily: list[OrderStatsByTime]
     hourly: list[OrderStatsByTime]
 
 

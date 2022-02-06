@@ -1,9 +1,10 @@
 from datetime import datetime
+from typing import Type
 
 from django.conf import settings
 from django.db import models
 from django.db.models import Count, Sum
-from django.db.models.functions import ExtractHour, ExtractMonth, ExtractWeekDay, ExtractYear
+from django.db.models.functions import Extract, ExtractHour, ExtractMonth, ExtractWeekDay, ExtractYear
 
 EXTERNAL_USER = "Ekstern"
 
@@ -80,19 +81,14 @@ class Product(models.Model):
 
 
 class OrderManager(models.Manager):
-    def count_by_year(self):
-        return self.get_queryset().annotate(period=ExtractYear("created")).values("period").annotate(count=Count("id"))
+    def count_by_created(self, extract_class: Type[Extract]):
+        period = extract_class("created")
+        return self.get_queryset().annotate(period=period).values("period").annotate(count=Count("id"))
 
-    def count_by_month(self):
-        return self.get_queryset().annotate(period=ExtractMonth("created")).values("period").annotate(count=Count("id"))
-
-    def count_by_weekday(self):
-        return (
-            self.get_queryset().annotate(period=ExtractWeekDay("created")).values("period").annotate(count=Count("id"))
-        )
-
-    def count_by_hour(self):
-        return self.get_queryset().annotate(period=ExtractHour("created")).values("period").annotate(count=Count("id"))
+    def count_by_created_period(self, period: str):
+        periods = {"yearly": ExtractYear, "monthly": ExtractMonth, "daily": ExtractWeekDay, "hourly": ExtractHour}
+        assert period in periods
+        return self.count_by_created(periods[period])
 
 
 class Order(models.Model):

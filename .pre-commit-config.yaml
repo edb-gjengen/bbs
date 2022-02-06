@@ -6,7 +6,6 @@ repos:
   - id: black
     name: black
     entry: black
-    exclude: model_config.py
     args: [--check]
     language: system
     require_serial: true
@@ -14,6 +13,6 @@ repos:
   - id: isort
     name: isort
     entry: isort
-    args: [--check-only]
+    args: [--check]
     language: system
     types: [python]
