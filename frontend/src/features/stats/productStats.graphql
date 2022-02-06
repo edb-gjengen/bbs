@@ -1,4 +1,4 @@
-query productStats($active: Boolean!) {
+query productStats($active: Boolean) {
   allProducts(filters: {active: $active}) {
     id
     name

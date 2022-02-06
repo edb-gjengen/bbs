@@ -14,9 +14,10 @@ def _format_counts(per_user):
         if row.get("order__customer__first_name") is None:
             who = EXTERNAL_USER
         else:
-            first = row.pop("order__customer__first_name")
-            last_initial = row.pop("order__customer__last_name")[0]
-            who = f"{first} {last_initial}"
+            first_name = row.pop("order__customer__first_name")
+            last_name = row.pop("order__customer__last_name")
+            last_name_initial = f" {last_name[0]}" if last_name else ""
+            who = f"{first_name}{last_name_initial}"
         row["name"] = who
 
     return per_user
