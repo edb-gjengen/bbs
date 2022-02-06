@@ -83,7 +83,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.admin",
     "django_extensions",
-    "rest_framework",
     "easy_thumbnails",
     "corsheaders",
 ]
