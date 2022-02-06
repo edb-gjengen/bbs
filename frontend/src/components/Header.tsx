@@ -7,6 +7,11 @@ import { NavLink } from "react-router-dom";
 import { ReactComponent as Logo } from "../assets/brick.svg";
 import styles from "./Header.module.css";
 
+interface NavLinkStyleProps {
+  isActive: boolean;
+}
+const navLinkStyles = ({ isActive }: NavLinkStyleProps) => (isActive ? "nav-link active" : "nav-link");
+
 export const Header: React.FC = () => {
   return (
     <header>
@@ -31,7 +36,7 @@ export const Header: React.FC = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <NavLink to="/" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")} end>
+              <NavLink to="/" className={navLinkStyles} end>
                 <span className={styles.navIcon}>
                   <House />
                 </span>{" "}
@@ -39,25 +44,25 @@ export const Header: React.FC = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/deposit" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+              <NavLink to="/deposit" className={navLinkStyles}>
                 Sett inn penger
               </NavLink>
             </li>
             <li className="nav-item">
-              <a href="/log" className="nav-link">
+              <NavLink to="/log" className={navLinkStyles}>
                 <span className={styles.navIcon}>
                   <CardList />
                 </span>{" "}
                 Logg
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a href="/stats" className="nav-link">
+              <NavLink to="/stats" className={navLinkStyles}>
                 <span className={styles.navIcon}>
                   <BarChart />
                 </span>{" "}
                 Statistikk
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>
