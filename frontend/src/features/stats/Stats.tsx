@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { Bar } from "@nivo/bar";
+import { Bar, BarDatum } from "@nivo/bar";
 import { Pie } from "@nivo/pie";
 import React from "react";
 
@@ -27,6 +27,20 @@ const months = {
   11: "November",
   12: "Desember",
 };
+
+const OrderBar = ({ data }: { data: BarDatum[] }) => (
+  <Bar
+    data={data}
+    margin={{ left: 60, bottom: 40 }}
+    width={1200}
+    height={400}
+    colorBy="indexValue"
+    enableLabel={false}
+    tooltipLabel={(d) => d.id.toString()}
+    axisLeft={{ legend: "Ordre", legendPosition: "middle", legendOffset: -50 }}
+  />
+);
+
 export const Stats = () => {
   const { data: productData, loading: productLoading } = useQuery(ProductStatsDocument, {
     variables: { active: true },
@@ -61,66 +75,38 @@ export const Stats = () => {
         ))}
       </div>
       <h3>Ordre per time</h3>
-      <Bar
+      <OrderBar
         data={(orderData?.orderStats?.hourly || []).map((stat: OrderStatsByTime) => ({
           id: `${stat.period.toString().padStart(2, "0")}:00`,
           label: stat.period,
           value: stat.count,
         }))}
-        margin={{ left: 60, bottom: 40 }}
-        width={1200}
-        height={400}
-        colorBy="indexValue"
-        enableLabel={false}
-        tooltipLabel={(d) => d.id.toString()}
-        axisLeft={{ legend: "Ordre", legendPosition: "middle", legendOffset: -50 }}
       />
       <h3>Ordre per ukedag</h3>
-      <Bar
+      <OrderBar
         data={(orderData?.orderStats?.daily || []).map((stat: OrderStatsByTime) => ({
           /* @ts-expect-error Here, stat.period can only be a key in days range. */
           id: days[stat.period],
           label: stat.period,
           value: stat.count,
         }))}
-        margin={{ left: 60, bottom: 40 }}
-        width={1200}
-        height={400}
-        colorBy="indexValue"
-        enableLabel={false}
-        tooltipLabel={(d) => d.id.toString()}
-        axisLeft={{ legend: "Ordre", legendPosition: "middle", legendOffset: -50 }}
       />
       <h3>Ordre per måned</h3>
-      <Bar
+      <OrderBar
         data={(orderData?.orderStats?.monthly || []).map((stat: OrderStatsByTime) => ({
           /* @ts-expect-error Here, stat.period can only be a key in months range. */
           id: months[stat.period],
           label: stat.period,
           value: stat.count,
         }))}
-        margin={{ left: 60, bottom: 40 }}
-        width={1200}
-        height={400}
-        colorBy="indexValue"
-        enableLabel={false}
-        tooltipLabel={(d) => d.id.toString()}
-        axisLeft={{ legend: "Ordre", legendPosition: "middle", legendOffset: -50 }}
       />
       <h3>Ordre per år</h3>
-      <Bar
+      <OrderBar
         data={(orderData?.orderStats?.yearly || []).map((stat: OrderStatsByTime) => ({
           id: stat.period,
           label: stat.period,
           value: stat.count,
         }))}
-        margin={{ left: 60, bottom: 40 }}
-        width={1200}
-        height={400}
-        colorBy="indexValue"
-        enableLabel={false}
-        tooltipLabel={(d) => d.id.toString()}
-        axisLeft={{ legend: "Ordre", legendPosition: "middle", legendOffset: -50 }}
       />
     </div>
   );
