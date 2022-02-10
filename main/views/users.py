@@ -13,10 +13,7 @@ def create_user(request):
         form = SimpleCreateUserForm(data=request.POST)
         if form.is_valid():
             user = form.save()
-            messages.success(
-                request,
-                "Hurra! {} {} er lagt til".format(user.first_name, user.last_name),
-            )
+            messages.success(request, f"Hurra! {user.first_name}{user.last_name} er lagt til")
             return redirect("create-user")
 
         else:

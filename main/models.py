@@ -1,3 +1,4 @@
+import hashlib
 from datetime import datetime
 from typing import Type
 
@@ -108,10 +109,10 @@ class Order(models.Model):
         return self.customer is None
 
     def reciept(self):
-        return "{}".format(", ".join([str(ol) for ol in self.orderlines.all()]))
+        return ", ".join([str(ol) for ol in self.orderlines.all()])
 
     def __str__(self):
-        return "{}: {} kr".format(self.customer or EXTERNAL_USER, self.order_sum)
+        return f"{self.customer or EXTERNAL_USER}: {self.order_sum} kr"
 
 
 class OrderLine(models.Model):
@@ -125,7 +126,7 @@ class OrderLine(models.Model):
         return self.amount * self.unit_price
 
     def __str__(self):
-        return "{} {} ({} kr per)".format(self.amount, self.product, self.unit_price)
+        return f"{self.amount} {self.product} ({self.unit_price} kr per)"
 
     class Meta:
         unique_together = ("order", "product")
@@ -139,7 +140,7 @@ class Transaction(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "{}: {}: {}".format(self.id, self.user, self.amount)
+        return f"{self.id}: { self.user}: {self.amount}"
 
 
 class InventoryTransaction(models.Model):
@@ -166,9 +167,7 @@ class InventoryTransaction(models.Model):
         return self.amount * self.unit_price
 
     def __str__(self):
-        return "{}: {}: {}. {:.0f} stykker ({} kr per)".format(
-            self.id, self.user, self.product, self.amount, self.unit_price
-        )
+        return f"{self.id}: {self.user}: {self.product}. {self.amount:.0f} stykker ({self.unit_price} kr per)"
 
 
 class UserProfile(models.Model):
@@ -177,23 +176,25 @@ class UserProfile(models.Model):
     image = models.URLField(blank=True)
 
     def last_purchase(self):
-        if len(self.user.orders.all()) == 0:
-            return None
-
-        return self.user.orders.order_by("-created")[0]
+        return self.user.orders.order_by("-created").first()
 
     def last_purchase_date(self):
         last = self.last_purchase()
         last_p = last.created if last else datetime.min
         return last_p
 
-    def profile_image_url(self):
-        from django.templatetags.static import static
+    def image_url(self) -> str:
+        if self.user.email:
+            md5_hash = hashlib.md5(self.user.email.lower().strip().encode()).hexdigest()
+            return f"https://www.gravatar.com/avatar/{md5_hash}?d=identicon"
 
+        return ""
+
+    def save(self, **kwargs):
         if not self.image:
-            return static("dist/images/unknown_person.png")
+            self.image = self.image_url()
 
-        return self.image
+        super().save(**kwargs)
 
     def __str__(self):
-        return "{}".format(self.user)
+        return f"{self.user}"
