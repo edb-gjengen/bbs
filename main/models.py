@@ -5,7 +5,7 @@ from typing import Type
 from django.conf import settings
 from django.db import models
 from django.db.models import Count, Sum
-from django.db.models.functions import Extract, ExtractHour, ExtractMonth, ExtractWeekDay, ExtractYear
+from django.db.models.functions import Extract, ExtractHour, ExtractIsoWeekDay, ExtractMonth, ExtractYear
 
 EXTERNAL_USER = "Ekstern"
 
@@ -87,7 +87,7 @@ class OrderManager(models.Manager):
         return self.get_queryset().annotate(period=period).values("period").annotate(count=Count("id"))
 
     def count_by_created_period(self, period: str):
-        periods = {"yearly": ExtractYear, "monthly": ExtractMonth, "daily": ExtractWeekDay, "hourly": ExtractHour}
+        periods = {"yearly": ExtractYear, "monthly": ExtractMonth, "daily": ExtractIsoWeekDay, "hourly": ExtractHour}
         assert period in periods
         return self.count_by_created(periods[period])
 
