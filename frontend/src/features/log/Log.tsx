@@ -1,13 +1,11 @@
 import { useQuery } from "@apollo/client";
 import clsx from "clsx";
-import { parseISO, format } from "date-fns";
 import React from "react";
 import { useUrlSearchParams } from "use-url-search-params";
 
 import { Order, OrderLine, OrderListDocument, Transaction, TransactionListDocument } from "../../types";
+import { formatTime } from "../../utils/time";
 import styles from "./Log.module.css";
-
-const formatTime = (isoDateTime: string): string => format(parseISO(isoDateTime), "yyyy-MM-dd HH:mm");
 
 const PAGE_SIZE = 10;
 

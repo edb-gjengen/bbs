@@ -5,7 +5,7 @@ from typing import Type
 from django.conf import settings
 from django.db import models
 from django.db.models import Count, Sum
-from django.db.models.functions import Extract, ExtractHour, ExtractIsoWeekDay, ExtractMonth, ExtractYear
+from django.db.models.functions import Extract, ExtractHour, ExtractIsoWeekDay, ExtractMonth, ExtractYear, TruncMonth
 
 EXTERNAL_USER = "Ekstern"
 
@@ -178,10 +178,22 @@ class UserProfile(models.Model):
     def last_purchase(self):
         return self.user.orders.order_by("-created").first()
 
-    def last_purchase_date(self):
+    def last_purchase_date(self) -> datetime:
         last = self.last_purchase()
         last_p = last.created if last else datetime.min
         return last_p
+
+    def top_months(self, limit=5):
+        return (
+            Order.objects.filter(customer_id=self.user_id)
+            .annotate(period=TruncMonth("created"))
+            .values("period")
+            .annotate(sum=Sum("order_sum"), count=Count("pk"))
+            .order_by("-sum")[:limit]
+        )
+
+    def order_sum_total(self) -> float:
+        return Order.objects.filter(customer_id=self.user_id).aggregate(sum=Sum("order_sum"))["sum"] or 0
 
     def image_url(self) -> str:
         if self.user.email:

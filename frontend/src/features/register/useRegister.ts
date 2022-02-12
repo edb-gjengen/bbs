@@ -1,10 +1,8 @@
 import { useQuery } from "@apollo/client";
-import { parseISO, subDays } from "date-fns";
 import { useState } from "react";
 
 import { User, Product, AllProductsDocument, AllUsersDocument } from "../../types";
-
-const activeLimitDays = 365 / 2;
+import { activeUserFilter } from "../../utils/users";
 
 type useRegisterType = {
   users: User[];
@@ -20,13 +18,7 @@ export const useRegister = (): useRegisterType => {
   const { data: usersData, loading: usersLoading } = useQuery(AllUsersDocument);
 
   const allUsers = usersData?.allUsers || [];
-  const users = showAll
-    ? allUsers
-    : allUsers.filter((user: User) => {
-        const balance = user.profile?.balance || 0;
-        const active = parseISO(user.profile?.lastPurchaseDate) >= subDays(new Date(), activeLimitDays);
-        return balance >= 15 && active;
-      });
+  const users = showAll ? allUsers : allUsers.filter(activeUserFilter);
 
   return { loading: loading || usersLoading, users, products: data?.allProducts || [], showAll, setShowAll };
 };

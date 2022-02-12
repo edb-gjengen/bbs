@@ -1,6 +1,7 @@
 import { ReactComponent as BarChart } from "bootstrap-icons/icons/bar-chart.svg";
 import { ReactComponent as CardList } from "bootstrap-icons/icons/card-list.svg";
 import { ReactComponent as House } from "bootstrap-icons/icons/house.svg";
+import { ReactComponent as PeopleIcon } from "bootstrap-icons/icons/people.svg";
 import React from "react";
 import { NavLink } from "react-router-dom";
 
@@ -62,6 +63,15 @@ export const Header: React.FC = () => {
                   <BarChart />
                 </span>{" "}
                 Statistikk
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink to="/users" className={navLinkStyles}>
+                <span className={styles.navIcon}>
+                  <PeopleIcon />
+                </span>{" "}
+                Folk
               </NavLink>
             </li>
           </ul>

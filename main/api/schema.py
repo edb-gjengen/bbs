@@ -1,5 +1,7 @@
 import strawberry
 import strawberry_django
+from django.contrib.auth.models import User as DjangoUser
+from strawberry import ID
 
 from main import models
 from main.api import mutations
@@ -22,6 +24,10 @@ class Query:
     all_orders: list[Order] = strawberry_django.field()
     order_list: list[Order] = strawberry_django.field(pagination=True, order=OrderOrdering)
     transaction_list: list[Transaction] = strawberry_django.field(pagination=True, order=TransactionOrdering)
+
+    @strawberry.field
+    def user(self, user_id: ID) -> User:
+        return DjangoUser.objects.get(pk=user_id)
 
     @strawberry.field
     def order_stats(self) -> OrderStats:
