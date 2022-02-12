@@ -24,13 +24,13 @@ export const UserDetail = () => {
           <div className="card-header">Stats</div>
           <ul className="list-group list-group-flush">
             <li className="list-group-item">
-              Saldo: <strong>{profile.balance.toLocaleString()}</strong>
+              Saldo: <strong>{profile.balance.toLocaleString("no")} kr</strong>
             </li>
             <li className="list-group-item">
               Siste kjøp: <strong>{formatTime(profile.lastPurchaseDate)}</strong>
             </li>
             <li className="list-group-item">
-              Kjøp totalt: <strong>{profile.orderSumTotal.toLocaleString()}</strong>
+              Kjøp totalt: <strong>{profile.orderSumTotal.toLocaleString("no")} kr</strong>
             </li>
           </ul>
         </div>
