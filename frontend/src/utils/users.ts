@@ -1,6 +1,6 @@
 import { parseISO, subDays } from "date-fns";
 
-import { User } from "../types";
+import type { User } from "../types";
 
 const activeLimitDays = 365 / 2;
 
