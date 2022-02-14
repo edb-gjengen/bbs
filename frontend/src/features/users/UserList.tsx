@@ -12,7 +12,7 @@ export const UserList = () => {
   if (loading) return <div>Loading...</div>;
 
   const allUsers = data?.allUsers || [];
-  const users = showAll ? allUsers : allUsers.filter(activeUserFilter);
+  const users = showAll ? allUsers : allUsers.filter((u) => activeUserFilter(u));
   return (
     <div>
       <button type="button" className="btn btn-link" onClick={() => setShowAll(!showAll)}>

@@ -2,11 +2,11 @@ import { ReactComponent as PersonFill } from "bootstrap-icons/icons/person-fill.
 import clsx from "clsx";
 import React, { MouseEventHandler } from "react";
 
-import { User } from "../types";
+import { AllUsersQuery } from "../types";
 import styles from "./UserCard.module.css";
 
 type UserCardProps = {
-  user: User | null;
+  user: AllUsersQuery["allUsers"][0] | null;
   onUser: MouseEventHandler;
   active: boolean;
 };
