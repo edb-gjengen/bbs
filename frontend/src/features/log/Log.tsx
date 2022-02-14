@@ -3,7 +3,7 @@ import clsx from "clsx";
 import React from "react";
 import { useUrlSearchParams } from "use-url-search-params";
 
-import { Order, OrderLine, OrderListDocument, Transaction, TransactionListDocument } from "../../types";
+import { OrderListDocument, TransactionListDocument } from "../../types";
 import { formatTime } from "../../utils/time";
 import styles from "./Log.module.css";
 
@@ -44,13 +44,12 @@ export const Log = () => {
             </tr>
           </thead>
           <tbody>
-            {/* @ts-expect-error The graphql query is not fetching all the fields, so the types are not overlapping */}
-            {orders.map((order: Order) => (
+            {orders.map((order) => (
               <tr key={order.id}>
                 <td>{formatTime(order.created)}</td>
                 <td>{order.isExternal ? "Ekstern" : `${order.customer?.firstName} ${order.customer?.lastName}`}</td>
                 <td>
-                  {(order.orderlines ?? []).map((line: OrderLine) => (
+                  {(order.orderlines ?? []).map((line) => (
                     <div key={line.id}>
                       {line.amount}x {line.product.name}
                     </div>
@@ -101,8 +100,7 @@ export const Log = () => {
             </tr>
           </thead>
           <tbody>
-            {/* @ts-expect-error The graphql query is not fetching all the fields, so the types are not overlapping */}
-            {transactions.map((trans: Transaction) => (
+            {transactions.map((trans) => (
               <tr key={trans.id}>
                 <td>{formatTime(trans.created)}</td>
                 <td>
