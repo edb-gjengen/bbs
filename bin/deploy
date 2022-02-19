@@ -2,8 +2,8 @@
 set -eu
 
 PROJECT_PATH=/var/www/neuf.no/bbs
-PROCESS_NAME="$PROJECT.neuf.no"
-
+PROCESS_NAME="bbs.neuf.no"
+echo "Deploying bbs to ${PROJECT_PATH}"
 cd "$PROJECT_PATH" || exit 1
 git pull
 poetry install
@@ -11,4 +11,5 @@ umask 022; poetry run python manage.py collectstatic --noinput  # Collect static
 poetry run python manage.py migrate  # Run DB migrations
 
 # Reload
+echo "Reloading supervisor process ${PROCESS_NAME}"
 sudo /usr/bin/supervisorctl pid "$PROCESS_NAME" | xargs kill -HUP
