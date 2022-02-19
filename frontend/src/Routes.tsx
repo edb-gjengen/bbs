@@ -19,7 +19,7 @@ export const Routes: React.FC = () => (
     <Route path="/stats/orders" element={<OrderStats />} />
     <Route path="/stats/products" element={<ProductStats />} />
     <Route path="/users" element={<UserList />} />
-    <Route path="/user/create" element={<UserCreate />} />
+    <Route path="/users/create" element={<UserCreate />} />
     <Route path="/user/:userId" element={<UserDetail />} />
     <Route path="/" element={<Register />} />
   </ReactRouterRoutes>

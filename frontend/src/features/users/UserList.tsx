@@ -27,6 +27,10 @@ export const UserList = () => {
           </li>
         ))}
       </ul>
+      <br />
+      <Link to="/users/create" className="btn btn-primary">
+        Opprett ny
+      </Link>
     </div>
   );
 };
