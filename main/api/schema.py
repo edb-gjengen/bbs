@@ -1,6 +1,7 @@
 import strawberry
 
 from main.api.mutations.shop import ShopMutations
+from main.api.mutations.users import UsersMutations
 from main.api.queries.inventory import InventoryQueries
 from main.api.queries.shop import ShopQueries
 from main.api.queries.users import UsersQueries
@@ -12,7 +13,7 @@ class Query(InventoryQueries, ShopQueries, UsersQueries):
 
 
 @strawberry.type
-class Mutation(ShopMutations):
+class Mutation(ShopMutations, UsersMutations):
     pass
 
 

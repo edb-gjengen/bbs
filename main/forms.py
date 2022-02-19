@@ -1,29 +1,6 @@
 from django import forms
-from django.contrib.auth.models import User
 
-from main.models import InventoryTransaction, Product, UserProfile
-from main.utils import format_username
-
-
-class SimpleCreateUserForm(forms.Form):
-    first_name = forms.CharField(required=True, label="Fornavn")
-    last_name = forms.CharField(required=True, label="Etternavn")
-    email = forms.EmailField(required=True, label="E-post")
-
-    def save(self, commit=True):
-        username = format_username(self.cleaned_data["first_name"], self.cleaned_data["last_name"])
-        user = User.objects.create_user(username, email=self.cleaned_data["email"])
-        user.first_name = self.cleaned_data["first_name"]
-        user.last_name = self.cleaned_data["last_name"]
-
-        profile = UserProfile.objects.create(user=user)
-        profile.image = self._get_facebook_url()
-
-        if commit:
-            user.save()
-            profile.save()
-
-        return user
+from main.models import InventoryTransaction, Product
 
 
 class InventoryTransactionForm(forms.ModelForm):
