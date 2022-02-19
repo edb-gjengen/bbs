@@ -17,6 +17,18 @@ class TopMonth:
     sum: int
 
 
+@strawberry.type
+class Point:
+    x: str
+    y: int
+
+
+@strawberry.type
+class ProductOrderStat:
+    product_name: str
+    data: list[Point]
+
+
 @strawberry_django.type(models.UserProfile)
 class UserProfile:
     id: auto
@@ -28,6 +40,13 @@ class UserProfile:
     @strawberry.field()
     def top_months(self) -> list[TopMonth]:
         return [TopMonth(**month) for month in self.top_months()]
+
+    @strawberry.field()
+    def product_order_stats(self) -> list[ProductOrderStat]:
+        return [
+            ProductOrderStat(product_name=stat["product_name"], data=[Point(**p) for p in stat["data"]])
+            for stat in self.product_order_stats().as_series()
+        ]
 
 
 @strawberry_django.type(UserModel)

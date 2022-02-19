@@ -102,6 +102,11 @@ enum Ordering {
   DESC
 }
 
+type Point {
+  x: String!
+  y: Int!
+}
+
 type Product {
   id: ID!
   name: String!
@@ -114,6 +119,11 @@ type Product {
 input ProductFilter {
   id: ID
   active: Boolean
+}
+
+type ProductOrderStat {
+  productName: String!
+  data: [Point!]!
 }
 
 type Query {
@@ -162,5 +172,6 @@ type UserProfile {
   image: String!
   lastPurchaseDate: DateTime!
   orderSumTotal: Float!
+  productOrderStats: [ProductOrderStat!]!
   topMonths: [TopMonth!]!
 }

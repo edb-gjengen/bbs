@@ -1,11 +1,20 @@
 import hashlib
 from datetime import datetime
+from itertools import groupby
 from typing import Type
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Count, Sum
-from django.db.models.functions import Extract, ExtractHour, ExtractIsoWeekDay, ExtractMonth, ExtractYear, TruncMonth
+from django.db.models import Count, F, Sum
+from django.db.models.functions import (
+    Extract,
+    ExtractHour,
+    ExtractIsoWeekDay,
+    ExtractMonth,
+    ExtractYear,
+    TruncDay,
+    TruncMonth,
+)
 
 EXTERNAL_USER = "Ekstern"
 
@@ -115,11 +124,34 @@ class Order(models.Model):
         return f"{self.customer or EXTERNAL_USER}: {self.order_sum} kr"
 
 
+class OrderLineManager(models.QuerySet):
+    def product_order_stats(self):
+        return (
+            self.annotate(date=TruncDay("order__created"))
+            .values("date", product_name=F("product__name"))
+            .annotate(count=Sum("amount"))
+            .order_by("date")
+        )
+
+    def as_series(self):
+        datas = list(self)
+        datas.sort(key=lambda x: x["product_name"])
+        return [
+            {
+                "product_name": key,
+                "data": [{"x": item["date"].date().isoformat(), "y": item["count"]} for item in list(group)],
+            }
+            for key, group in groupby(datas, key=lambda x: x["product_name"])
+        ]
+
+
 class OrderLine(models.Model):
     order = models.ForeignKey("main.Order", on_delete=models.CASCADE, related_name="orderlines")
     product = models.ForeignKey("main.Product", on_delete=models.CASCADE, related_name="orderlines")
     amount = models.IntegerField()
     unit_price = models.FloatField(verbose_name="Enhetspris")
+
+    objects = OrderLineManager.as_manager()
 
     @property
     def price(self):
@@ -191,6 +223,9 @@ class UserProfile(models.Model):
             .annotate(sum=Sum("order_sum"), count=Count("pk"))
             .order_by("-sum")[:limit]
         )
+
+    def product_order_stats(self):
+        return OrderLine.objects.filter(order__customer__pk=self.pk).product_order_stats()
 
     def order_sum_total(self) -> float:
         return Order.objects.filter(customer_id=self.user_id).aggregate(sum=Sum("order_sum"))["sum"] or 0

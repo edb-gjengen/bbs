@@ -13,6 +13,13 @@ query userDetail($userId: ID!) {
               sum
               count
           }
+          productOrderStats {
+            productName
+            data {
+              x
+              y
+            }
+          }
           orderSumTotal
       }
     }
