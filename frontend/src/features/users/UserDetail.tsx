@@ -58,6 +58,7 @@ export const UserDetail = () => {
         </div>
       </div>
       <div>
+        <h2>Kjøp over tid</h2>
         <Line
           data={series}
           width={1000}

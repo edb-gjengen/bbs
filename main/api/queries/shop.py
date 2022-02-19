@@ -2,7 +2,7 @@ import strawberry
 import strawberry_django
 
 from main import models
-from main.api.types.shop import Order, OrderOrdering, OrderStats, OrderStatsByTime, Product
+from main.api.types.shop import Order, OrderOrdering, OrderStats, OrderStatsByTime, Point, Product, ProductOrderStat
 
 
 @strawberry.type
@@ -22,3 +22,10 @@ class ShopQueries:
                 for period in ["yearly", "monthly", "daily", "hourly"]
             }
         )
+
+    @strawberry.field
+    def product_stats(self) -> list[ProductOrderStat]:
+        return [
+            ProductOrderStat(product_name=stat["product_name"], data=[Point(**p) for p in stat["data"]])
+            for stat in models.OrderLine.objects.product_order_stats().as_series()
+        ]

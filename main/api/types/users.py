@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from strawberry_django import auto
 
 from main import models
+from main.api.types.shop import Point, ProductOrderStat
 
 UserModel = get_user_model()
 
@@ -15,18 +16,6 @@ class TopMonth:
     period: str
     count: int
     sum: int
-
-
-@strawberry.type
-class Point:
-    x: str
-    y: int
-
-
-@strawberry.type
-class ProductOrderStat:
-    product_name: str
-    data: list[Point]
 
 
 @strawberry_django.type(models.UserProfile)

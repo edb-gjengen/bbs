@@ -3,7 +3,6 @@ import strawberry_django
 from strawberry_django import auto
 
 from main import models
-from main.api.types.users import User
 from main.api.types.utils import JSONScalar
 
 
@@ -32,7 +31,7 @@ class OrderOrdering:
 @strawberry_django.type(models.Order)
 class Order:
     id: auto
-    customer: User
+    customer: strawberry.LazyType["User", "main.api.types.users"]
     order_sum: auto
     created: auto
     orderlines: list["OrderLine"]
@@ -60,3 +59,15 @@ class OrderStats:
     monthly: list[OrderStatsByTime]
     daily: list[OrderStatsByTime]
     hourly: list[OrderStatsByTime]
+
+
+@strawberry.type
+class Point:
+    x: str
+    y: int
+
+
+@strawberry.type
+class ProductOrderStat:
+    product_name: str
+    data: list[Point]

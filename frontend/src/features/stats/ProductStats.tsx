@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { Pie } from "@nivo/pie";
 import React from "react";
 
-import { ProductStatsDocument } from "../../types";
+import { AllProductStatsDocument } from "../../types";
 import styles from "./Stats.module.css";
 import { StatsView } from "./StatsView";
 
@@ -12,7 +12,7 @@ type UserCount = {
 };
 
 export const ProductStats = () => {
-  const { data, loading } = useQuery(ProductStatsDocument, {
+  const { data, loading } = useQuery(AllProductStatsDocument, {
     variables: { active: true },
   });
 

@@ -132,6 +132,7 @@ type Query {
   allOrders: [Order!]!
   orderList(pagination: OffsetPaginationInput, order: OrderOrdering): [Order!]!
   orderStats: OrderStats!
+  productStats: [ProductOrderStat!]!
   allUsers: [User!]!
   user(userId: ID!): User!
 }
