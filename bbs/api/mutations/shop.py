@@ -1,3 +1,5 @@
+from typing import List
+
 import strawberry
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -34,7 +36,7 @@ CreateOrderResponse = strawberry.union("CreateOrderResponse", [CreateOrderSucces
 
 @strawberry.mutation
 @transaction.atomic
-def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external: bool = False) -> CreateOrderResponse:
+def create_order(customer_id: ID, order_lines: List[OrderLineInput], is_external: bool = False) -> CreateOrderResponse:
     # clean and validate
     try:
         user = UserModel.objects.get(pk=customer_id)

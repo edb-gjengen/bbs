@@ -1,3 +1,5 @@
+from typing import List
+
 import strawberry
 import strawberry_django
 from strawberry_django import auto
@@ -34,7 +36,7 @@ class Order:
     customer: strawberry.LazyType["User", "bbs.api.types.users"]
     order_sum: auto
     created: auto
-    orderlines: list["OrderLine"]
+    orderlines: List["OrderLine"]
     is_external: bool
 
 
@@ -55,10 +57,10 @@ class OrderStatsByTime:
 
 @strawberry.type
 class OrderStats:
-    yearly: list[OrderStatsByTime]
-    monthly: list[OrderStatsByTime]
-    daily: list[OrderStatsByTime]
-    hourly: list[OrderStatsByTime]
+    yearly: List[OrderStatsByTime]
+    monthly: List[OrderStatsByTime]
+    daily: List[OrderStatsByTime]
+    hourly: List[OrderStatsByTime]
 
 
 @strawberry.type
@@ -70,4 +72,4 @@ class Point:
 @strawberry.type
 class ProductOrderStat:
     product_name: str
-    data: list[Point]
+    data: List[Point]
