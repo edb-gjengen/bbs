@@ -23,7 +23,7 @@ npm start
 ## TODO
 
 - update emails
-- Stats: subnav, products over time grouped by month compared to last month, move per product stats to subview
+- Stats: products over time
 - Light on dark colors
 - inventory views
 
