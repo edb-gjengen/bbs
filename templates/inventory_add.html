@@ -1,10 +1,8 @@
 {% extends "base.html" %}
-{% load widget_tweaks %}
-{% load bootstrap %}
 
 {% block title %}Legg til nye varer {% endblock %}
 
-{% block active_inventory_add" %}active{% endblock %}
+{% block active_inventory_add %}active{% endblock %}
 
 {% block content %}
     {% if perms.auth.can_add_inventory_transaction %}
@@ -24,10 +22,10 @@
 
                 <form method="post" role="form">
                     {% csrf_token %}
-                    {{ form|bootstrap }}
+                    {{ form }}
 
                     <input type="submit" value="Legg til" class="btn btn-primary btn-lg" />
-                    <a href="{% url 'inventory' %}" class="btn btn-default" />Tilbake</a>
+                    <a href="{% url 'inventory' %}" class="btn btn-default">Tilbake</a>
                 </form>
             </div>
         </section>

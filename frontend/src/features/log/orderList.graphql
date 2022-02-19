@@ -1,0 +1,28 @@
+query orderList($limit: Int = 10, $offset: Int = 0) {
+  orderList(order: {created: DESC}, pagination: {limit: $limit, offset: $offset}) {
+    id
+    isExternal
+    created
+    orderSum
+    customer {
+      id
+      firstName
+      lastName
+      profile {
+        id
+        balance
+      }
+    }
+    orderlines {
+      id
+      amount
+      unitPrice
+      product {
+        id
+        name
+        salePriceExt
+        salePriceInt
+      }
+    }
+  }
+}

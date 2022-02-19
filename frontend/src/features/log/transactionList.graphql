@@ -1,0 +1,16 @@
+query transactionList($limit: Int = 10, $offset: Int = 0) {
+  transactionList(order: {created: DESC}, pagination: {limit: $limit, offset: $offset}) {
+    id
+    created
+    amount
+    user {
+      id
+      firstName
+      lastName
+      profile {
+        id
+        balance
+      }
+    }
+  }
+}

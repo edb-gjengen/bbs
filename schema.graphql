@@ -1,0 +1,178 @@
+type AboveMaxSaldo implements Error {
+  message: String!
+  error: Boolean!
+  maxSaldo: Float!
+  above: Float!
+}
+
+union CreateDepositResponse = CreateDepositSuccess | AboveMaxSaldo | FormErrors
+
+type CreateDepositSuccess {
+  transaction: Transaction!
+}
+
+union CreateOrderResponse = CreateOrderSuccess | InsufficientFunds | FormErrors
+
+type CreateOrderSuccess {
+  order: Order!
+}
+
+"""Date with time (isoformat)"""
+scalar DateTime
+
+interface Error {
+  message: String!
+  error: Boolean!
+}
+
+type FieldError implements Error {
+  message: String!
+  error: Boolean!
+  field: String!
+}
+
+type FormErrors {
+  fields: [FieldError!]!
+  message: String!
+  error: Boolean!
+}
+
+type InsufficientFunds implements Error {
+  message: String!
+  error: Boolean!
+  amountLacking: Float!
+}
+
+"""
+The GenericScalar scalar type represents a generic GraphQL scalar value that could be: List or Object.
+"""
+scalar JSONScalar
+
+type Mutation {
+  createOrder(customerId: ID!, orderLines: [OrderLineInput!]!, isExternal: Boolean! = false): CreateOrderResponse!
+  createDeposit(userId: ID!, amount: Int!): CreateDepositResponse!
+  createUser(input: UserInput!): User!
+}
+
+input OffsetPaginationInput {
+  offset: Int! = 0
+  limit: Int! = -1
+}
+
+type Order {
+  id: ID!
+  customer: User
+  orderSum: Float!
+  created: DateTime!
+  orderlines: [OrderLine!]
+  isExternal: Boolean!
+}
+
+type OrderLine {
+  id: ID!
+  order: Order!
+  product: Product!
+  amount: Int!
+  unitPrice: Float!
+}
+
+input OrderLineInput {
+  productId: ID!
+  amount: Int!
+}
+
+input OrderOrdering {
+  created: Ordering
+}
+
+type OrderStats {
+  yearly: [OrderStatsByTime!]!
+  monthly: [OrderStatsByTime!]!
+  daily: [OrderStatsByTime!]!
+  hourly: [OrderStatsByTime!]!
+}
+
+type OrderStatsByTime {
+  period: Int!
+  count: String!
+}
+
+enum Ordering {
+  ASC
+  DESC
+}
+
+type Point {
+  x: String!
+  y: Int!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  imageUrl: String!
+  salePriceInt: Float!
+  salePriceExt: Float!
+  userCounts: JSONScalar!
+}
+
+input ProductFilter {
+  id: ID
+  active: Boolean
+}
+
+type ProductOrderStat {
+  productName: String!
+  data: [Point!]!
+}
+
+type Query {
+  transactionList(pagination: OffsetPaginationInput, order: TransactionOrdering): [Transaction!]!
+  allProducts(filters: ProductFilter): [Product!]!
+  allOrders: [Order!]!
+  orderList(pagination: OffsetPaginationInput, order: OrderOrdering): [Order!]!
+  orderStats: OrderStats!
+  productStats: [ProductOrderStat!]!
+  allUsers: [User!]!
+  user(userId: ID!): User!
+}
+
+type TopMonth {
+  period: String!
+  count: Int!
+  sum: Int!
+}
+
+type Transaction {
+  id: ID!
+  user: User!
+  amount: Float!
+  created: DateTime!
+}
+
+input TransactionOrdering {
+  created: Ordering
+}
+
+type User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  profile: UserProfile
+}
+
+input UserInput {
+  email: String
+  firstName: String
+  lastName: String
+}
+
+type UserProfile {
+  id: ID!
+  balance: Float!
+  image: String!
+  lastPurchaseDate: DateTime!
+  orderSumTotal: Float!
+  productOrderStats: [ProductOrderStat!]!
+  topMonths: [TopMonth!]!
+}

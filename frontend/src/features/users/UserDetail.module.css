@@ -1,0 +1,5 @@
+.userDetail {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 400px 1fr;
+}

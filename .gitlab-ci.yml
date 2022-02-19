@@ -1,0 +1,35 @@
+variables:
+  PIP_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/pip"
+
+default:
+  image: nikolaik/python-nodejs:python3.9-nodejs16
+  cache:
+    paths:
+      - .cache/pip
+      - .venv
+  before_script:
+    - poetry config virtualenvs.in-project true
+    - poetry install
+
+django-checks:
+  stage: build
+  script:
+    - poetry run python manage.py migrate
+    - poetry run python manage.py check
+
+tests:
+  stage: test
+  script:
+    - poetry run bin/test
+
+lint:
+  stage: test
+  script:
+    - poetry run bin/lint
+
+deploy:
+  stage: deploy
+  script:
+    - ssh gitdeploy@dreamcast.neuf.no "$(< bin/deploy)"
+  only:
+    - main

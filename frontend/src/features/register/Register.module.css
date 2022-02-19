@@ -1,0 +1,28 @@
+.userList {
+  display: grid;
+  grid-template-columns: repeat(12, 128px);
+  row-gap: 16px;
+}
+
+.productList {
+  display: grid;
+  grid-template-columns: repeat(8, 150px);
+  row-gap: 16px;
+}
+.productListSection {
+  margin-top: 2rem;
+}
+
+.checkout {
+  margin-top: 32px;
+}
+
+.total {
+  display: inline-block;
+  min-width: 200px;
+  padding: 4px 8px;
+  margin-right: 8px;
+  background: black;
+  color: white;
+  font-size: 1.8rem;
+}
