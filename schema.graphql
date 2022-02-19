@@ -51,6 +51,7 @@ scalar JSONScalar
 type Mutation {
   createOrder(customerId: ID!, orderLines: [OrderLineInput!]!, isExternal: Boolean! = false): CreateOrderResponse!
   createDeposit(userId: ID!, amount: Int!): CreateDepositResponse!
+  createUser(input: UserInput!): User!
 }
 
 input OffsetPaginationInput {
@@ -147,6 +148,12 @@ type User {
   firstName: String!
   lastName: String!
   profile: UserProfile
+}
+
+input UserInput {
+  email: String
+  firstName: String
+  lastName: String
 }
 
 type UserProfile {

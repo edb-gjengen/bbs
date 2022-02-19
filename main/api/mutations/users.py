@@ -29,4 +29,4 @@ def register_mutation(input: UserInput) -> User:
 
 @strawberry.type
 class UsersMutations:
-    register = register_mutation
+    create_user = register_mutation
