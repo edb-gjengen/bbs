@@ -1,0 +1,13 @@
+query allUsers {
+  allUsers {
+    id
+    firstName
+    lastName
+    profile {
+      id
+      balance
+      image
+      lastPurchaseDate
+    }
+  }
+}

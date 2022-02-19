@@ -1,0 +1,13 @@
+.userList {
+  display: grid;
+  height: 400px;
+  grid-template-columns: repeat(12, 100px);
+  overflow-y: auto;
+  row-gap: 16px;
+}
+.amountSection {
+  margin-top: 32px;
+}
+.checkout {
+  margin-top: 32px;
+}

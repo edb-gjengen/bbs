@@ -1,0 +1,26 @@
+query userDetail($userId: ID!) {
+  user(userId: $userId) {
+      id
+      firstName
+      lastName
+      profile {
+        id
+        balance
+        image
+        lastPurchaseDate
+          topMonths {
+              period
+              sum
+              count
+          }
+          productOrderStats {
+            productName
+            data {
+              x
+              y
+            }
+          }
+          orderSumTotal
+      }
+    }
+}

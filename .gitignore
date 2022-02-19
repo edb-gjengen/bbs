@@ -4,9 +4,11 @@ local_settings.py
 db.sqlite3
 static/.sass-cache
 uploads/[^.]*
-venv
-node_modules
-bower_components
-.idea
-/CACHE
-media
+venv/
+node_modules/
+.idea/
+CACHE/
+media/
+tmp/
+frontend/dist
+static/modern

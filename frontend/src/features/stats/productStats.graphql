@@ -1,0 +1,9 @@
+query productStats {
+    productStats {
+        productName
+        data {
+            x
+            y
+        }
+    }
+}
