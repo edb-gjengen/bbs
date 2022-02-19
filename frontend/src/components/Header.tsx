@@ -8,10 +8,11 @@ import { NavLink } from "react-router-dom";
 import { ReactComponent as Logo } from "../assets/brick.svg";
 import styles from "./Header.module.css";
 
-interface NavLinkStyleProps {
-  isActive: boolean;
-}
-const navLinkStyles = ({ isActive }: NavLinkStyleProps) => (isActive ? "nav-link active" : "nav-link");
+const ADMIN_URL = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/admin`
+  : "http://localhost:8000/admin/";
+
+const navLinkStyles = ({ isActive }: { isActive: boolean }) => (isActive ? "nav-link active" : "nav-link");
 
 export const Header: React.FC = () => {
   return (
@@ -76,6 +77,13 @@ export const Header: React.FC = () => {
             </li>
           </ul>
         </div>
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <a href={ADMIN_URL} className="nav-link">
+              Admin
+            </a>
+          </li>
+        </ul>
       </nav>
     </header>
   );
