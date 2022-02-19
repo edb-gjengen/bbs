@@ -22,8 +22,10 @@ npm start
 
 ## TODO
 
-- Log view
-- Remove everything facebook related. Use gravatars.
+- create user
+- login
+- update emails
+- Stats: subnav, products over time grouped by month compared to last month, rethink per product stats
 - Light on dark colors
 
 ## TODO-old

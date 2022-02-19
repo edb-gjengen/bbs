@@ -116,13 +116,13 @@ input ProductFilter {
 }
 
 type Query {
+  transactionList(pagination: OffsetPaginationInput, order: TransactionOrdering): [Transaction!]!
   allProducts(filters: ProductFilter): [Product!]!
-  allUsers: [User!]!
   allOrders: [Order!]!
   orderList(pagination: OffsetPaginationInput, order: OrderOrdering): [Order!]!
-  transactionList(pagination: OffsetPaginationInput, order: TransactionOrdering): [Transaction!]!
-  user(userId: ID!): User!
   orderStats: OrderStats!
+  allUsers: [User!]!
+  user(userId: ID!): User!
 }
 
 type TopMonth {
