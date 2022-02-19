@@ -7,7 +7,8 @@ from strawberry import ID
 
 from main import models
 from main.api.errors import Error, FieldError, FormErrors
-from main.api.types import Order, Transaction
+from main.api.types.inventory import Transaction
+from main.api.types.shop import Order
 
 UserModel = get_user_model()
 
@@ -128,3 +129,9 @@ def create_deposit(user_id: ID, amount: int) -> CreateDepositResponse:
     profile.save()
 
     return CreateDepositSuccess(transaction=trans)
+
+
+@strawberry.type
+class ShopMutations:
+    create_order = create_order
+    create_deposit = create_deposit
