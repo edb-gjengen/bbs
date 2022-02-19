@@ -22,11 +22,11 @@ npm start
 
 ## TODO
 
-- create user
-- login
 - update emails
-- Stats: subnav, products over time grouped by month compared to last month, rethink per product stats
+- Stats: subnav, products over time grouped by month compared to last month, move per product stats to subview
 - Light on dark colors
+- inventory views
+
 
 ## TODO-old
 
