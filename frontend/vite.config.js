@@ -10,5 +10,5 @@ export default defineConfig({
     __DEV__: process.env.NODE_ENV !== "production",
   },
   envDir: "..",
-  build: { outDir: "../static/modern", emptyOutDir: true },
+  build: { outDir: "../static", emptyOutDir: false },
 });
