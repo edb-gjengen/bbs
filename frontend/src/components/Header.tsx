@@ -8,7 +8,7 @@ import { NavLink } from "react-router-dom";
 import { ReactComponent as Logo } from "../assets/brick.svg";
 import styles from "./Header.module.css";
 
-const ADMIN_URL = `${import.meta.env.VITE_API_URL}/admin`;
+const ADMIN_URL = `${import.meta.env.VITE_API_URL}/admin/`;
 
 const navLinkStyles = ({ isActive }: { isActive: boolean }) => (isActive ? "nav-link active" : "nav-link");
 
