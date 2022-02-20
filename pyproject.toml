@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "bbssite.settings"
+DJANGO_SETTINGS_MODULE = "bbs.settings"
 
 [tool.black]
 line-length = 120
