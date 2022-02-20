@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SRC_DIR="main bbssite"
+SRC_DIR="bbs"
 
 black $SRC_DIR
 isort $SRC_DIR
