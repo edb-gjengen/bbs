@@ -1,8 +1,10 @@
 #!/bin/bash
 set -eu
 
+export VITE_API_URL="https://bbs.neuf.no/api"
 PROJECT_PATH=/var/www/neuf.no/bbs
 PROCESS_NAME="bbs.neuf.no"
+
 echo "Deploying bbs to ${PROJECT_PATH}"
 cd "$PROJECT_PATH" || exit 1
 git pull
