@@ -9,6 +9,7 @@ poetry shell
 pre-commit install
 python manage.py migrate
 bin/run
+cp .env-default .env
 
 # in another terminal
 cd frontend

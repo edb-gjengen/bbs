@@ -13,3 +13,4 @@ tmp/
 frontend/dist
 static/modern
 .python-version
+.env
