@@ -45,6 +45,7 @@ class Product(models.Model):
     alcohol_percent = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, null=True)
     image = models.ImageField(upload_to="products", blank=True)
     customer_support = models.CharField(max_length=32, blank=True)
+    # FIXME: rename to inventory_quantity
     inventory_amount = models.IntegerField(default=0)
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -150,7 +151,9 @@ class OrderLineManager(models.QuerySet):
 class OrderLine(models.Model):
     order = models.ForeignKey("bbs.Order", on_delete=models.CASCADE, related_name="orderlines")
     product = models.ForeignKey("bbs.Product", on_delete=models.CASCADE, related_name="orderlines")
+    # FIXME: rename to quantity
     amount = models.IntegerField()
+    # FIXME: rename to price
     unit_price = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, verbose_name="Enhetspris")
 
     objects = OrderLineManager.as_manager()
@@ -191,7 +194,9 @@ class InventoryTransaction(models.Model):
         related_name="transactions",
         verbose_name="Produkt",
     )
+    # FIXME: rename to quantity
     amount = models.IntegerField(verbose_name="Antall")
+    # FIXME: rename to price
     unit_price = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, verbose_name="Enhetspris")
     comment = models.TextField(verbose_name="Kommentar", blank=True)
     created = models.DateTimeField(auto_now_add=True)
