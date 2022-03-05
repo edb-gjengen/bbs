@@ -48,7 +48,7 @@ export const Register: React.FC = () => {
             />
           ))}
         </div>
-        <button type="button" className="btn btn-link" onClick={() => setShowAll(!showAll)}>
+        <button type="button" onClick={() => setShowAll(!showAll)}>
           {showAll ? "Skjul gamliser" : "Vis alle"}
         </button>
       </section>
@@ -70,10 +70,10 @@ export const Register: React.FC = () => {
         <span className={styles.total}>
           Totalt: <span>{total}</span>
         </span>
-        <button type="button" className="btn btn-primary btn-lg" onClick={onSubmit}>
+        <button type="button" onClick={onSubmit}>
           Kjøp
         </button>{" "}
-        <button type="button" className="btn btn-outline-secondary btn-lg" onClick={reset}>
+        <button type="button" onClick={reset}>
           Start på nytt
         </button>
       </section>

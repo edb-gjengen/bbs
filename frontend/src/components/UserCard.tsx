@@ -1,4 +1,3 @@
-import { ReactComponent as PersonFill } from "bootstrap-icons/icons/person-fill.svg";
 import clsx from "clsx";
 import React, { MouseEventHandler } from "react";
 
@@ -19,11 +18,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, onUser, active = false
       {user?.profile?.image && (
         <img src={user.profile?.image} alt={`Profile for ${user.firstName}`} className={styles.avatar} />
       )}
-      {!user?.profile?.image && (
-        <span className={styles.avatar}>
-          <PersonFill />
-        </span>
-      )}
+      {!user?.profile?.image && <span className={styles.avatar}>TODO: NO IMAGE</span>}
       <span className={styles.name}>{user?.firstName || "Ekstern"}</span>
       <span className={styles.balance}>{user?.profile?.balance || ""}</span>
     </button>

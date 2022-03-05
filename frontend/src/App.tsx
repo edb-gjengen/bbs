@@ -1,7 +1,6 @@
 import { ApolloProvider } from "@apollo/client";
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 import styles from "./App.module.css";
 import { Routes } from "./Routes";

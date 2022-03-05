@@ -33,7 +33,7 @@ export const Deposit: React.FC = () => {
           placeholder="Filtrér på navn"
         />
         {userQuery !== "" && (
-          <button className="btn btn-link" type="button" onClick={() => setUserQuery("")}>
+          <button type="button" onClick={() => setUserQuery("")}>
             Vis alle
           </button>
         )}
@@ -55,10 +55,10 @@ export const Deposit: React.FC = () => {
         <input name="amount" value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="0" />
       </section>
       <section className={styles.checkout}>
-        <button type="button" className="btn btn-primary btn-lg" onClick={onSubmit}>
+        <button type="button" onClick={onSubmit}>
           Sett inn
         </button>{" "}
-        <button type="button" className="btn btn-outline-secondary btn-lg" onClick={reset}>
+        <button type="button" onClick={reset}>
           Start på nytt
         </button>
       </section>

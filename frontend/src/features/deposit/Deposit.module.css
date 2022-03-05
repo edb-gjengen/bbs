@@ -5,9 +5,11 @@
   overflow-y: auto;
   row-gap: 16px;
 }
+
 .amountSection {
   margin-top: 32px;
 }
+
 .checkout {
   margin-top: 32px;
 }

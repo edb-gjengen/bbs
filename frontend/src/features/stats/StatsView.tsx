@@ -6,24 +6,24 @@ const navLinkStyles = ({ isActive }: { isActive: boolean }) => (isActive ? "nav-
 
 export const StatsNav = () => (
   <div className={styles.statsNav}>
-    <ul className="nav nav-tabs">
-      <li className="nav-item">
+    <ul>
+      <li>
         <NavLink className={navLinkStyles} to="/stats" end>
           Oversikt
         </NavLink>
       </li>
-      <li className="nav-item">
+      <li>
         <NavLink className={navLinkStyles} to="/stats/products">
           Produkter
         </NavLink>
       </li>
-      <li className="nav-item">
+      <li>
         <NavLink className={navLinkStyles} to="/stats/orders">
           Ordre
         </NavLink>
       </li>
-      <li className="nav-item">
-        <NavLink className="nav-link disabled" to="/stats/users" title="TODO">
+      <li>
+        <NavLink className="disabled" to="/stats/users" title="TODO">
           Folk
         </NavLink>
       </li>
