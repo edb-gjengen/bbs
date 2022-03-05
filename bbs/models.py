@@ -17,6 +17,8 @@ from django.db.models.functions import (
 )
 
 EXTERNAL_USER = "Ekstern"
+MAX_DIGITS = 9
+DECIMAL_PLACES = 1
 
 
 def _format_counts(per_user):
@@ -36,14 +38,15 @@ def _format_counts(per_user):
 
 class Product(models.Model):
     name = models.CharField(max_length=64)
-    sale_price_int = models.FloatField()
-    sale_price_ext = models.FloatField()
+    sale_price_int = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES)
+    sale_price_ext = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES)
     description = models.CharField(max_length=256, blank=True)
-    volume_liter = models.FloatField(null=True)
-    alcohol_percent = models.FloatField(null=True)
+    volume_liter = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, null=True)
+    alcohol_percent = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, null=True)
     image = models.ImageField(upload_to="products", blank=True)
     customer_support = models.CharField(max_length=32, blank=True)
-    inventory_amount = models.FloatField(default=0)
+    # FIXME: rename to inventory_quantity
+    inventory_amount = models.IntegerField(default=0)
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -148,8 +151,10 @@ class OrderLineManager(models.QuerySet):
 class OrderLine(models.Model):
     order = models.ForeignKey("bbs.Order", on_delete=models.CASCADE, related_name="orderlines")
     product = models.ForeignKey("bbs.Product", on_delete=models.CASCADE, related_name="orderlines")
+    # FIXME: rename to quantity
     amount = models.IntegerField()
-    unit_price = models.FloatField(verbose_name="Enhetspris")
+    # FIXME: rename to price
+    unit_price = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, verbose_name="Enhetspris")
 
     objects = OrderLineManager.as_manager()
 
@@ -168,7 +173,7 @@ class Transaction(models.Model):
     """Money"""
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="transactions")
-    amount = models.FloatField()
+    amount = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -189,8 +194,10 @@ class InventoryTransaction(models.Model):
         related_name="transactions",
         verbose_name="Produkt",
     )
-    amount = models.FloatField(verbose_name="Antall")
-    unit_price = models.FloatField(verbose_name="Enhetspris")
+    # FIXME: rename to quantity
+    amount = models.IntegerField(verbose_name="Antall")
+    # FIXME: rename to price
+    unit_price = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, verbose_name="Enhetspris")
     comment = models.TextField(verbose_name="Kommentar", blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -204,7 +211,7 @@ class InventoryTransaction(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
-    balance = models.FloatField(default=0.0)
+    balance = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
     image = models.URLField(blank=True)
 
     def last_purchase(self):
