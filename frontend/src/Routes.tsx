@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Routes as ReactRouterRoutes } from "react-router-dom";
 
+import { Splash } from "./components/Splash";
 import { UserCreate } from "./features/auth/UserCreate";
 import { Deposit } from "./features/deposit/Deposit";
 import { Log } from "./features/log/Log";
@@ -22,5 +23,6 @@ export const Routes: React.FC = () => (
     <Route path="/users/create" element={<UserCreate />} />
     <Route path="/user/:userId" element={<UserDetail />} />
     <Route path="/" element={<Register />} />
+    <Route path="*" element={<Splash brandText="404" noOverlay />} />
   </ReactRouterRoutes>
 );

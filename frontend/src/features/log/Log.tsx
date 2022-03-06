@@ -61,8 +61,8 @@ export const Log = () => {
           </tbody>
         </table>
         <nav aria-label="Order pagination">
-          <ul>
-            <li className={clsx({ disabled: orderOffset <= 0 })}>
+          <ul className={styles.pagination}>
+            <li className={clsx({ [styles.disabled]: orderOffset <= 0 })}>
               <a
                 href="#"
                 onClick={(e) => {
@@ -110,8 +110,8 @@ export const Log = () => {
           </tbody>
         </table>
         <nav aria-label="Transaction pagination">
-          <ul>
-            <li className={clsx({ disabled: transactionOffset <= 0 })}>
+          <ul className={styles.pagination}>
+            <li className={clsx({ [styles.disabled]: transactionOffset <= 0 })}>
               <a
                 href="#"
                 onClick={(e) => {

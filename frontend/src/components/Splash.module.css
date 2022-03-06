@@ -1,0 +1,69 @@
+.splash {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  font-family: Rocket Rinder, monospace;
+  /* color: var(--interlace-color); */
+  place-items: center;
+  text-align: center;
+}
+.overlay {
+  position: fixed;
+}
+
+.wrap {
+  position: relative;
+}
+
+.sun {
+  width: clamp(100px, 65vw, 600px);
+  height: clamp(100px, 65vw, 600px);
+  margin: 0 auto;
+  background: linear-gradient(var(--sun) 50%, var(--sun-end) 90%);
+  border-radius: 50% 50%;
+  box-shadow: 0 0 4px var(--sun), 0 0 11px var(--sun), 0 0 19px var(--sun), 0 0 30px var(--sun);
+}
+.brand {
+  position: relative;
+  left: -0.6rem;
+  padding-top: 3rem;
+  color: var(--brand);
+  font-size: clamp(20px, 20vw, 200px);
+  font-style: italic;
+  letter-spacing: 1rem;
+  line-height: 1;
+  text-shadow: 0 0 4px rgba(243, 33, 61, 0.8), 0 0 11px rgba(243, 33, 61, 0.8), 0 0 19px rgba(243, 33, 61, 0.8);
+}
+
+.subtitle {
+  position: relative;
+  bottom: 0.5rem;
+  left: 0rem;
+  animation: flicker 1.5s infinite alternate;
+  color: var(--interlace);
+  font-family: Rocket Clouds DEMO, serif;
+  font-size: clamp(20px, 5vw, 50px);
+  font-weight: bold;
+  line-height: 1;
+  transform: rotate(-6deg);
+}
+
+@keyframes flicker {
+  0%,
+  18%,
+  22%,
+  25%,
+  53%,
+  57%,
+  100% {
+    text-shadow: 0 0 4px rgba(121, 152, 238, 0.8), 0 0 11px rgba(121, 152, 238, 0.8), 0 0 19px rgba(121, 152, 238, 0.8);
+  }
+
+  20%,
+  24%,
+  55% {
+    text-shadow: none;
+  }
+}

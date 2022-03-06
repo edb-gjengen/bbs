@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React from "react";
 import { NavLink } from "react-router-dom";
 
@@ -6,52 +7,45 @@ import styles from "./Header.module.css";
 
 const ADMIN_URL = `${import.meta.env.VITE_API_URL}/admin/`;
 
-const navLinkStyles = ({ isActive }: { isActive: boolean }) => (isActive ? "nav-link active" : "nav-link");
+const navLinkStyles = ({ isActive }: { isActive: boolean }) => clsx(styles.navLink, { [styles.active]: isActive });
 
 export const Header: React.FC = () => {
   return (
     <header>
-      <nav>
-        <NavLink to="/">
+      <nav className={styles.nav}>
+        <NavLink to="/" className={clsx([styles.navLink, styles.logoNav])}>
           <span className={styles.logo}>
             <Logo />
           </span>
           Biceps Bar System - BBS
         </NavLink>
-        <button type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon" />
-        </button>
-        <div id="navbarNav">
-          <ul>
-            <li>
-              <NavLink to="/" className={navLinkStyles} end>
-                Kjøp drikke
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/deposit" className={navLinkStyles}>
-                Sett inn penger
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/log" className={navLinkStyles}>
-                Logg
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/stats" className={navLinkStyles}>
-                Statistikk
-              </NavLink>
-            </li>
+        <ul className={styles.navItems}>
+          <li>
+            <NavLink to="/" className={navLinkStyles} end>
+              Kjøp drikke
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/deposit" className={navLinkStyles}>
+              Sett inn penger
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/log" className={navLinkStyles}>
+              Logg
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/stats" className={navLinkStyles}>
+              Statistikk
+            </NavLink>
+          </li>
 
-            <li>
-              <NavLink to="/users" className={navLinkStyles}>
-                Folk
-              </NavLink>
-            </li>
-          </ul>
-        </div>
-        <ul>
+          <li>
+            <NavLink to="/users" className={navLinkStyles}>
+              Folk
+            </NavLink>
+          </li>
           <li>
             <a href={ADMIN_URL}>Admin</a>
           </li>
