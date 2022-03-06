@@ -2,7 +2,6 @@ import clsx from "clsx";
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import { ReactComponent as Logo } from "../assets/brick.svg";
 import styles from "./Header.module.css";
 
 const ADMIN_URL = `${import.meta.env.VITE_API_URL}/admin/`;

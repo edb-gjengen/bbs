@@ -5,6 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import styles from "./App.module.css";
 import { Routes } from "./Routes";
 import client from "./client";
+import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { Splash as Splash } from "./components/Splash";
 import { Toast } from "./components/Toast";
@@ -18,6 +19,7 @@ const App: React.FC = () => (
         <div className={styles.app}>
           <Routes />
         </div>
+        <Footer />
         <Toast />
       </ToastProvider>
     </Router>

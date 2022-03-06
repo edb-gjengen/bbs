@@ -67,10 +67,10 @@ export const Log = () => {
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
-                  setParams({ orderOffset: orderOffset - PAGE_SIZE });
+                  setParams({ orderOffset: Math.max(0, orderOffset - PAGE_SIZE) });
                 }}
               >
-                Previous
+                ⬅
               </a>
             </li>
             <li>
@@ -78,10 +78,10 @@ export const Log = () => {
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
-                  setParams({ orderOffset: orderOffset + PAGE_SIZE });
+                  setParams({ orderOffset: Math.max(0, orderOffset + PAGE_SIZE) });
                 }}
               >
-                Next
+                ➡
               </a>
             </li>
           </ul>
@@ -116,10 +116,10 @@ export const Log = () => {
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
-                  setParams({ transactionOffset: transactionOffset - PAGE_SIZE });
+                  setParams({ transactionOffset: Math.max(0, transactionOffset - PAGE_SIZE) });
                 }}
               >
-                Previous
+                ⬅
               </a>
             </li>
             <li>
@@ -127,10 +127,10 @@ export const Log = () => {
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
-                  setParams({ transactionOffset: transactionOffset + PAGE_SIZE });
+                  setParams({ transactionOffset: Math.max(transactionOffset + PAGE_SIZE) });
                 }}
               >
-                Next
+                ➡
               </a>
             </li>
           </ul>
