@@ -4,6 +4,21 @@
   align-items: center;
   text-transform: uppercase;
 }
+.navLink:after {
+  position: absolute;
+  right: 12px;
+  left: 14px;
+  display: block;
+  height: 1px;
+  background-color: rgba(243, 33, 61, 0.4);
+  box-shadow: 0 0 4px rgba(243, 33, 61, 0.4), 0 0 11px rgba(243, 33, 61, 0.4), 0 0 19px rgba(243, 33, 61, 0.4);
+  content: "";
+  transform: rotate(-2.5deg);
+}
+.navLink:hover:after {
+  background-color: var(--brand);
+  box-shadow: 0 0 4px var(--brand), 0 0 11px var(--brand), 0 0 19px var(--brand), 0 0 30px var(--brand);
+}
 
 .logoNav {
   margin-left: 1.5rem;
@@ -17,12 +32,13 @@
   list-style: none;
 }
 .navLink {
+  position: relative;
   padding: 0.4rem 0.8rem;
   border: 1px solid transparent;
+  transition: color 0.1s ease-in-out;
 }
 .navLink:hover {
-  border-color: var(--border);
-  border-radius: 4px;
+  color: white;
 }
 .active.active {
   color: white;

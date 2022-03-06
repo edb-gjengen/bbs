@@ -45,7 +45,9 @@ export const Header: React.FC = () => {
             </NavLink>
           </li>
           <li>
-            <a href={ADMIN_URL}>Admin</a>
+            <a href={ADMIN_URL} className={styles.navLink}>
+              Admin
+            </a>
           </li>
         </ul>
       </nav>

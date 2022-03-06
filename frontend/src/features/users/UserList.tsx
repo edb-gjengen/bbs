@@ -15,6 +15,7 @@ export const UserList = () => {
   const users = showAll ? allUsers : allUsers.filter((u) => activeUserFilter(u));
   return (
     <div>
+      <h2>Folk</h2>
       <button type="button" onClick={() => setShowAll(!showAll)}>
         {showAll ? "Skjul gamliser" : "Vis alle"}
       </button>
@@ -28,7 +29,9 @@ export const UserList = () => {
         ))}
       </ul>
       <br />
-      <Link to="/users/create">Opprett ny</Link>
+      <Link to="/users/create" className="btn-primary">
+        Opprett ny
+      </Link>
     </div>
   );
 };

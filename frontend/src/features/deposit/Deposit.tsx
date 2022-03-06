@@ -55,7 +55,7 @@ export const Deposit: React.FC = () => {
         <input name="amount" value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="0" />
       </section>
       <section className={styles.checkout}>
-        <button type="button" onClick={onSubmit}>
+        <button type="button" onClick={onSubmit} className="primary">
           Sett inn
         </button>{" "}
         <button type="button" onClick={reset}>

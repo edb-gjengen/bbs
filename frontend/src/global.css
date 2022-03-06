@@ -33,6 +33,7 @@ body {
   background-color: var(--background);
   color: var(--text);
   font-family: var(--font-family);
+  text-shadow: 0 0 4px currentColor, 0 0 11px currentColor, 0 0 19px currentColor;
 }
 
 /* Links */
@@ -50,7 +51,22 @@ a:active {
 }
 
 a:hover {
-  color: var(--interlace);
+  color: var(--text);
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: var(--sun);
+}
+a.btn-primary {
+  padding: 0.4rem 1rem;
+  border: 1px solid transparent;
+  background: linear-gradient(var(--sun) 30%, var(--sun-end) 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 4px var(--sun), 0 0 11px var(--sun), 0 0 19px var(--sun);
+  color: var(--text);
 }
 
 /* Buttons */
@@ -61,10 +77,17 @@ button {
   border-radius: 4px;
   color: var(--border);
   font-family: var(--font-family);
+  text-shadow: 0 0 4px currentColor, 0 0 11px currentColor, 0 0 19px currentColor;
 }
 button:hover {
   color: var(--text);
   cursor: pointer;
+}
+button.primary {
+  border: 1px solid transparent;
+  background: linear-gradient(var(--sun) 30%, var(--sun-end) 100%);
+  box-shadow: 0 0 4px var(--sun), 0 0 11px var(--sun), 0 0 19px var(--sun);
+  color: var(--text);
 }
 
 /* Inputs */
@@ -76,10 +99,19 @@ input {
   color: var(--text);
   font-family: var(--font-family);
   font-size: 1.5rem;
+  text-shadow: 0 0 4px currentColor, 0 0 11px currentColor, 0 0 19px currentColor;
 }
 input:focus {
   background: rgba(85, 109, 200, 0.1);
   outline: none;
+}
+input.btn-primary {
+  padding: 0.4rem 1rem;
+  border: 1px solid transparent;
+  background: linear-gradient(var(--sun) 30%, var(--sun-end) 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 4px var(--sun), 0 0 11px var(--sun), 0 0 19px var(--sun);
+  color: var(--text);
 }
 ::placeholder {
   color: var(--border);

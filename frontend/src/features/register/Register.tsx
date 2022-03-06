@@ -70,7 +70,7 @@ export const Register: React.FC = () => {
         <span className={styles.total}>
           Totalt: <span>{total}</span>
         </span>
-        <button type="button" onClick={onSubmit}>
+        <button type="button" onClick={onSubmit} className="primary">
           Kjøp
         </button>{" "}
         <button type="button" onClick={reset}>
