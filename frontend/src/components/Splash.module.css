@@ -4,8 +4,6 @@
   bottom: 0;
   left: 0;
   display: grid;
-  font-family: Rocket Rinder, monospace;
-  /* color: var(--interlace-color); */
   place-items: center;
   text-align: center;
 }
@@ -30,6 +28,7 @@
   left: -0.6rem;
   padding-top: 3rem;
   color: var(--brand);
+  font-family: Rocket Rinder, monospace;
   font-size: clamp(20px, 20vw, 200px);
   font-style: italic;
   letter-spacing: 1rem;

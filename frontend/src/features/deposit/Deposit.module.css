@@ -1,6 +1,7 @@
 .userList {
   display: grid;
   height: 400px;
+  padding-top: 2rem;
   grid-template-columns: repeat(12, 100px);
   overflow-y: auto;
   row-gap: 16px;

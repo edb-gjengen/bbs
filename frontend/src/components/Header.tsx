@@ -13,11 +13,9 @@ export const Header: React.FC = () => {
   return (
     <header>
       <nav className={styles.nav}>
-        <NavLink to="/" className={clsx([styles.navLink, styles.logoNav])}>
-          <span className={styles.logo}>
-            <Logo />
-          </span>
-          Biceps Bar System - BBS
+        <NavLink to="/" className={styles.logoNav}>
+          <div className={styles.brand}>BBS</div>
+          <div className={styles.subtitle}>Biceps Bar System</div>
         </NavLink>
         <ul className={styles.navItems}>
           <li>

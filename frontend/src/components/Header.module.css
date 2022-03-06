@@ -1,25 +1,12 @@
 .nav {
   display: flex;
-  height: 3rem;
+  height: 5rem;
   align-items: center;
   text-transform: uppercase;
 }
 
-.logo {
-  position: relative;
-  top: 5px;
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  margin-right: 0.5rem;
-  margin-left: 1rem;
-}
 .logoNav {
-  position: relative;
-  top: -4px;
-}
-.logoNav:hover.logoNav:hover {
-  border-color: transparent;
+  margin-left: 1.5rem;
 }
 
 .navItems {
@@ -39,4 +26,46 @@
 }
 .active.active {
   color: white;
+}
+
+/* FIXME: Duplicates Splash styles */
+.brand {
+  padding-left: 1rem;
+  color: var(--brand);
+  font-family: Rocket Rinder, monospace;
+  font-size: 3rem;
+  font-style: italic;
+  letter-spacing: 2px;
+  line-height: 1;
+  text-shadow: 0 0 4px rgba(243, 33, 61, 0.8), 0 0 11px rgba(243, 33, 61, 0.8), 0 0 19px rgba(243, 33, 61, 0.8);
+}
+
+.subtitle {
+  position: relative;
+  left: -8px;
+  animation: flicker 1.5s infinite alternate;
+  color: var(--interlace);
+  font-family: Rocket Clouds DEMO, serif;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1;
+  transform: rotate(-6deg);
+}
+
+@keyframes flicker {
+  0%,
+  18%,
+  22%,
+  25%,
+  53%,
+  57%,
+  100% {
+    text-shadow: 0 0 4px rgba(121, 152, 238, 0.8), 0 0 11px rgba(121, 152, 238, 0.8), 0 0 19px rgba(121, 152, 238, 0.8);
+  }
+
+  20%,
+  24%,
+  55% {
+    text-shadow: none;
+  }
 }
