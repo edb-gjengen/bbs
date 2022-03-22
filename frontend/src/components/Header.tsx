@@ -10,7 +10,7 @@ const navLinkStyles = ({ isActive }: { isActive: boolean }) => clsx(styles.navLi
 
 export const Header: React.FC = () => {
   return (
-    <header>
+    <header className={styles.header}>
       <nav className={styles.nav}>
         <NavLink to="/" className={styles.logoNav}>
           <div className={styles.brand}>BBS</div>

@@ -1,9 +1,15 @@
+.header {
+  margin: 1rem auto;
+  max-width: 1220px;
+}
+
 .nav {
   display: flex;
   height: 5rem;
   align-items: center;
   text-transform: uppercase;
 }
+
 .navLink:after {
   position: absolute;
   right: 12px;
@@ -15,13 +21,14 @@
   content: "";
   transform: rotate(-2.5deg);
 }
+
 .navLink:hover:after {
   background-color: var(--brand);
   box-shadow: 0 0 4px var(--brand), 0 0 11px var(--brand), 0 0 19px var(--brand), 0 0 30px var(--brand);
 }
 
 .logoNav {
-  margin-left: 1.5rem;
+  margin-left: 8px;
 }
 
 .navItems {

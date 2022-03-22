@@ -18,6 +18,11 @@ const App: React.FC = () => (
         <Header />
         <div className={styles.app}>
           <Routes />
+          <div className={styles.wireframe}>
+            {[...Array(64)].map((_, idx) => (
+              <div key={idx} className={styles.cell} />
+            ))}
+          </div>
         </div>
         <Footer />
         <Toast />
