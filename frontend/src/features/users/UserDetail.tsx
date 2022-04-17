@@ -3,15 +3,18 @@ import { Line } from "@nivo/line";
 import React from "react";
 import { useParams } from "react-router-dom";
 
+import { GQLError } from "../../components/GQLError";
 import { User, UserDetailDocument, UserProfile } from "../../types";
 import { formatMonth, formatTime } from "../../utils/time";
 import styles from "./UserDetail.module.css";
 
 const UserDetail = () => {
   const { userId } = useParams();
-  const { data, loading } = useQuery(UserDetailDocument, { variables: { userId: userId || "" }, skip: !userId });
+  const { data, loading, error } = useQuery(UserDetailDocument, { variables: { userId: userId || "" }, skip: !userId });
 
   if (loading) return <div>Loading...</div>;
+
+  if (error) return <GQLError error={error} />;
 
   const user = data?.user as User;
   const profile = user?.profile as UserProfile;

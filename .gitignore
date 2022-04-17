@@ -11,6 +11,7 @@ CACHE/
 media/
 tmp/
 frontend/dist
-static/
+static/assets
+static/index.html
 .python-version
 .env

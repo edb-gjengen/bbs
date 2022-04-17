@@ -1,0 +1,9 @@
+.errorMessage {
+  font-family: Rocket Rinder, monospace;
+  font-size: 3rem;
+  font-style: italic;
+  color: var(--brand);
+  text-align: center;
+  width: 100%;
+  margin-top: 30vh;
+}
