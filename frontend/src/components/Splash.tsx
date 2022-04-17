@@ -8,14 +8,12 @@ interface SplashProps {
   noOverlay?: boolean;
 }
 
-export const Splash: React.FC<SplashProps> = ({ brandText = "BBS", noOverlay = false }) => {
-  return (
-    <div className={clsx(styles.splash, { [styles.overlay]: !noOverlay })}>
-      <div className={styles.wrap}>
-        <div className={styles.sun}></div>
-        <div className={styles.brand}>{brandText}</div>
-        <div className={styles.subtitle}>Biceps Bar System</div>
-      </div>
+export const Splash = ({ brandText = "BBS", noOverlay = false }: SplashProps): JSX.Element => (
+  <div className={clsx(styles.splash, { [styles.overlay]: !noOverlay })}>
+    <div className={styles.wrap}>
+      <div className={styles.sun}></div>
+      <div className={styles.brand}>{brandText}</div>
+      <div className={styles.subtitle}>Biceps Bar System</div>
     </div>
-  );
-};
+  </div>
+);

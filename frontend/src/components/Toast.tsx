@@ -4,7 +4,7 @@ import React from "react";
 import styles from "./Toast.module.css";
 import { useToast } from "./ToastProvider";
 
-export const Toast: React.FC = () => {
+export const Toast = (): JSX.Element => {
   const { showToast, message, background, visible } = useToast();
 
   const classes = clsx([styles[background], styles.toast], { [styles.visible]: visible });

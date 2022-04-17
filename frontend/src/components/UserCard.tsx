@@ -11,7 +11,7 @@ type UserCardProps = {
 };
 
 /** If user is null, then it's the special external user */
-export const UserCard: React.FC<UserCardProps> = ({ user, onUser, active = false }) => {
+export const UserCard = ({ user, onUser, active = false }: UserCardProps): JSX.Element => {
   const classes = clsx(styles.user, { [styles.active]: active });
   return (
     <button className={classes} onClick={onUser} type="button">

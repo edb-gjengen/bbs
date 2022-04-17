@@ -8,7 +8,7 @@ import { useRegister } from "./useRegister";
 
 const USER_EXTERNAL = "external";
 
-export const Register: React.FC = () => {
+export const Register = (): JSX.Element => {
   const {
     users,
     products,

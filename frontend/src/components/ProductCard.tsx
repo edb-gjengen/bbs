@@ -11,7 +11,7 @@ type ProductCardProps = {
   amount: number;
 };
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, onProduct, amount, active = false }) => {
+export const ProductCard = ({ product, onProduct, amount, active = false }: ProductCardProps): JSX.Element => {
   const classes = clsx(styles.product, { [styles.active]: active });
   return (
     <button className={classes} type="button" onClick={onProduct}>

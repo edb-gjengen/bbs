@@ -4,7 +4,7 @@ import { UserCard } from "../../components/UserCard";
 import styles from "./Deposit.module.css";
 import { useDeposit } from "./useDeposit";
 
-export const Deposit: React.FC = () => {
+export const Deposit = (): JSX.Element => {
   const {
     loading,
     selectedUser,

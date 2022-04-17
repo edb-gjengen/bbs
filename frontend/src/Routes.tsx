@@ -12,7 +12,7 @@ import { Stats } from "./features/stats/Stats";
 import { UserDetail } from "./features/users/UserDetail";
 import { UserList } from "./features/users/UserList";
 
-export const Routes: React.FC = () => (
+export const Routes = (): JSX.Element => (
   <ReactRouterRoutes>
     <Route path="/deposit" element={<Deposit />} />
     <Route path="/log" element={<Log />} />

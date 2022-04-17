@@ -11,7 +11,7 @@ import { Splash as Splash } from "./components/Splash";
 import { Toast } from "./components/Toast";
 import { ToastProvider } from "./components/ToastProvider";
 
-const App: React.FC = () => (
+const App = (): JSX.Element => (
   <ApolloProvider client={client}>
     <Router>
       <ToastProvider>

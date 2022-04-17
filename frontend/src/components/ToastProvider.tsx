@@ -26,7 +26,7 @@ const ToastContext = React.createContext<ToastProps>(defaultState);
 type ToastProviderProps = {
   children: ReactNode;
 };
-export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
+export const ToastProvider = ({ children }: ToastProviderProps): JSX.Element => {
   const [visible, setVisible] = useState(defaultState.visible);
   const [message, setMessage] = useState(defaultState.message);
   const [background, setBackground] = useState(defaultState.background);
