@@ -34,7 +34,7 @@ export const Log = () => {
     <div className={styles.log}>
       <div>
         <h2>Ordre</h2>
-        <table className="table">
+        <table>
           <thead>
             <tr>
               <th scope="col">Når</th>
@@ -61,29 +61,27 @@ export const Log = () => {
           </tbody>
         </table>
         <nav aria-label="Order pagination">
-          <ul className="pagination">
-            <li className={clsx("page-item", { disabled: orderOffset <= 0 })}>
+          <ul className={styles.pagination}>
+            <li className={clsx({ [styles.disabled]: orderOffset <= 0 })}>
               <a
                 href="#"
-                className="page-link"
                 onClick={(e) => {
                   e.preventDefault();
-                  setParams({ orderOffset: orderOffset - PAGE_SIZE });
+                  setParams({ orderOffset: Math.max(0, orderOffset - PAGE_SIZE) });
                 }}
               >
-                Previous
+                ⬅
               </a>
             </li>
-            <li className="page-item">
+            <li>
               <a
                 href="#"
-                className="page-link"
                 onClick={(e) => {
                   e.preventDefault();
-                  setParams({ orderOffset: orderOffset + PAGE_SIZE });
+                  setParams({ orderOffset: Math.max(0, orderOffset + PAGE_SIZE) });
                 }}
               >
-                Next
+                ➡
               </a>
             </li>
           </ul>
@@ -91,7 +89,7 @@ export const Log = () => {
       </div>
       <div>
         <h2>Transaksjoner</h2>
-        <table className="table">
+        <table>
           <thead>
             <tr>
               <th scope="col">Når</th>
@@ -112,29 +110,27 @@ export const Log = () => {
           </tbody>
         </table>
         <nav aria-label="Transaction pagination">
-          <ul className="pagination">
-            <li className={clsx("page-item", { disabled: transactionOffset <= 0 })}>
+          <ul className={styles.pagination}>
+            <li className={clsx({ [styles.disabled]: transactionOffset <= 0 })}>
               <a
                 href="#"
-                className="page-link"
                 onClick={(e) => {
                   e.preventDefault();
-                  setParams({ transactionOffset: transactionOffset - PAGE_SIZE });
+                  setParams({ transactionOffset: Math.max(0, transactionOffset - PAGE_SIZE) });
                 }}
               >
-                Previous
+                ⬅
               </a>
             </li>
-            <li className="page-item">
+            <li>
               <a
                 href="#"
-                className="page-link"
                 onClick={(e) => {
                   e.preventDefault();
-                  setParams({ transactionOffset: transactionOffset + PAGE_SIZE });
+                  setParams({ transactionOffset: Math.max(transactionOffset + PAGE_SIZE) });
                 }}
               >
-                Next
+                ➡
               </a>
             </li>
           </ul>

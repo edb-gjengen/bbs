@@ -30,26 +30,26 @@ export const UserDetail = () => {
         <h1>
           {profile.image && <img src={profile.image} alt={`${user.firstName}s profile picture`} />} {user.firstName}
         </h1>
-        <div className="card">
-          <div className="card-header">Stats</div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item">
+        <div>
+          <div>Stats</div>
+          <ul>
+            <li>
               Saldo: <strong>{profile.balance.toLocaleString("no")} kr</strong>
             </li>
-            <li className="list-group-item">
+            <li>
               Siste kjøp: <strong>{formatTime(profile.lastPurchaseDate)}</strong>
             </li>
-            <li className="list-group-item">
+            <li>
               Kjøp totalt: <strong>{profile.orderSumTotal.toLocaleString("no")} kr</strong>
             </li>
           </ul>
         </div>
         <br />
-        <div className="card">
-          <div className="card-header">Top 5 måneder</div>
-          <ul className="list-group list-group-flush">
+        <div>
+          <div>Top 5 måneder</div>
+          <ul>
             {profile.topMonths.map((topMonth) => (
-              <li key={topMonth.period} className="list-group-item">
+              <li key={topMonth.period}>
                 {formatMonth(topMonth.period)}: <strong>{topMonth.count}</strong> kjøp på totalt{" "}
                 <strong>{topMonth.sum} kr</strong>
               </li>

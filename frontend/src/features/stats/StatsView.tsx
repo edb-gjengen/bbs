@@ -1,34 +1,36 @@
+import clsx from "clsx";
 import React from "react";
 import { NavLink } from "react-router-dom";
 
 import styles from "./Stats.module.css";
-const navLinkStyles = ({ isActive }: { isActive: boolean }) => (isActive ? "nav-link active" : "nav-link");
+
+const navLinkStyles = ({ isActive }: { isActive: boolean }) => clsx(styles.navLink, { [styles.active]: isActive });
 
 export const StatsNav = () => (
-  <div className={styles.statsNav}>
-    <ul className="nav nav-tabs">
-      <li className="nav-item">
+  <nav className={styles.statsNav}>
+    <ul>
+      <li>
         <NavLink className={navLinkStyles} to="/stats" end>
           Oversikt
         </NavLink>
       </li>
-      <li className="nav-item">
+      <li>
         <NavLink className={navLinkStyles} to="/stats/products">
           Produkter
         </NavLink>
       </li>
-      <li className="nav-item">
+      <li>
         <NavLink className={navLinkStyles} to="/stats/orders">
           Ordre
         </NavLink>
       </li>
-      <li className="nav-item">
-        <NavLink className="nav-link disabled" to="/stats/users" title="TODO">
+      <li>
+        <NavLink className="disabled" to="/stats/users" title="TODO">
           Folk
         </NavLink>
       </li>
     </ul>
-  </div>
+  </nav>
 );
 
 export const StatsView = ({ children, loading }: { children: React.ReactNode; loading: boolean }) => (

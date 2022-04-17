@@ -1,0 +1,145 @@
+/* Custom props */
+:root {
+  --brand: rgb(243, 33, 61);
+  --background: rgb(70, 30, 82);
+  --text: rgb(255, 255, 255);
+  --sun: rgb(221, 81, 127);
+  --sun-end: rgb(230, 142, 54);
+  --border: rgb(85, 109, 200);
+  --interlace: rgb(121, 152, 238);
+  --font-family: "IBM Plex Mono", monospace;
+}
+
+/* Resets */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+/* Body and interitable styles */
+body {
+  background: linear-gradient(rgba(0, 0, 0, 0.8) 60%, var(--background) 100%);
+  background-color: var(--background);
+  color: var(--text);
+  font-family: var(--font-family);
+  text-shadow: 0 0 4px currentColor, 0 0 11px currentColor, 0 0 19px currentColor;
+}
+
+/* Links */
+a:link {
+  color: var(--interlace);
+  text-decoration: none;
+}
+
+a:visited {
+  color: var(--interlace);
+}
+
+a:active {
+  color: var(--interlace);
+}
+
+a:hover {
+  color: var(--text);
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: var(--sun);
+}
+a.btn-primary {
+  padding: 0.4rem 1rem;
+  border: 1px solid transparent;
+  background: linear-gradient(var(--sun) 30%, var(--sun-end) 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 4px var(--sun), 0 0 11px var(--sun), 0 0 19px var(--sun);
+  color: var(--text);
+}
+
+/* Buttons */
+button {
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  border-radius: 4px;
+  color: var(--border);
+  font-family: var(--font-family);
+  text-shadow: 0 0 4px currentColor, 0 0 11px currentColor, 0 0 19px currentColor;
+}
+button:hover {
+  color: var(--text);
+  cursor: pointer;
+}
+button.primary {
+  border: 1px solid transparent;
+  background: linear-gradient(var(--sun) 30%, var(--sun-end) 100%);
+  box-shadow: 0 0 4px var(--sun), 0 0 11px var(--sun), 0 0 19px var(--sun);
+  color: var(--text);
+}
+
+/* Inputs */
+input {
+  padding: 0.4rem 0.4rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  border-radius: 4px;
+  color: var(--text);
+  font-family: var(--font-family);
+  font-size: 1.5rem;
+  text-shadow: 0 0 4px currentColor, 0 0 11px currentColor, 0 0 19px currentColor;
+}
+input:focus {
+  background: rgba(85, 109, 200, 0.1);
+  outline: none;
+}
+input.btn-primary {
+  padding: 0.4rem 1rem;
+  border: 1px solid transparent;
+  background: linear-gradient(var(--sun) 30%, var(--sun-end) 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 4px var(--sun), 0 0 11px var(--sun), 0 0 19px var(--sun);
+  color: var(--text);
+}
+::placeholder {
+  color: var(--border);
+}
+
+/* Tables */
+table {
+  border: 1px solid var(--border);
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td,
+th {
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--border);
+}
+
+/* Fonts*/
+@font-face {
+  font-family: "Rocket Clouds DEMO";
+  font-style: normal;
+  font-weight: normal;
+  src: url("assets/rocket-clouds.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Rocket Rinder";
+  font-style: normal;
+  font-weight: normal;
+  src: url("assets/rocket-rinder.ttf") format("truetype");
+}

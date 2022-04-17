@@ -1,41 +1,18 @@
-import { Toast as BSToast } from "bootstrap";
 import clsx from "clsx";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 
 import styles from "./Toast.module.css";
 import { useToast } from "./ToastProvider";
 
-export const Toast: React.FC = () => {
-  const ref = useRef<HTMLInputElement>(null);
-  const { visible, showToast, message, background } = useToast();
+export const Toast = (): JSX.Element => {
+  const { showToast, message, background, visible } = useToast();
 
-  const backgroundColor = `bg-${background}`;
-  const classes = clsx("toast align-items-center text-white bg-primary border-0", backgroundColor, styles.toast);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const bsToast = BSToast.getInstance(ref.current) || new BSToast(ref.current);
-
-    if (visible) {
-      bsToast?.show();
-    } else if (!visible) {
-      bsToast?.hide();
-    }
-    return () => bsToast?.hide();
-  }, [visible]);
+  const classes = clsx([styles[background], styles.toast], { [styles.visible]: visible });
 
   return (
-    <div ref={ref} className={classes} role="alert" aria-live="assertive" aria-atomic="true">
-      <div className="d-flex">
-        <div className="toast-body">{message}</div>
-        <button
-          type="button"
-          className="btn-close btn-close-white me-2 m-auto"
-          data-bs-dismiss="toast"
-          aria-label="Close"
-          onClick={() => showToast(message)}
-        />
-      </div>
+    <div className={classes} role="alert" aria-live="assertive" aria-atomic="true">
+      <div>{message}</div>
+      <button type="button" aria-label="Close" onClick={() => showToast(message)} className={styles.close} />
     </div>
   );
 };
