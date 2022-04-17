@@ -1,14 +1,14 @@
 import React from "react";
 
-import { ProductCard } from "../../components/ProductCard";
-import { UserCard } from "../../components/UserCard";
 import { OrderLineInput, Product } from "../../types";
+import { UserCard } from "../users/UserCard";
+import { ProductCard } from "./ProductCard";
 import styles from "./Register.module.css";
 import { useRegister } from "./useRegister";
 
 const USER_EXTERNAL = "external";
 
-export const Register: React.FC = () => {
+export const Register = (): JSX.Element => {
   const {
     users,
     products,
@@ -48,7 +48,7 @@ export const Register: React.FC = () => {
             />
           ))}
         </div>
-        <button type="button" className="btn btn-link" onClick={() => setShowAll(!showAll)}>
+        <button type="button" onClick={() => setShowAll(!showAll)} className={styles.showAll}>
           {showAll ? "Skjul gamliser" : "Vis alle"}
         </button>
       </section>
@@ -70,10 +70,10 @@ export const Register: React.FC = () => {
         <span className={styles.total}>
           Totalt: <span>{total}</span>
         </span>
-        <button type="button" className="btn btn-primary btn-lg" onClick={onSubmit}>
+        <button type="button" onClick={onSubmit} className="primary">
           Kjøp
         </button>{" "}
-        <button type="button" className="btn btn-outline-secondary btn-lg" onClick={reset}>
+        <button type="button" onClick={reset}>
           Start på nytt
         </button>
       </section>

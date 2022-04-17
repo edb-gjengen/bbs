@@ -2,4 +2,27 @@
   position: absolute;
   bottom: 32px;
   left: 32px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.visible {
+  opacity: 1;
+  pointer-events: initial;
+}
+
+.primary {
+  background: linear-gradient(var(--sun) 30%, var(--sun-end) 100%);
+  box-shadow: 0 0 4px var(--sun), 0 0 11px var(--sun), 0 0 19px var(--sun);
+}
+.danger {
+  background: var(--brand);
+  box-shadow: 0 0 4px rgba(243, 33, 61, 0.8), 0 0 11px rgba(243, 33, 61, 0.8), 0 0 19px rgba(243, 33, 61, 0.8);
+}
+
+.close {
+  display: none;
 }

@@ -3,6 +3,7 @@ import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { CreateUserDocument } from "../../types";
+import styles from "./UserCreate.module.css";
 
 type FormValues = {
   firstName: string;
@@ -30,20 +31,20 @@ export const UserCreate = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <label>Fornavn</label>
-      <input {...register("firstName", { required: true })} />
-      {errors.firstName && <span>This field is required</span>}
-      <br />
-      <label>Etternavn</label>
-      <input {...register("lastName", { required: true })} />
-      {errors.lastName && <span>This field is required</span>}
-      <br />
-      <label>E-post</label>
-      <input type="email" {...register("email", { required: true })} />
-      {errors.email && <span>This field is required</span>}
-      <br />
-      <input type="submit" disabled={creating} />
-    </form>
+    <div>
+      <h2>Opprett ny</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+        <label>Fornavn</label>
+        <input {...register("firstName", { required: true })} />
+        {errors.firstName && <span>This field is required</span>}
+        <label>Etternavn</label>
+        <input {...register("lastName", { required: true })} />
+        {errors.lastName && <span>This field is required</span>}
+        <label>E-post</label>
+        <input type="email" {...register("email", { required: true })} />
+        {errors.email && <span>This field is required</span>}
+        <input type="submit" disabled={creating} className="btn-primary" />
+      </form>
+    </div>
   );
 };

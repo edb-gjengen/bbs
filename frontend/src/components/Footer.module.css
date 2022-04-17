@@ -1,0 +1,22 @@
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 1rem;
+  left: 0;
+  height: 20px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.heart {
+  color: var(--brand);
+}
+
+.brick {
+  position: relative;
+  top: 7px;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}

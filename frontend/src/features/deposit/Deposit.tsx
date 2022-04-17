@@ -1,10 +1,10 @@
 import React from "react";
 
-import { UserCard } from "../../components/UserCard";
+import { UserCard } from "../users/UserCard";
 import styles from "./Deposit.module.css";
 import { useDeposit } from "./useDeposit";
 
-export const Deposit: React.FC = () => {
+export const Deposit = (): JSX.Element => {
   const {
     loading,
     selectedUser,
@@ -33,7 +33,7 @@ export const Deposit: React.FC = () => {
           placeholder="Filtrér på navn"
         />
         {userQuery !== "" && (
-          <button className="btn btn-link" type="button" onClick={() => setUserQuery("")}>
+          <button type="button" onClick={() => setUserQuery("")}>
             Vis alle
           </button>
         )}
@@ -55,10 +55,10 @@ export const Deposit: React.FC = () => {
         <input name="amount" value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="0" />
       </section>
       <section className={styles.checkout}>
-        <button type="button" className="btn btn-primary btn-lg" onClick={onSubmit}>
+        <button type="button" onClick={onSubmit} className="primary">
           Sett inn
         </button>{" "}
-        <button type="button" className="btn btn-outline-secondary btn-lg" onClick={reset}>
+        <button type="button" onClick={reset}>
           Start på nytt
         </button>
       </section>

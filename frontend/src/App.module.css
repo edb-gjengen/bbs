@@ -1,3 +1,4 @@
 .app {
-  margin: 16px;
+  margin: 1rem auto;
+  max-width: 1220px;
 }

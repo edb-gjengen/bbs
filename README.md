@@ -23,9 +23,8 @@ npm start
 
 ## TODO
 
-- update emails
+- improve product listing (light purple background)
 - Stats: products over time
-- Light on dark colors
 - inventory views
 
 
