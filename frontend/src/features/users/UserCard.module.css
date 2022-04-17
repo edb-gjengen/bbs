@@ -1,31 +1,29 @@
 .user {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 4px;
-  border: 1px solid transparent;
-  background: transparent;
+  padding: 0;
+  border: none;
+  border-left: 4px solid transparent;
+  background: rgb(35, 15, 41);
   border-radius: 4px;
   color: var(--text);
   transition: background-color 0.1s ease-out, border 0.1s ease-out;
-  max-height: 100px;
 }
 
 .user:hover {
-  border-color: var(--border);
   cursor: pointer;
 }
-
-.active {
-  border-color: var(--border);
-  background: var(--border);
+.user:hover,
+.active.user {
+  background-color: var(--background);
+  box-shadow: 0 0 4px var(--background), 0 0 11px var(--background), 0 0 19px var(--background);
 }
-
-.active:hover {
-  /* TODO */
+.active.user {
+  border-left: 4px solid var(--sun)
 }
 
 .avatar {
+  margin-left: 1rem;
   width: 50px;
   height: 50px;
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
@@ -36,6 +34,7 @@
 }
 
 .noAvatar {
+  margin-left: 1rem;
   display: block;
   width: 50px;
   height: 50px;
@@ -44,6 +43,18 @@
   content: "";
 }
 
-.name {
-  font-weight: bold;
+.meta {
+  display: flex;
+  padding: 1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 1.2rem;
+  text-shadow: none;
+}
+
+.balance {
+  color: var(--sun)
 }

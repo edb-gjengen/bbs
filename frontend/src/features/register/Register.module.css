@@ -1,7 +1,12 @@
 .userList {
   display: grid;
-  grid-template-columns: repeat(12, 128px);
-  row-gap: 16px;
+  grid-template-columns: repeat(5, 220px);
+  column-gap: 16px;
+  row-gap: 24px;
+}
+
+.showAll {
+  margin-top: 1rem;
 }
 
 .productList {

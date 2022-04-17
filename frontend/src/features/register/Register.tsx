@@ -48,7 +48,7 @@ export const Register = (): JSX.Element => {
             />
           ))}
         </div>
-        <button type="button" onClick={() => setShowAll(!showAll)}>
+        <button type="button" onClick={() => setShowAll(!showAll)} className={styles.showAll}>
           {showAll ? "Skjul gamliser" : "Vis alle"}
         </button>
       </section>

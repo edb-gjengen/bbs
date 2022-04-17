@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { MouseEventHandler } from "react";
 
-import { AllUsersQuery } from "../types";
+import { AllUsersQuery } from "../../types";
 import styles from "./UserCard.module.css";
 
 type UserCardProps = {
@@ -14,7 +14,7 @@ type UserCardProps = {
 export const UserCard = ({ user, onUser, active = false }: UserCardProps): JSX.Element => {
   const classes = clsx(styles.user, { [styles.active]: active });
   return (
-    <button className={classes} onClick={onUser} type="button">
+    <button className={classes} onClick={onUser} type="button" title={user?.firstName || "Ekstern"}>
       <div className={styles.avatarWrap}>
         {user?.profile?.image && (
           <img src={user.profile?.image} alt={`Profile for ${user.firstName}`} className={styles.avatar} />
@@ -25,8 +25,10 @@ export const UserCard = ({ user, onUser, active = false }: UserCardProps): JSX.E
           </span>
         )}
       </div>
-      <span className={styles.name}>{user?.firstName || "Ekstern"}</span>
-      <span className={styles.balance}>{user?.profile?.balance || ""}</span>
+      <div className={styles.meta}>
+        {user?.firstName || "Ekstern"}
+        <span className={styles.balance}>{user?.profile?.balance || ""}</span>
+      </div>
     </button>
   );
 };
