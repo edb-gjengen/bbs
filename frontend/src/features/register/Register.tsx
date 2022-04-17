@@ -1,8 +1,8 @@
 import React from "react";
 
-import { ProductCard } from "../../components/ProductCard";
-import { UserCard } from "../../components/UserCard";
 import { OrderLineInput, Product } from "../../types";
+import { UserCard } from "../users/UserCard";
+import { ProductCard } from "./ProductCard";
 import styles from "./Register.module.css";
 import { useRegister } from "./useRegister";
 

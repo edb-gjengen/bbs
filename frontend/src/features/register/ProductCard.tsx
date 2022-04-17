@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { MouseEventHandler } from "react";
 
-import { Product } from "../types";
+import { Product } from "../../types";
 import styles from "./ProductCard.module.css";
 
 type ProductCardProps = {
