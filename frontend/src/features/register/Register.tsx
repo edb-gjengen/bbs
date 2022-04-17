@@ -8,7 +8,7 @@ import { useRegister } from "./useRegister";
 
 const USER_EXTERNAL = "external";
 
-export const Register = (): JSX.Element => {
+const Register = (): JSX.Element => {
   const {
     users,
     products,
@@ -80,3 +80,4 @@ export const Register = (): JSX.Element => {
     </div>
   );
 };
+export default Register;

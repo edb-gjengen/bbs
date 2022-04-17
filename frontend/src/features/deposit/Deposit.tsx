@@ -4,7 +4,7 @@ import { UserCard } from "../users/UserCard";
 import styles from "./Deposit.module.css";
 import { useDeposit } from "./useDeposit";
 
-export const Deposit = (): JSX.Element => {
+const Deposit = (): JSX.Element => {
   const {
     loading,
     selectedUser,
@@ -65,3 +65,4 @@ export const Deposit = (): JSX.Element => {
     </div>
   );
 };
+export default Deposit;

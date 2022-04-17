@@ -7,7 +7,7 @@ import { User, UserDetailDocument, UserProfile } from "../../types";
 import { formatMonth, formatTime } from "../../utils/time";
 import styles from "./UserDetail.module.css";
 
-export const UserDetail = () => {
+const UserDetail = () => {
   const { userId } = useParams();
   const { data, loading } = useQuery(UserDetailDocument, { variables: { userId: userId || "" }, skip: !userId });
 
@@ -108,3 +108,4 @@ export const UserDetail = () => {
     </div>
   );
 };
+export default UserDetail;

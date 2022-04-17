@@ -9,7 +9,7 @@ import styles from "./Log.module.css";
 
 const PAGE_SIZE = 10;
 
-export const Log = () => {
+const Log = () => {
   const types = {
     orderOffset: Number,
     transactionOffset: Number,
@@ -139,3 +139,4 @@ export const Log = () => {
     </div>
   );
 };
+export default Log;

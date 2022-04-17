@@ -8,7 +8,7 @@ interface SplashProps {
   noOverlay?: boolean;
 }
 
-export const Splash = ({ brandText = "BBS", noOverlay = false }: SplashProps): JSX.Element => (
+const Splash = ({ brandText = "BBS", noOverlay = false }: SplashProps): JSX.Element => (
   <div className={clsx(styles.splash, { [styles.overlay]: !noOverlay })}>
     <div className={styles.wrap}>
       <div className={styles.sun}></div>
@@ -17,3 +17,4 @@ export const Splash = ({ brandText = "BBS", noOverlay = false }: SplashProps): J
     </div>
   </div>
 );
+export default Splash;

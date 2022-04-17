@@ -11,7 +11,7 @@ type UserCount = {
   count: number;
 };
 
-export const ProductStats = () => {
+const ProductStats = () => {
   const { data, loading } = useQuery(AllProductStatsDocument, {
     variables: { active: true },
   });
@@ -38,3 +38,4 @@ export const ProductStats = () => {
     </StatsView>
   );
 };
+export default ProductStats;

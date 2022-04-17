@@ -5,7 +5,7 @@ import React from "react";
 import { ProductStatsDocument } from "../../types";
 import { StatsView } from "./StatsView";
 
-export const Stats = () => {
+const Stats = () => {
   const { data, loading } = useQuery(ProductStatsDocument);
 
   const series: any[] = [];
@@ -68,3 +68,4 @@ export const Stats = () => {
     </StatsView>
   );
 };
+export default Stats;

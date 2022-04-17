@@ -11,6 +11,6 @@ CACHE/
 media/
 tmp/
 frontend/dist
-static/modern
+static/
 .python-version
 .env

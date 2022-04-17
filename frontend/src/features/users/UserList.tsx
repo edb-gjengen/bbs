@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { AllUsersDocument } from "../../types";
 import { activeUserFilter } from "../../utils/users";
 
-export const UserList = () => {
+const UserList = () => {
   const { data, loading } = useQuery(AllUsersDocument);
   const [showAll, setShowAll] = useState(false);
 
@@ -35,3 +35,4 @@ export const UserList = () => {
     </div>
   );
 };
+export default UserList;

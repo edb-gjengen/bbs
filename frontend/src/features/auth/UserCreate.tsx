@@ -11,7 +11,7 @@ type FormValues = {
   email: string;
 };
 
-export const UserCreate = () => {
+const UserCreate = () => {
   const {
     register,
     handleSubmit,
@@ -48,3 +48,4 @@ export const UserCreate = () => {
     </div>
   );
 };
+export default UserCreate;

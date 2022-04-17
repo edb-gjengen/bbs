@@ -7,7 +7,6 @@ import { Routes } from "./Routes";
 import client from "./client";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
-import { Splash as Splash } from "./components/Splash";
 import { Toast } from "./components/Toast";
 import { ToastProvider } from "./components/ToastProvider";
 import { Wireframe } from "./components/Wireframe";

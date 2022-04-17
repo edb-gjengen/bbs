@@ -35,7 +35,7 @@ const OrderBar = ({ data }: { data: BarDatum[] }) => (
   />
 );
 
-export const OrderStats = () => {
+const OrderStats = () => {
   const { data, loading } = useQuery(OrderStatsDocument);
 
   return (
@@ -77,3 +77,4 @@ export const OrderStats = () => {
     </StatsView>
   );
 };
+export default OrderStats;
