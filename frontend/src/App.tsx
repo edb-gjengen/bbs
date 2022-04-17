@@ -10,6 +10,7 @@ import { Header } from "./components/Header";
 import { Splash as Splash } from "./components/Splash";
 import { Toast } from "./components/Toast";
 import { ToastProvider } from "./components/ToastProvider";
+import { Wireframe } from "./components/Wireframe";
 
 const App = (): JSX.Element => (
   <ApolloProvider client={client}>
@@ -18,11 +19,7 @@ const App = (): JSX.Element => (
         <Header />
         <div className={styles.app}>
           <Routes />
-          <div className={styles.wireframe}>
-            {[...Array(64)].map((_, idx) => (
-              <div key={idx} className={styles.cell} />
-            ))}
-          </div>
+          <Wireframe />
         </div>
         <Footer />
         <Toast />

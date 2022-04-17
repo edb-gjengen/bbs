@@ -14,13 +14,9 @@ type ProductCardProps = {
 export const ProductCard = ({ product, onProduct, amount, active = false }: ProductCardProps): JSX.Element => {
   const classes = clsx(styles.product, { [styles.active]: active });
   return (
-    <button className={classes} type="button" onClick={onProduct}>
-      <div className={styles.wrap}>
-        <span className={styles.amount}>{amount}</span>
-        {product.imageUrl && <img src={product.imageUrl} className={styles.productImage} alt={product.name} />}
-        {!product.imageUrl && <div className={styles.noProductImage} />}
-        <span className={styles.productText}>{product.name}</span>
-      </div>
+    <button className={classes} type="button" onClick={onProduct} title={product.name}>
+      <span className={styles.amount}>{amount}</span>
+      <span className={styles.productText}>{product.name}</span>
     </button>
   );
 };

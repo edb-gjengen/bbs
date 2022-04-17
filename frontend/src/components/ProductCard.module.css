@@ -1,62 +1,52 @@
 .product {
   display: flex;
-  overflow: hidden;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid transparent;
-  background: transparent;
+  border: none;
+  /*border: 1px solid var(--background);*/
+  background: rgb(35, 15, 41);
   border-radius: 4px;
   transition: background-color 0.1s ease-out, border 0.1s ease-out;
+  position: relative;
+  align-items: flex-start;
+  padding: 1rem;
 }
+
 .product:hover,
 .active.product {
-  border-color: var(--border);
+  background-color: var(--background);
+  box-shadow: 0 0 4px var(--background), 0 0 11px var(--background), 0 0 19px var(--background);
 }
 
 .productText {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 4px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 1.2rem;
+  text-shadow: none;
   color: white;
-  font-size: 1.5rem;
-}
-
-.productImage {
-  width: 140px;
-  height: 140px;
-  border-radius: 4px;
-  filter: opacity(0.2);
-  object-fit: contain;
-}
-.active .productImage {
-  filter: none;
-}
-
-.noProductImage {
-  width: 140px;
-  height: 140px;
 }
 
 .amount {
   position: absolute;
   z-index: 1;
-  top: 0px;
-  left: 0px;
-  padding: 4px;
-  border-radius: 4px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding: 10px 12px 8px 8px;
+  border-left: 1px solid transparent;
   color: transparent;
   font-size: 2rem;
   font-weight: bold;
   line-height: 1;
+  background-color: transparent;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  display: none;
 }
 
-.wrap {
-  position: relative;
-}
 .active .amount {
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
+  display: block;
+  color: var(--background);
+  text-shadow: none;
+  border-left-color: rgb(35, 15, 41);
+  background-color: var(--sun-end);
 }
