@@ -8,12 +8,9 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class CardAdmin(admin.ModelAdmin):
-    list_display = ("name", "user", "card_id", "disabled")
-    list_filter = ("disabled",)
+    list_display = ("name", "user", "card_id", "active")
+    list_filter = ("active",)
     search_fields = ("user__username", "name")
-
-    def get_search_results(self, request, queryset, search_term):
-        return super().get_search_results(request, queryset, search_term)
 
 
 admin.site.register(Product, ProductAdmin)

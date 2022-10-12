@@ -253,7 +253,7 @@ class Card(models.Model):
     name = models.CharField(max_length=64)
     # pin = models.IntegerField(max_length=4, blank=True, null=True)
     # valid_until = models.DateTimeField(blank=True, null=True)
-    disabled = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
