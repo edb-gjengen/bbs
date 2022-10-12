@@ -245,3 +245,16 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user}"
+
+
+class Card(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="cards")
+    card_id = models.CharField(max_length=32)
+    name = models.CharField(max_length=64)
+    # pin = models.IntegerField(max_length=4, blank=True, null=True)
+    # valid_until = models.DateTimeField(blank=True, null=True)
+    disabled = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name}"
