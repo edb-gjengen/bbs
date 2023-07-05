@@ -53,7 +53,7 @@ export const useRegister = () => {
     setOrder(newOrder);
   };
 
-  const total = sumTotal(products, order, selectedUser === USER_EXTERNAL);
+  const total = Number(sumTotal(products, order, selectedUser === USER_EXTERNAL).toFixed(2));
 
   const onSubmit = async () => {
     let res;

@@ -27,7 +27,7 @@ export const UserCard = ({ user, onUser, active = false }: UserCardProps): JSX.E
       </div>
       <div className={styles.meta}>
         {user?.firstName || "Ekstern"}
-        <span className={styles.balance}>{user?.profile?.balance || ""}</span>
+        <span className={styles.balance}>{Number(user?.profile?.balance) || ""}</span>
       </div>
     </button>
   );

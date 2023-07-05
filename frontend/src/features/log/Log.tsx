@@ -51,11 +51,11 @@ const Log = () => {
                 <td>
                   {(order.orderlines ?? []).map((line) => (
                     <div key={line.id}>
-                      {line.amount}x {line.product.name}
+                      {Number(line.amount)}x {line.product.name}
                     </div>
                   ))}
                 </td>
-                <td>{order.orderSum}</td>
+                <td>{Number(order.orderSum)}</td>
               </tr>
             ))}
           </tbody>
@@ -104,7 +104,7 @@ const Log = () => {
                 <td>
                   {trans.user.firstName} {trans.user.lastName}
                 </td>
-                <td>{trans.amount}</td>
+                <td>{Number(trans.amount)}</td>
               </tr>
             ))}
           </tbody>
