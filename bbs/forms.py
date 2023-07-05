@@ -2,9 +2,11 @@ from django import forms
 
 from bbs.models import InventoryTransaction, Product
 
+MAX_DIGITS = 9
+DECIMAL_PLACES = 1
 
 class InventoryTransactionForm(forms.ModelForm):
-    unit_price = forms.FloatField(required=True, localize=True)
+    unit_price = forms.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, required=True, localize=True)
 
     def __init__(self, *args, **kwargs):
         # Only show active products

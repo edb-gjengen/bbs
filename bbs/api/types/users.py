@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import List
+from decimal import Decimal
 
 import strawberry
 import strawberry_django
@@ -25,7 +26,7 @@ class UserProfile:
     balance: auto
     image: auto
     last_purchase_date: datetime
-    order_sum_total: float
+    order_sum_total: Decimal
 
     @strawberry.field()
     def top_months(self) -> List[TopMonth]:

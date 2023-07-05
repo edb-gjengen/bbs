@@ -2,6 +2,7 @@ import hashlib
 from datetime import datetime
 from itertools import groupby
 from typing import Type
+from decimal import Decimal
 
 from django.conf import settings
 from django.db import models
@@ -112,7 +113,7 @@ class Order(models.Model):
         blank=True,
         related_name="orders",
     )
-    order_sum = models.FloatField(db_column="sum")
+    order_sum = models.DecimalField(db_column="sum", max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES)
     created = models.DateTimeField(auto_now_add=True)
 
     objects = OrderManager()
@@ -234,7 +235,7 @@ class UserProfile(models.Model):
     def product_order_stats(self):
         return OrderLine.objects.filter(order__customer__pk=self.pk).product_order_stats()
 
-    def order_sum_total(self) -> float:
+    def order_sum_total(self) -> Decimal:
         return Order.objects.filter(customer_id=self.user_id).aggregate(sum=Sum("order_sum"))["sum"] or 0
 
     def image_url(self) -> str:
