@@ -26,6 +26,7 @@ npm start
 - improve product listing (light purple background)
 - Stats: products over time
 - inventory views
+- Stats: Implement users tab
 
 
 ## TODO-old
