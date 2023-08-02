@@ -15,8 +15,8 @@ const Register = (): JSX.Element => {
     loading,
     showAll,
     setShowAll,
-    setSelectedUser,
     selectedUser,
+    toggleSelectedUser,
     addToOrder,
     order,
     total,
@@ -36,14 +36,14 @@ const Register = (): JSX.Element => {
           <UserCard
             key={USER_EXTERNAL}
             user={null}
-            onUser={() => setSelectedUser(USER_EXTERNAL)}
+            onUser={() => toggleSelectedUser(USER_EXTERNAL)}
             active={selectedUser == USER_EXTERNAL}
           />
           {users.map((user) => (
             <UserCard
               key={user.id}
               user={user}
-              onUser={() => setSelectedUser(user.id)}
+              onUser={() => toggleSelectedUser(user.id)}
               active={selectedUser == user.id}
             />
           ))}
