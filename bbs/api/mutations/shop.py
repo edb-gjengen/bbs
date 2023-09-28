@@ -66,7 +66,7 @@ def create_order(customer_id: ID, order_lines: List[OrderLineInput], is_external
         product.inventory_amount -= ol.amount
         product.save()
 
-    if not is_external and user.profile.balance <= order_sum:
+    if not is_external and user.profile.balance < order_sum:
         return InsufficientFunds(
             message="Du har ikke nok penger på bok.", amount_lacking=abs(order_sum - user.profile.balance)
         )
