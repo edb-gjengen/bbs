@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useToast } from "../../components/ToastProvider";
 import { AllProductsDocument, AllUsersDocument, CreateOrderDocument, OrderLineInput, Product } from "../../types";
 import { activeUserFilter } from "../../utils/users";
+import {formatCurrency} from "../../utils/currency";
 
 const USER_EXTERNAL = "external";
 
@@ -53,9 +54,7 @@ export const useRegister = () => {
     setOrder(newOrder);
   };
 
-  // This value does not interact with the backend or any financial logic.
-  // It is only used for rendering the sum total in the browser. The actual total is handled entirely by the backend.
-  const total = Number(sumTotal(products, order, selectedUser === USER_EXTERNAL).toFixed(2));
+  const total = formatCurrency(sumTotal(products, order, selectedUser === USER_EXTERNAL));
 
   const onSubmit = async () => {
     let res;
