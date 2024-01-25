@@ -53,6 +53,8 @@ export const useRegister = () => {
     setOrder(newOrder);
   };
 
+  // This value does not interact with the backend or any financial logic.
+  // It is only used for rendering the sum total in the browser. The actual total is handled entirely by the backend.
   const total = Number(sumTotal(products, order, selectedUser === USER_EXTERNAL).toFixed(2));
 
   const onSubmit = async () => {
