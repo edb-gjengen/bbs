@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import styles from "./Header.module.css";
 
 const ADMIN_URL = `${import.meta.env.VITE_API_URL}/admin/`;
+const LOGOUT_URL = `${import.meta.env.VITE_API_URL}/`.replace("://", "://none:none@");
 
 const navLinkStyles = ({ isActive }: { isActive: boolean }) => clsx(styles.navLink, { [styles.active]: isActive });
 
@@ -46,6 +47,11 @@ export const Header = (): JSX.Element => {
           <li>
             <a href={ADMIN_URL} className={styles.navLink}>
               Admin
+            </a>
+          </li>
+          <li>
+            <a href={LOGOUT_URL} className={styles.navLink}>
+              Logg ut
             </a>
           </li>
         </ul>
