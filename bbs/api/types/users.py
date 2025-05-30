@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import List
 from decimal import Decimal
 
 import strawberry
@@ -29,13 +28,16 @@ class UserProfile:
     order_sum_total: Decimal
 
     @strawberry.field()
-    def top_months(self) -> List[TopMonth]:
+    def top_months(self) -> list[TopMonth]:
         return [TopMonth(**month) for month in self.top_months()]
 
     @strawberry.field()
-    def product_order_stats(self) -> List[ProductOrderStat]:
+    def product_order_stats(self) -> list[ProductOrderStat]:
         return [
-            ProductOrderStat(product_name=stat["product_name"], data=[Point(**p) for p in stat["data"]])
+            ProductOrderStat(
+                product_name=stat["product_name"],
+                data=[Point(**p) for p in stat["data"]],
+            )
             for stat in self.product_order_stats().as_series()
         ]
 

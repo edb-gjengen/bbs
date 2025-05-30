@@ -10,11 +10,10 @@ class Command(BaseCommand):
         parser.add_argument("--dry-run", action="store_true")
         parser.add_argument("--force", action="store_true")
 
-    def handle(self, *args, dry_run=False, force=False, **options):
+    def handle(self, *args, dry_run=False, force=False, **options):  # noqa: ARG002
         for profile in UserProfile.objects.all().order_by("id"):
             if dry_run:
-                print(profile.user.email, profile.image_url())
-            else:
-                if force or not profile.image:
-                    profile.image = profile.image_url()
-                    profile.save()
+                pass
+            elif force or not profile.image:
+                profile.image = profile.image_url()
+                profile.save()

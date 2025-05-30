@@ -10,12 +10,12 @@ from bbs.models import InventoryTransaction, Order, Product, Transaction, UserPr
 
 def report(request):
     # FIXME: split this up in smaller pieces
-    datetime_now = datetime.now()
-    start_time = datetime.now() - timedelta(days=30)
+    datetime_now = datetime.now()  # noqa: DTZ005
+    start_time = datetime.now() - timedelta(days=30)  # noqa: DTZ005
     # start of day, 1 month
     start_time = start_time.replace(hour=0, minute=0, second=0, microsecond=0)
     # end of day
-    end_time = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999)
+    end_time = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999)  # noqa: DTZ005
 
     if request.GET.get("start_time", False) or request.GET.get("end_time", False):
         form = DateRangeForm(request.GET)
@@ -50,14 +50,14 @@ def report(request):
                 k: {
                     "name": k,
                     "transactions": group,
-                    "transactions_sum": sum(map(lambda x: x["transactions__price"], group)),
-                    "transactions_units": sum(map(lambda x: x["transactions__amount"], group)),
+                    "transactions_sum": sum(x["transactions__price"] for x in group),
+                    "transactions_units": sum(x["transactions__amount"] for x in group),
                 }
             }
         )
 
     itrans = InventoryTransaction.objects.filter(created__range=[start_time, end_time])
-    inv_in = sum(map(lambda x: x[1].get("transactions_sum", 0), inventory_products.items()))
+    inv_in = sum(x[1].get("transactions_sum", 0) for x in inventory_products.items())
 
     # out
     out_products = (
@@ -75,8 +75,8 @@ def report(request):
         product = {
             "name": k,
             "orderlines": group,
-            "orderlines_sum": sum(map(lambda x: x["orderlines__price"], group)),
-            "orderlines_units": sum(map(lambda x: x["orderlines__amount"], group)),
+            "orderlines_sum": sum(x["orderlines__price"] for x in group),
+            "orderlines_units": sum(x["orderlines__amount"] for x in group),
         }
         if k in inventory_products:
             # add diff
@@ -88,7 +88,7 @@ def report(request):
         p[1]["value_diff"] = p[1].get("transactions_sum", 0) - p[1].get("orderlines_sum", 0)
         p[1]["units_diff"] = p[1].get("transactions_units", 0) - p[1].get("orderlines_units", 0)
 
-    inv_out = sum(map(lambda x: x[1].get("orderlines_sum", 0), inventory_products.items()))
+    inv_out = sum(x[1].get("orderlines_sum", 0) for x in inventory_products.items())
 
     inv_diff = inv_in - inv_out
 
@@ -110,7 +110,7 @@ def report(request):
     purchases_diff = purchases_end - purchases_start
     saldo_diff = saldo_end - saldo_start
 
-    return render(request, "report.html", locals())
+    return render(request, "report.html", locals())  # noqa: DJ003
 
 
 def inventory(request):
@@ -120,7 +120,7 @@ def inventory(request):
     wholesale_value = sum([p.wholesale_value for p in products_active])
     num_products = sum(products_active.values_list("inventory_amount", flat=True))
 
-    return render(request, "inventory.html", locals())
+    return render(request, "inventory.html", locals())  # noqa: DJ003
 
 
 def inventory_add(request):
@@ -133,13 +133,12 @@ def inventory_add(request):
             itrans.user = request.user
             itrans.product.save()
             itrans.save()
-            messages.success(request, "Satt inn {0} stk {1}.".format(itrans.amount, itrans.product))
+            messages.success(request, f"Satt inn {itrans.amount} stk {itrans.product}.")
             return redirect("inventory-add")
 
-        else:
-            messages.error(request, "Feil med skjemaet, se under.")
-            form = InventoryTransactionForm(data=request.POST)
+        messages.error(request, "Feil med skjemaet, se under.")
+        form = InventoryTransactionForm(data=request.POST)
     else:
         form = InventoryTransactionForm()
 
-    return render(request, "inventory_add.html", locals())
+    return render(request, "inventory_add.html", locals())  # noqa: DJ003

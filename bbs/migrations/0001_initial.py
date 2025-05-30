@@ -3,7 +3,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
@@ -180,6 +179,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name="orderline",
-            unique_together=set([("order", "product")]),
+            unique_together={("order", "product")},
         ),
     ]

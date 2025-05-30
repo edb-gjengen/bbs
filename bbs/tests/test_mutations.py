@@ -1,4 +1,4 @@
-import pytest
+import pytest  # noqa: INP001
 from django.test import Client
 from strawberry.django.test import GraphQLTestClient
 
@@ -7,17 +7,21 @@ from bbs.models import Order, Product
 
 @pytest.fixture(name="gql_client")
 def gql_client_fixture(client: Client):
-    yield GraphQLTestClient(client)
+    return GraphQLTestClient(client)
 
 
 @pytest.fixture(name="product")
-def product_fix(db):
+def product_fix(db):  # noqa: ARG001
     return Product.objects.create(name="borg", sale_price_ext=35, sale_price_int=30)
 
 
 def test_create_order(product, gql_client):
     assert Order.objects.count() == 0
-    variables = dict(customerId="external", isExternal=True, orderLines=[{"productId": product.id, "amount": 1}])
+    variables = {
+        "customerId": "external",
+        "isExternal": True,
+        "orderLines": [{"productId": product.id, "amount": 1}],
+    }
     query = """
     mutation CreateOrder($customerId: ID!, $isExternal: Boolean!, $orderLines: [OrderLineInput!]!) {
       createOrder(customerId: $customerId, isExternal: $isExternal, orderLines: $orderLines) {

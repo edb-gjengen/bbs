@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.urls import path, re_path
+from django.urls import path
 from strawberry.django.views import GraphQLView
 
 from bbs.api.schema import schema
@@ -12,11 +12,15 @@ admin.autodiscover()
 
 urlpatterns = [
     # TODO: migrate reports to SPA
-    re_path(r"^inventory/$", inventory, name="inventory"),
-    re_path(r"^inventory/add/$", inventory_add, name="inventory-add"),
-    re_path(r"^report$", report, name="report"),
+    path("inventory/", inventory, name="inventory"),
+    path("inventory/add/", inventory_add, name="inventory-add"),
+    path("report", report, name="report"),
     path("accounts/login/", LoginView.as_view(), name="django.contrib.auth.views.login"),
-    path("accounts/logout/", LogoutView.as_view(), name="django.contrib.auth.views.logout"),
+    path(
+        "accounts/logout/",
+        LogoutView.as_view(),
+        name="django.contrib.auth.views.logout",
+    ),
     path("admin/", admin.site.urls),
     path("graphql/", GraphQLView.as_view(schema=schema), name="graphql"),
 ]

@@ -19,9 +19,12 @@ class UserInput:
 
 @strawberry.mutation
 @transaction.atomic
-def register_mutation(input: UserInput) -> User:
+def register_mutation(input: UserInput) -> User:  # noqa: A002
     user = DjangoUser.objects.create_user(
-        first_name=input.first_name, last_name=input.last_name, email=input.email, username=input.email
+        first_name=input.first_name,
+        last_name=input.last_name,
+        email=input.email,
+        username=input.email,
     )
     models.UserProfile.objects.create(user=user)
     return user

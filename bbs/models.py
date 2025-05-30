@@ -1,8 +1,7 @@
-import hashlib
+import hashlib  # noqa: EXE002
 from datetime import datetime
-from itertools import groupby
-from typing import Type
 from decimal import Decimal
+from itertools import groupby
 
 from django.conf import settings
 from django.db import models
@@ -87,21 +86,26 @@ class Product(models.Model):
 
         return _format_counts(per_user)
 
-    def __str__(self):
+    def __str__(self):  # noqa: DJ012
         return self.name
 
-    class Meta:
+    class Meta:  # noqa: DJ012
         ordering = ["name"]
 
 
 class OrderManager(models.Manager):
-    def count_by_created(self, extract_class: Type[Extract]):
+    def count_by_created(self, extract_class: type[Extract]):
         period = extract_class("created")
         return self.get_queryset().annotate(period=period).values("period").annotate(count=Count("id"))
 
     def count_by_created_period(self, period: str):
-        periods = {"yearly": ExtractYear, "monthly": ExtractMonth, "daily": ExtractIsoWeekDay, "hourly": ExtractHour}
-        assert period in periods
+        periods = {
+            "yearly": ExtractYear,
+            "monthly": ExtractMonth,
+            "daily": ExtractIsoWeekDay,
+            "hourly": ExtractHour,
+        }
+        assert period in periods  # noqa: S101
         return self.count_by_created(periods[period])
 
 
@@ -124,7 +128,7 @@ class Order(models.Model):
     def reciept(self):
         return ", ".join([str(ol) for ol in self.orderlines.all()])
 
-    def __str__(self):
+    def __str__(self):  # noqa: DJ012
         return f"{self.customer or EXTERNAL_USER}: {self.order_sum} kr"
 
 
@@ -163,10 +167,10 @@ class OrderLine(models.Model):
     def price(self):
         return self.amount * self.unit_price
 
-    def __str__(self):
+    def __str__(self):  # noqa: DJ012
         return f"{self.amount} {self.product} ({self.unit_price} kr per)"
 
-    class Meta:
+    class Meta:  # noqa: DJ012
         unique_together = ("order", "product")
 
 
@@ -178,7 +182,7 @@ class Transaction(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.id}: { self.user}: {self.amount}"
+        return f"{self.id}: {self.user}: {self.amount}"
 
 
 class InventoryTransaction(models.Model):
@@ -206,7 +210,7 @@ class InventoryTransaction(models.Model):
     def price(self):
         return self.amount * self.unit_price
 
-    def __str__(self):
+    def __str__(self):  # noqa: DJ012
         return f"{self.id}: {self.user}: {self.product}. {self.amount:.0f} stykker ({self.unit_price} kr per)"
 
 
@@ -220,8 +224,7 @@ class UserProfile(models.Model):
 
     def last_purchase_date(self) -> datetime:
         last = self.last_purchase()
-        last_p = last.created if last else datetime.min
-        return last_p
+        return last.created if last else datetime.min  # noqa: DTZ901
 
     def top_months(self, limit=5):
         return (
@@ -240,16 +243,16 @@ class UserProfile(models.Model):
 
     def image_url(self) -> str:
         if self.user.email:
-            md5_hash = hashlib.md5(self.user.email.lower().strip().encode()).hexdigest()
+            md5_hash = hashlib.md5(self.user.email.lower().strip().encode()).hexdigest()  # noqa: S324
             return f"https://www.gravatar.com/avatar/{md5_hash}?d=identicon"
 
         return ""
 
-    def save(self, **kwargs):
+    def save(self, **kwargs):  # noqa: DJ012
         if not self.image:
             self.image = self.image_url()
 
         super().save(**kwargs)
 
-    def __str__(self):
+    def __str__(self):  # noqa: DJ012
         return f"{self.user}"

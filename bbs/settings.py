@@ -1,12 +1,13 @@
-# Django settings for bbs project.
+# Django settings for bbs project.  # noqa: EXE002
+import contextlib
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # noqa: PTH120
 
 DEBUG = True
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    # ('Your Name', 'your_email@example.com'),  # noqa: ERA001
 )
 MANAGERS = ADMINS
 
@@ -20,18 +21,17 @@ DATABASES = {
 TIME_ZONE = "Europe/Oslo"
 LANGUAGE_CODE = "nb"
 USE_I18N = True
-USE_L10N = True
 
 SITE_ID = 1
 
 # Media and uploads
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # noqa: PTH118
 MEDIA_URL = "/media/"
 
 # Static files
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # noqa: PTH118
 STATIC_URL = "/static/"
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)  # noqa: PTH118
 
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -39,13 +39,13 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = "osv$uy-ea$*%lc)+xiwt5@2b7au%u*c!pa6hmh#vl)*+tp%fss"
+SECRET_KEY = "osv$uy-ea$*%lc)+xiwt5@2b7au%u*c!pa6hmh#vl)*+tp%fss"  # noqa: S105
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(BASE_DIR, "templates"),
+            os.path.join(BASE_DIR, "templates"),  # noqa: PTH118
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -141,7 +141,5 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+with contextlib.suppress(ImportError):
+    from .local_settings import *  # noqa: F403

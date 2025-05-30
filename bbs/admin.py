@@ -1,13 +1,20 @@
 from django.contrib import admin
 
-from bbs.models import *
+from bbs.models import (
+    InventoryTransaction,
+    Order,
+    OrderLine,
+    Product,
+    Transaction,
+    UserProfile,
+)
 
 
+@admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(Product, ProductAdmin)
 admin.site.register(InventoryTransaction)
 admin.site.register(Order)
 admin.site.register(OrderLine)

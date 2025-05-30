@@ -1,5 +1,3 @@
-from typing import List
-
 import strawberry
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -27,7 +25,7 @@ class CreateOrderSuccess:
 
 
 @strawberry.type
-class InsufficientFunds(Error):
+class InsufficientFunds(Error):  # noqa: N818
     amount_lacking: float
 
 
@@ -36,7 +34,7 @@ CreateOrderResponse = strawberry.union("CreateOrderResponse", [CreateOrderSucces
 
 @strawberry.mutation
 @transaction.atomic
-def create_order(customer_id: ID, order_lines: List[OrderLineInput], is_external: bool = False) -> CreateOrderResponse:
+def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external: bool = False) -> CreateOrderResponse:  # noqa: FBT001
     # clean and validate
     try:
         user = UserModel.objects.get(pk=customer_id)
@@ -68,7 +66,8 @@ def create_order(customer_id: ID, order_lines: List[OrderLineInput], is_external
 
     if not is_external and user.profile.balance <= order_sum:
         return InsufficientFunds(
-            message="Du har ikke nok penger på bok.", amount_lacking=abs(order_sum - user.profile.balance)
+            message="Du har ikke nok penger på bok.",
+            amount_lacking=abs(order_sum - user.profile.balance),
         )
 
     # create
@@ -91,7 +90,7 @@ class CreateDepositSuccess:
 
 
 @strawberry.type
-class AboveMaxSaldo(Error):
+class AboveMaxSaldo(Error):  # noqa: N818
     max_saldo: float
     above: float
 
@@ -118,7 +117,7 @@ def create_deposit(user_id: ID, amount: int) -> CreateDepositResponse:
             fields=[FieldError(field="amount", message=message)],
         )
     # 1337 is special <3
-    if amount + user.profile.balance > settings.BBS_SALDO_MAX and amount + user.profile.balance != 1337:
+    if amount + user.profile.balance > settings.BBS_SALDO_MAX and amount + user.profile.balance != 1337:  # noqa: PLR2004
         return AboveMaxSaldo(
             message="Du prøver å sette inn for mye penger",
             max_saldo=settings.BBS_SALDO_MAX,

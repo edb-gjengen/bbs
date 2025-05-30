@@ -1,8 +1,12 @@
+from typing import TYPE_CHECKING
+
 import strawberry_django
 from strawberry_django import auto
 
 from bbs import models
-from bbs.api.types.users import User
+
+if TYPE_CHECKING:
+    from bbs.api.types.users import User
 
 
 @strawberry_django.ordering.order(models.Transaction)

@@ -1,5 +1,3 @@
-from typing import List
-
 import strawberry
 
 
@@ -19,6 +17,6 @@ class FieldError(Error):
 
 @strawberry.type
 class FormErrors:
-    fields: List[FieldError]
+    fields: list[FieldError]
     message: str = ""
     error: bool = True
