@@ -3,7 +3,7 @@ name = "bbs"
 version = "0.1.0"
 description = ""
 authors = [{ name = "Nikolai R Kristiansen", email = "nikolaik@gmail.com" }]
-requires-python = ">=3.8,<3.9"
+requires-python = ">=3.9,<3.10"
 license = "MIT"
 dependencies = [
     "django-cors-headers>=3.10.0,<4",
