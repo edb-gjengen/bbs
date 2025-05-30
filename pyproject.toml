@@ -29,3 +29,27 @@ dev = [
     "pytest",
 ]
 
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "D",                # pydocstyle: Allow undocumented code
+  "ANN",              # flake8-annotations: Allow untyped code
+  "TD", "FIX",        # Allow TODOs and FIXMEs
+  "RUF012",           # FIXME: Fix later https://docs.astral.sh/ruff/rules/mutable-class-default/
+  "FBT002",           # Allow boolean args
+  "G004",             # Allow logging using f-string
+  "EM101", "EM102",   # Allow string in exceptions (prioritice code readability vs exception time readability)
+  "TRY003",           # Allow long exception messages
+  "E501",             # Allow long lines
+  "COM812", "ISC001", # Avoid conflicting with ruff formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Testing code can deviate a bit more
+"bbs/tests/*.py" = ["S101", "S106", "PLR2004"]
+"**/test_*.py" = ["S101", "S106", "PLR2004"]
+"**/tests.py" = ["S101", "S106", "PLR2004"]
