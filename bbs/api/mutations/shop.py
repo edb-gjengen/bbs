@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Union
 
 import strawberry
 from django.conf import settings
@@ -32,7 +32,7 @@ class InsufficientFunds(Error):  # noqa: N818
 
 
 CreateOrderResponse = Annotated[
-    CreateOrderSuccess | InsufficientFunds | FormErrors, strawberry.union("CreateOrderResponse")
+    Union[CreateOrderSuccess, InsufficientFunds, FormErrors], strawberry.union("CreateOrderResponse")  # noqa: UP007
 ]
 
 
@@ -100,7 +100,7 @@ class AboveMaxSaldo(Error):  # noqa: N818
 
 
 CreateDepositResponse = Annotated[
-    CreateDepositSuccess | AboveMaxSaldo | FormErrors, strawberry.union("CreateDepositResponse")
+    Union[CreateDepositSuccess, AboveMaxSaldo, FormErrors], strawberry.union("CreateDepositResponse")  # noqa: UP007
 ]
 
 
