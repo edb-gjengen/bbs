@@ -10,9 +10,9 @@ cd "$PROJECT_PATH" || exit 1
 git pull
 
 # Backend
-poetry install
-umask 022; poetry run python manage.py collectstatic --noinput  # Collect static
-poetry run python manage.py migrate  # Run DB migrations
+uv sync
+umask 022; uv run manage.py collectstatic --noinput  # Collect static
+uv run manage.py migrate  # Run DB migrations
 
 # Frontend
 bin/build-frontend

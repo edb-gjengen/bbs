@@ -1,18 +1,14 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
-- repo: local
-  hooks:
-  - id: black
-    name: black
-    entry: black
-    args: [--check]
-    language: system
-    require_serial: true
-    types: [python]
-  - id: isort
-    name: isort
-    entry: isort
-    args: [--check]
-    language: system
-    types: [python]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 'v0.11.7'
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+  - repo: https://github.com/adamchainz/django-upgrade
+    rev: "1.24.0"
+    hooks:
+      - id: django-upgrade
+        args: [--target-version, "4.2"]

@@ -7,25 +7,22 @@ default:
     paths:
       - .cache/pip
       - .venv
-  before_script:
-    - poetry config virtualenvs.in-project true
-    - poetry install
 
 django-checks:
   stage: build
   script:
-    - poetry run python manage.py migrate
-    - poetry run python manage.py check
+    - uv run manage.py migrate
+    - uv run manage.py check
 
 tests:
   stage: test
   script:
-    - poetry run bin/test
+    - uv run bin/test
 
 lint:
   stage: test
   script:
-    - poetry run bin/lint
+    - uv run bin/lint
 
 deploy:
   stage: deploy
