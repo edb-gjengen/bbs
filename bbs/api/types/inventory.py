@@ -1,15 +1,16 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Annotated
 
+import strawberry
 import strawberry_django
-from strawberry_django import auto
+from strawberry import auto
 
 from bbs import models
 
 if TYPE_CHECKING:
-    from bbs.api.types.users import User
+    from .users import User
 
 
-@strawberry_django.ordering.order(models.Transaction)
+@strawberry_django.order_type(models.Transaction)
 class TransactionOrdering:
     created: auto
 
@@ -17,6 +18,6 @@ class TransactionOrdering:
 @strawberry_django.type(models.Transaction)
 class Transaction:
     id: auto
-    user: "User"
+    user: Annotated["User", strawberry.lazy(".users")]
     amount: auto
     created: auto

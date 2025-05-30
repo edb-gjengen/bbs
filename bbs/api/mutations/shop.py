@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import strawberry
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -29,7 +31,9 @@ class InsufficientFunds(Error):  # noqa: N818
     amount_lacking: float
 
 
-CreateOrderResponse = strawberry.union("CreateOrderResponse", [CreateOrderSuccess, InsufficientFunds, FormErrors])
+CreateOrderResponse = Annotated[
+    CreateOrderSuccess | InsufficientFunds | FormErrors, strawberry.union("CreateOrderResponse")
+]
 
 
 @strawberry.mutation
@@ -95,7 +99,9 @@ class AboveMaxSaldo(Error):  # noqa: N818
     above: float
 
 
-CreateDepositResponse = strawberry.union("CreateDepositResponse", [CreateDepositSuccess, AboveMaxSaldo, FormErrors])
+CreateDepositResponse = Annotated[
+    CreateDepositSuccess | AboveMaxSaldo | FormErrors, strawberry.union("CreateDepositResponse")
+]
 
 
 @strawberry.mutation

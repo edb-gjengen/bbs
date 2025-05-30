@@ -21,6 +21,7 @@ DATABASES = {
 TIME_ZONE = "Europe/Oslo"
 LANGUAGE_CODE = "nb"
 USE_I18N = True
+USE_TZ = True
 
 SITE_ID = 1
 

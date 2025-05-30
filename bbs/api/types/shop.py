@@ -1,12 +1,17 @@
+from typing import TYPE_CHECKING, Annotated
+
 import strawberry
 import strawberry_django
-from strawberry_django import auto
+from strawberry import auto
 
 from bbs import models
 from bbs.api.types.utils import JSONScalar
 
+if TYPE_CHECKING:
+    from .users import User
 
-@strawberry_django.filters.filter(models.Product)
+
+@strawberry_django.filter_type(models.Product)
 class ProductFilter:
     id: auto
     active: auto
@@ -23,7 +28,7 @@ class Product:
     user_counts: JSONScalar
 
 
-@strawberry_django.ordering.order(models.Order)
+@strawberry_django.order_type(models.Order)
 class OrderOrdering:
     created: auto
 
@@ -31,7 +36,7 @@ class OrderOrdering:
 @strawberry_django.type(models.Order)
 class Order:
     id: auto
-    customer: strawberry.LazyType["User", "bbs.api.types.users"]  # noqa: F821
+    customer: Annotated["User", strawberry.lazy(".users")]
     order_sum: auto
     created: auto
     orderlines: list["OrderLine"]

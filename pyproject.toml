@@ -15,8 +15,8 @@ dependencies = [
     "mysqlclient>=2.0.3,<3",
     "Pillow>=9.0.0,<10",
     "sentry-sdk>=1.5.5,<2",
-    "strawberry-graphql-django>=0.2.5,<0.3",
-    "strawberry-graphql>=0.97.0,<0.98",
+    "strawberry-graphql-django==0.60.*",
+    "strawberry-graphql==0.270.*",
 ]
 
 [tool.pytest.ini_options]

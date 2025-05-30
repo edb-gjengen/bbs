@@ -3,13 +3,11 @@ from decimal import Decimal
 
 import strawberry
 import strawberry_django
-from django.contrib.auth import get_user_model
-from strawberry_django import auto
+from django.contrib.auth.models import User as DjangoUser
+from strawberry import auto
 
 from bbs import models
 from bbs.api.types.shop import Point, ProductOrderStat
-
-UserModel = get_user_model()
 
 
 @strawberry.type
@@ -42,7 +40,7 @@ class UserProfile:
         ]
 
 
-@strawberry_django.type(UserModel)
+@strawberry_django.type(DjangoUser)
 class User:
     id: auto
     first_name: auto

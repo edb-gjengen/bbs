@@ -1,13 +1,11 @@
 import strawberry
 import strawberry_django
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User as DjangoUser
 from django.db import transaction
-from strawberry_django import auto
+from strawberry import auto
 
 from bbs import models
 from bbs.api.types.users import User
-
-DjangoUser = get_user_model()
 
 
 @strawberry_django.input(DjangoUser)

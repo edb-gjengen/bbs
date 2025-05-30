@@ -17,7 +17,7 @@ from bbs.api.types.shop import (
 class ShopQueries:
     all_products: list[Product] = strawberry_django.field()
     all_orders: list[Order] = strawberry_django.field()
-    order_list: list[Order] = strawberry_django.field(pagination=True, order=OrderOrdering)
+    order_list: list[Order] = strawberry_django.field(pagination=True, ordering=OrderOrdering)
 
     @strawberry.field
     def order_stats(self) -> OrderStats:

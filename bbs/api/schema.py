@@ -1,6 +1,6 @@
 import strawberry
 from django.core.exceptions import ObjectDoesNotExist
-from strawberry.extensions import Extension
+from strawberry.extensions import SchemaExtension
 
 from bbs.api.mutations.shop import ShopMutations
 from bbs.api.mutations.users import UsersMutations
@@ -19,7 +19,7 @@ class Mutation(ShopMutations, UsersMutations):
     pass
 
 
-class HandleNotFound(Extension):
+class HandleNotFound(SchemaExtension):
     def on_request_end(self):
         result = self.execution_context.result
         if result.errors:
