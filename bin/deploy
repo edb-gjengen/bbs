@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eu
 
+source "$HOME/.local/bin/env"
+
 export VITE_API_URL="https://bbs.neuf.no/api"
 PROJECT_PATH=/var/www/neuf.no/bbs
 PROCESS_NAME="bbs.neuf.no"
