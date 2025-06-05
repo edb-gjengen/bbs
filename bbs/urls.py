@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
+from django.views.decorators.csrf import csrf_exempt
 from django.urls import path
 from strawberry.django.views import GraphQLView
 
@@ -22,7 +23,7 @@ urlpatterns = [
         name="django.contrib.auth.views.logout",
     ),
     path("admin/", admin.site.urls),
-    path("graphql/", GraphQLView.as_view(schema=schema), name="graphql"),
+    path("graphql/", csrf_exempt(GraphQLView.as_view(schema=schema)), name="graphql"),
 ]
 
 urlpatterns += static("/media", document_root=settings.MEDIA_ROOT)
