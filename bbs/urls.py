@@ -2,8 +2,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.decorators.csrf import csrf_exempt
 from django.urls import path
+from django.views.decorators.csrf import csrf_exempt
 from strawberry.django.views import GraphQLView
 
 from bbs.api.schema import schema
