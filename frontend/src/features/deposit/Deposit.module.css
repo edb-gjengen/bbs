@@ -2,9 +2,9 @@
   display: grid;
   height: 800px;
   padding-top: 2rem;
+  column-gap: 16px;
   grid-template-columns: repeat(5, 220px);
   overflow-y: auto;
-  column-gap: 16px;
   row-gap: 24px;
 }
 

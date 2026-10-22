@@ -4,7 +4,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 import { GQLError } from "../../components/GQLError";
-import { User, UserDetailDocument, UserProfile } from "../../types";
+import { SchemaUser as User, UserDetailDocument, SchemaUserProfile as UserProfile } from "../../types";
 import { formatMonth, formatTime } from "../../utils/time";
 import styles from "./UserDetail.module.css";
 
@@ -18,15 +18,13 @@ const UserDetail = () => {
 
   const user = data?.user as User;
   const profile = user?.profile as UserProfile;
-  // FIXME: types
-  const series: any[] = [];
-  (profile?.productOrderStats || [])?.forEach(({ productName: id, data }) => {
-    const lineData: any[] = [];
-    data.forEach((point, index) => {
-      lineData.push({ x: point.x, y: point.y + (lineData?.[index - 1]?.y || 0) });
-    });
-    series.push({ id, data: lineData });
-  });
+  const series = (profile?.productOrderStats || []).map(({ productName: id, data }) => ({
+    id,
+    data: data.map((point, index, points) => ({
+      x: point.x,
+      y: point.y + (points[index - 1]?.y || 0),
+    })),
+  }));
   return (
     <div className={styles.userDetail}>
       <div>
@@ -101,8 +99,8 @@ const UserDetail = () => {
                 <strong>{point.data.xFormatted}</strong>
               </div>
               <div>
-                <span style={{ background: point.serieColor, width: 13, height: 13, display: "inline-block" }} />{" "}
-                <strong>{point.data.yFormatted}</strong> {point.serieId}
+                <span style={{ background: point.seriesColor, width: 13, height: 13, display: "inline-block" }} />{" "}
+                <strong>{String(point.data.yFormatted)}</strong> {point.seriesId}
               </div>
             </div>
           )}

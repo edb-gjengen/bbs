@@ -20,8 +20,8 @@
 .pagination a {
   padding: 0.4rem 0.8rem;
   border: 1px solid var(--border);
-  margin-top: 1rem;
   border-radius: 4px;
+  margin-top: 1rem;
 }
 .pagination a:hover {
   color: white;

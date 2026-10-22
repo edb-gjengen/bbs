@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ReactComponent as Brick } from "../assets/brick.svg";
+import Brick from "../assets/brick.svg?react";
 import styles from "./Footer.module.css";
 
 export const Footer = (): JSX.Element => {

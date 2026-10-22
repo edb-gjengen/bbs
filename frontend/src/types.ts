@@ -1,329 +1,343 @@
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
   /** Date with time (isoformat) */
-  DateTime: any;
+  DateTime: { input: string; output: string; }
   /** The GenericScalar scalar type represents a generic GraphQL scalar value that could be: List or Object. */
-  JSONScalar: any;
+  JSONScalar: { input: unknown; output: Array<{ name: string; count: number }>; }
 };
 
-export type AboveMaxSaldo = Error & {
+export type SchemaAboveMaxSaldo = SchemaError & {
   __typename?: 'AboveMaxSaldo';
-  above: Scalars['Float'];
-  error: Scalars['Boolean'];
-  maxSaldo: Scalars['Float'];
-  message: Scalars['String'];
+  message: Scalars['String']['output'];
+  error: Scalars['Boolean']['output'];
+  maxSaldo: Scalars['Float']['output'];
+  above: Scalars['Float']['output'];
 };
 
-export type CreateDepositResponse = AboveMaxSaldo | CreateDepositSuccess | FormErrors;
+export type SchemaCreateDepositResponse = SchemaCreateDepositSuccess | SchemaAboveMaxSaldo | SchemaFormErrors;
 
-export type CreateDepositSuccess = {
+export type SchemaCreateDepositSuccess = {
   __typename?: 'CreateDepositSuccess';
-  transaction: Transaction;
+  transaction: SchemaTransaction;
 };
 
-export type CreateOrderResponse = CreateOrderSuccess | FormErrors | InsufficientFunds;
+export type SchemaCreateOrderResponse = SchemaCreateOrderSuccess | SchemaInsufficientFunds | SchemaFormErrors;
 
-export type CreateOrderSuccess = {
+export type SchemaCreateOrderSuccess = {
   __typename?: 'CreateOrderSuccess';
-  order: Order;
+  order: SchemaOrder;
 };
 
-export type Error = {
-  error: Scalars['Boolean'];
-  message: Scalars['String'];
+export type SchemaError = {
+  message: Scalars['String']['output'];
+  error: Scalars['Boolean']['output'];
 };
 
-export type FieldError = Error & {
+export type SchemaFieldError = SchemaError & {
   __typename?: 'FieldError';
-  error: Scalars['Boolean'];
-  field: Scalars['String'];
-  message: Scalars['String'];
+  message: Scalars['String']['output'];
+  error: Scalars['Boolean']['output'];
+  field: Scalars['String']['output'];
 };
 
-export type FormErrors = {
+export type SchemaFormErrors = {
   __typename?: 'FormErrors';
-  error: Scalars['Boolean'];
-  fields: Array<FieldError>;
-  message: Scalars['String'];
+  fields: Array<SchemaFieldError>;
+  message: Scalars['String']['output'];
+  error: Scalars['Boolean']['output'];
 };
 
-export type InsufficientFunds = Error & {
+export type SchemaInsufficientFunds = SchemaError & {
   __typename?: 'InsufficientFunds';
-  amountLacking: Scalars['Float'];
-  error: Scalars['Boolean'];
-  message: Scalars['String'];
+  message: Scalars['String']['output'];
+  error: Scalars['Boolean']['output'];
+  amountLacking: Scalars['Float']['output'];
 };
 
-export type Mutation = {
+export type SchemaMutation = {
   __typename?: 'Mutation';
-  createDeposit: CreateDepositResponse;
-  createOrder: CreateOrderResponse;
-  createUser: User;
+  createOrder: SchemaCreateOrderResponse;
+  createDeposit: SchemaCreateDepositResponse;
+  createUser: SchemaUser;
 };
 
 
-export type MutationCreateDepositArgs = {
-  amount: Scalars['Int'];
-  userId: Scalars['ID'];
+export type SchemaMutationCreateOrderArgs = {
+  customerId: Scalars['ID']['input'];
+  orderLines: Array<SchemaOrderLineInput>;
+  isExternal?: Scalars['Boolean']['input'];
 };
 
 
-export type MutationCreateOrderArgs = {
-  customerId: Scalars['ID'];
-  isExternal?: Scalars['Boolean'];
-  orderLines: Array<OrderLineInput>;
+export type SchemaMutationCreateDepositArgs = {
+  userId: Scalars['ID']['input'];
+  amount: Scalars['Int']['input'];
 };
 
 
-export type MutationCreateUserArgs = {
-  input: UserInput;
+export type SchemaMutationCreateUserArgs = {
+  input: SchemaUserInput;
 };
 
-export type OffsetPaginationInput = {
-  limit?: Scalars['Int'];
-  offset?: Scalars['Int'];
+export type SchemaOffsetPaginationInput = {
+  offset?: Scalars['Int']['input'];
+  limit?: Scalars['Int']['input'];
 };
 
-export type Order = {
+export type SchemaOrder = {
   __typename?: 'Order';
-  created: Scalars['DateTime'];
-  customer?: Maybe<User>;
-  id: Scalars['ID'];
-  isExternal: Scalars['Boolean'];
-  orderSum: Scalars['Float'];
-  orderlines?: Maybe<Array<OrderLine>>;
+  id: Scalars['ID']['output'];
+  customer?: Maybe<SchemaUser>;
+  orderSum: Scalars['Float']['output'];
+  created: Scalars['DateTime']['output'];
+  orderlines?: Maybe<Array<SchemaOrderLine>>;
+  isExternal: Scalars['Boolean']['output'];
 };
 
-export type OrderLine = {
+export type SchemaOrderLine = {
   __typename?: 'OrderLine';
-  amount: Scalars['Int'];
-  id: Scalars['ID'];
-  order: Order;
-  product: Product;
-  unitPrice: Scalars['Float'];
+  id: Scalars['ID']['output'];
+  order: SchemaOrder;
+  product: SchemaProduct;
+  amount: Scalars['Int']['output'];
+  unitPrice: Scalars['Float']['output'];
 };
 
-export type OrderLineInput = {
-  amount: Scalars['Int'];
-  productId: Scalars['ID'];
+export type SchemaOrderLineInput = {
+  productId: Scalars['ID']['input'];
+  amount: Scalars['Int']['input'];
 };
 
-export type OrderOrdering = {
-  created?: InputMaybe<Ordering>;
+export type SchemaOrderOrdering = {
+  created?: InputMaybe<SchemaOrdering>;
 };
 
-export type OrderStats = {
+export type SchemaOrderStats = {
   __typename?: 'OrderStats';
-  daily: Array<OrderStatsByTime>;
-  hourly: Array<OrderStatsByTime>;
-  monthly: Array<OrderStatsByTime>;
-  yearly: Array<OrderStatsByTime>;
+  yearly: Array<SchemaOrderStatsByTime>;
+  monthly: Array<SchemaOrderStatsByTime>;
+  daily: Array<SchemaOrderStatsByTime>;
+  hourly: Array<SchemaOrderStatsByTime>;
 };
 
-export type OrderStatsByTime = {
+export type SchemaOrderStatsByTime = {
   __typename?: 'OrderStatsByTime';
-  count: Scalars['String'];
-  period: Scalars['Int'];
+  period: Scalars['Int']['output'];
+  count: Scalars['String']['output'];
 };
 
-export enum Ordering {
+export enum SchemaOrdering {
   Asc = 'ASC',
   Desc = 'DESC'
 }
 
-export type Point = {
+export type SchemaPoint = {
   __typename?: 'Point';
-  x: Scalars['String'];
-  y: Scalars['Int'];
+  x: Scalars['String']['output'];
+  y: Scalars['Int']['output'];
 };
 
-export type Product = {
+export type SchemaProduct = {
   __typename?: 'Product';
-  id: Scalars['ID'];
-  imageUrl: Scalars['String'];
-  name: Scalars['String'];
-  salePriceExt: Scalars['Float'];
-  salePriceInt: Scalars['Float'];
-  userCounts: Scalars['JSONScalar'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  imageUrl: Scalars['String']['output'];
+  salePriceInt: Scalars['Float']['output'];
+  salePriceExt: Scalars['Float']['output'];
+  userCounts: Scalars['JSONScalar']['output'];
 };
 
-export type ProductFilter = {
-  active?: InputMaybe<Scalars['Boolean']>;
-  id?: InputMaybe<Scalars['ID']>;
+export type SchemaProductFilter = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  active?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-export type ProductOrderStat = {
+export type SchemaProductOrderStat = {
   __typename?: 'ProductOrderStat';
-  data: Array<Point>;
-  productName: Scalars['String'];
+  productName: Scalars['String']['output'];
+  data: Array<SchemaPoint>;
 };
 
-export type Query = {
+export type SchemaQuery = {
   __typename?: 'Query';
-  allOrders: Array<Order>;
-  allProducts: Array<Product>;
-  allUsers: Array<User>;
-  orderList: Array<Order>;
-  orderStats: OrderStats;
-  productStats: Array<ProductOrderStat>;
-  transactionList: Array<Transaction>;
-  user: User;
+  transactionList: Array<SchemaTransaction>;
+  allProducts: Array<SchemaProduct>;
+  allOrders: Array<SchemaOrder>;
+  orderList: Array<SchemaOrder>;
+  orderStats: SchemaOrderStats;
+  productStats: Array<SchemaProductOrderStat>;
+  allUsers: Array<SchemaUser>;
+  user: SchemaUser;
 };
 
 
-export type QueryAllProductsArgs = {
-  filters?: InputMaybe<ProductFilter>;
+export type SchemaQueryTransactionListArgs = {
+  pagination?: InputMaybe<SchemaOffsetPaginationInput>;
+  order?: InputMaybe<SchemaTransactionOrdering>;
 };
 
 
-export type QueryOrderListArgs = {
-  order?: InputMaybe<OrderOrdering>;
-  pagination?: InputMaybe<OffsetPaginationInput>;
+export type SchemaQueryAllProductsArgs = {
+  filters?: InputMaybe<SchemaProductFilter>;
 };
 
 
-export type QueryTransactionListArgs = {
-  order?: InputMaybe<TransactionOrdering>;
-  pagination?: InputMaybe<OffsetPaginationInput>;
+export type SchemaQueryOrderListArgs = {
+  pagination?: InputMaybe<SchemaOffsetPaginationInput>;
+  order?: InputMaybe<SchemaOrderOrdering>;
 };
 
 
-export type QueryUserArgs = {
-  userId: Scalars['ID'];
+export type SchemaQueryUserArgs = {
+  userId: Scalars['ID']['input'];
 };
 
-export type TopMonth = {
+export type SchemaTopMonth = {
   __typename?: 'TopMonth';
-  count: Scalars['Int'];
-  period: Scalars['String'];
-  sum: Scalars['Int'];
+  period: Scalars['String']['output'];
+  count: Scalars['Int']['output'];
+  sum: Scalars['Int']['output'];
 };
 
-export type Transaction = {
+export type SchemaTransaction = {
   __typename?: 'Transaction';
-  amount: Scalars['Float'];
-  created: Scalars['DateTime'];
-  id: Scalars['ID'];
-  user: User;
+  id: Scalars['ID']['output'];
+  user: SchemaUser;
+  amount: Scalars['Float']['output'];
+  created: Scalars['DateTime']['output'];
 };
 
-export type TransactionOrdering = {
-  created?: InputMaybe<Ordering>;
+export type SchemaTransactionOrdering = {
+  created?: InputMaybe<SchemaOrdering>;
 };
 
-export type User = {
+export type SchemaUser = {
   __typename?: 'User';
-  firstName: Scalars['String'];
-  id: Scalars['ID'];
-  lastName: Scalars['String'];
-  profile?: Maybe<UserProfile>;
+  id: Scalars['ID']['output'];
+  firstName: Scalars['String']['output'];
+  lastName: Scalars['String']['output'];
+  profile?: Maybe<SchemaUserProfile>;
 };
 
-export type UserInput = {
-  email?: InputMaybe<Scalars['String']>;
-  firstName?: InputMaybe<Scalars['String']>;
-  lastName?: InputMaybe<Scalars['String']>;
+export type SchemaUserInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type UserProfile = {
+export type SchemaUserProfile = {
   __typename?: 'UserProfile';
-  balance: Scalars['Float'];
-  id: Scalars['ID'];
-  image: Scalars['String'];
-  lastPurchaseDate: Scalars['DateTime'];
-  orderSumTotal: Scalars['Float'];
-  productOrderStats: Array<ProductOrderStat>;
-  topMonths: Array<TopMonth>;
+  id: Scalars['ID']['output'];
+  balance: Scalars['Float']['output'];
+  image: Scalars['String']['output'];
+  lastPurchaseDate: Scalars['DateTime']['output'];
+  orderSumTotal: Scalars['Float']['output'];
+  productOrderStats: Array<SchemaProductOrderStat>;
+  topMonths: Array<SchemaTopMonth>;
+};
+
+export type OrderLineInput = {
+  productId: string | number;
+  amount: number;
 };
 
 export type CreateUserMutationVariables = Exact<{
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  email: Scalars['String'];
+  firstName: string;
+  lastName: string;
+  email: string;
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, firstName: string, lastName: string, profile?: { __typename?: 'UserProfile', id: string } | null } };
+export type CreateUserMutation = { __typename: 'Mutation', createUser: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string } | null } };
 
 export type CreateDepositMutationVariables = Exact<{
-  userId: Scalars['ID'];
-  amount: Scalars['Int'];
+  userId: string | number;
+  amount: number;
 }>;
 
 
-export type CreateDepositMutation = { __typename?: 'Mutation', createDeposit: { __typename?: 'AboveMaxSaldo', error: boolean, message: string, maxSaldo: number, above: number } | { __typename?: 'CreateDepositSuccess', transaction: { __typename?: 'Transaction', id: string, amount: number, user: { __typename?: 'User', id: string, firstName: string, lastName: string, profile?: { __typename?: 'UserProfile', id: string, balance: number } | null } } } | { __typename?: 'FormErrors', error: boolean, message: string, fields: Array<{ __typename?: 'FieldError', field: string, message: string }> } };
+export type CreateDepositMutation = { __typename: 'Mutation', createDeposit:
+    | { __typename: 'CreateDepositSuccess', transaction: { __typename: 'Transaction', id: string, amount: number, user: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number } | null } } }
+    | { __typename: 'AboveMaxSaldo', error: boolean, message: string, maxSaldo: number, above: number }
+    | { __typename: 'FormErrors', error: boolean, message: string, fields: Array<{ __typename: 'FieldError', field: string, message: string }> }
+   };
 
 export type OrderListQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: number | null | undefined;
+  offset?: number | null | undefined;
 }>;
 
 
-export type OrderListQuery = { __typename?: 'Query', orderList: Array<{ __typename?: 'Order', id: string, isExternal: boolean, created: any, orderSum: number, customer?: { __typename?: 'User', id: string, firstName: string, lastName: string, profile?: { __typename?: 'UserProfile', id: string, balance: number } | null } | null, orderlines?: Array<{ __typename?: 'OrderLine', id: string, amount: number, unitPrice: number, product: { __typename?: 'Product', id: string, name: string, salePriceExt: number, salePriceInt: number } }> | null }> };
+export type OrderListQuery = { __typename: 'Query', orderList: Array<{ __typename: 'Order', id: string, isExternal: boolean, created: string, orderSum: number, customer: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number } | null } | null, orderlines: Array<{ __typename: 'OrderLine', id: string, amount: number, unitPrice: number, product: { __typename: 'Product', id: string, name: string, salePriceExt: number, salePriceInt: number } }> | null }> };
 
 export type TransactionListQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: number | null | undefined;
+  offset?: number | null | undefined;
 }>;
 
 
-export type TransactionListQuery = { __typename?: 'Query', transactionList: Array<{ __typename?: 'Transaction', id: string, created: any, amount: number, user: { __typename?: 'User', id: string, firstName: string, lastName: string, profile?: { __typename?: 'UserProfile', id: string, balance: number } | null } }> };
+export type TransactionListQuery = { __typename: 'Query', transactionList: Array<{ __typename: 'Transaction', id: string, created: string, amount: number, user: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number } | null } }> };
 
 export type AllProductsQueryVariables = Exact<{
-  active: Scalars['Boolean'];
+  active: boolean;
 }>;
 
 
-export type AllProductsQuery = { __typename?: 'Query', allProducts: Array<{ __typename?: 'Product', id: string, name: string, imageUrl: string, salePriceExt: number, salePriceInt: number }> };
+export type AllProductsQuery = { __typename: 'Query', allProducts: Array<{ __typename: 'Product', id: string, name: string, imageUrl: string, salePriceExt: number, salePriceInt: number }> };
 
 export type AllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllUsersQuery = { __typename?: 'Query', allUsers: Array<{ __typename?: 'User', id: string, firstName: string, lastName: string, profile?: { __typename?: 'UserProfile', id: string, balance: number, image: string, lastPurchaseDate: any } | null }> };
+export type AllUsersQuery = { __typename: 'Query', allUsers: Array<{ __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number, image: string, lastPurchaseDate: string } | null }> };
 
 export type CreateOrderMutationVariables = Exact<{
-  customerId: Scalars['ID'];
+  customerId: string | number;
   orderLines: Array<OrderLineInput> | OrderLineInput;
-  isExternal: Scalars['Boolean'];
+  isExternal: boolean;
 }>;
 
 
-export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'CreateOrderSuccess', order: { __typename?: 'Order', id: string, isExternal: boolean, orderSum: number, customer?: { __typename?: 'User', id: string, firstName: string, lastName: string, profile?: { __typename?: 'UserProfile', id: string, balance: number } | null } | null, orderlines?: Array<{ __typename?: 'OrderLine', id: string, amount: number, unitPrice: number, product: { __typename?: 'Product', id: string, name: string, salePriceExt: number, salePriceInt: number } }> | null } } | { __typename?: 'FormErrors', error: boolean, message: string, fields: Array<{ __typename?: 'FieldError', field: string, message: string }> } | { __typename?: 'InsufficientFunds', error: boolean, message: string, amountLacking: number } };
+export type CreateOrderMutation = { __typename: 'Mutation', createOrder:
+    | { __typename: 'CreateOrderSuccess', order: { __typename: 'Order', id: string, isExternal: boolean, orderSum: number, customer: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number } | null } | null, orderlines: Array<{ __typename: 'OrderLine', id: string, amount: number, unitPrice: number, product: { __typename: 'Product', id: string, name: string, salePriceExt: number, salePriceInt: number } }> | null } }
+    | { __typename: 'InsufficientFunds', error: boolean, message: string, amountLacking: number }
+    | { __typename: 'FormErrors', error: boolean, message: string, fields: Array<{ __typename: 'FieldError', field: string, message: string }> }
+   };
 
 export type AllProductStatsQueryVariables = Exact<{
-  active?: InputMaybe<Scalars['Boolean']>;
+  active?: boolean | null | undefined;
 }>;
 
 
-export type AllProductStatsQuery = { __typename?: 'Query', allProducts: Array<{ __typename?: 'Product', id: string, name: string, userCounts: any }> };
+export type AllProductStatsQuery = { __typename: 'Query', allProducts: Array<{ __typename: 'Product', id: string, name: string, userCounts: Array<{ name: string; count: number }> }> };
 
 export type OrderStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OrderStatsQuery = { __typename?: 'Query', orderStats: { __typename?: 'OrderStats', yearly: Array<{ __typename?: 'OrderStatsByTime', period: number, count: string }>, monthly: Array<{ __typename?: 'OrderStatsByTime', period: number, count: string }>, daily: Array<{ __typename?: 'OrderStatsByTime', period: number, count: string }>, hourly: Array<{ __typename?: 'OrderStatsByTime', period: number, count: string }> } };
+export type OrderStatsQuery = { __typename: 'Query', orderStats: { __typename: 'OrderStats', yearly: Array<{ __typename: 'OrderStatsByTime', period: number, count: string }>, monthly: Array<{ __typename: 'OrderStatsByTime', period: number, count: string }>, daily: Array<{ __typename: 'OrderStatsByTime', period: number, count: string }>, hourly: Array<{ __typename: 'OrderStatsByTime', period: number, count: string }> } };
 
 export type ProductStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductStatsQuery = { __typename?: 'Query', productStats: Array<{ __typename?: 'ProductOrderStat', productName: string, data: Array<{ __typename?: 'Point', x: string, y: number }> }> };
+export type ProductStatsQuery = { __typename: 'Query', productStats: Array<{ __typename: 'ProductOrderStat', productName: string, data: Array<{ __typename: 'Point', x: string, y: number }> }> };
 
 export type UserDetailQueryVariables = Exact<{
-  userId: Scalars['ID'];
+  userId: string | number;
 }>;
 
 
-export type UserDetailQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, firstName: string, lastName: string, profile?: { __typename?: 'UserProfile', id: string, balance: number, image: string, lastPurchaseDate: any, orderSumTotal: number, topMonths: Array<{ __typename?: 'TopMonth', period: string, sum: number, count: number }>, productOrderStats: Array<{ __typename?: 'ProductOrderStat', productName: string, data: Array<{ __typename?: 'Point', x: string, y: number }> }> } | null } };
+export type UserDetailQuery = { __typename: 'Query', user: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number, image: string, lastPurchaseDate: string, orderSumTotal: number, topMonths: Array<{ __typename: 'TopMonth', period: string, sum: number, count: number }>, productOrderStats: Array<{ __typename: 'ProductOrderStat', productName: string, data: Array<{ __typename: 'Point', x: string, y: number }> }> } | null } };
 
 
 export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"firstName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"lastName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"firstName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"firstName"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"lastName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"lastName"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;

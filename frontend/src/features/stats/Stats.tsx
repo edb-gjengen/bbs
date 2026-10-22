@@ -8,14 +8,13 @@ import { StatsView } from "./StatsView";
 const Stats = () => {
   const { data, loading } = useQuery(ProductStatsDocument);
 
-  const series: any[] = [];
-  (data?.productStats || [])?.forEach(({ productName: id, data }) => {
-    const lineData: any[] = [];
-    data.forEach((point, index) => {
-      lineData.push({ x: point.x, y: point.y + (lineData?.[index - 1]?.y || 0) });
-    });
-    series.push({ id, data: lineData });
-  });
+  const series = (data?.productStats || []).map(({ productName: id, data }) => ({
+    id,
+    data: data.map((point, index, points) => ({
+      x: point.x,
+      y: point.y + (points[index - 1]?.y || 0),
+    })),
+  }));
 
   return (
     <StatsView loading={loading}>
@@ -59,8 +58,8 @@ const Stats = () => {
               <strong>{point.data.xFormatted}</strong>
             </div>
             <div>
-              <span style={{ background: point.serieColor, width: 13, height: 13, display: "inline-block" }} />{" "}
-              <strong>{point.data.yFormatted}</strong> {point.serieId}
+              <span style={{ background: point.seriesColor, width: 13, height: 13, display: "inline-block" }} />{" "}
+              <strong>{String(point.data.yFormatted)}</strong> {point.seriesId}
             </div>
           </div>
         )}

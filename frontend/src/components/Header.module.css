@@ -1,6 +1,6 @@
 .header {
-  margin: 1rem auto;
   max-width: 1220px;
+  margin: 1rem auto;
 }
 
 .nav {
@@ -17,14 +17,21 @@
   display: block;
   height: 1px;
   background-color: rgba(243, 33, 61, 0.4);
-  box-shadow: 0 0 4px rgba(243, 33, 61, 0.4), 0 0 11px rgba(243, 33, 61, 0.4), 0 0 19px rgba(243, 33, 61, 0.4);
+  box-shadow:
+    0 0 4px rgba(243, 33, 61, 0.4),
+    0 0 11px rgba(243, 33, 61, 0.4),
+    0 0 19px rgba(243, 33, 61, 0.4);
   content: "";
   transform: rotate(-2.5deg);
 }
 
 .navLink:hover:after {
   background-color: var(--brand);
-  box-shadow: 0 0 4px var(--brand), 0 0 11px var(--brand), 0 0 19px var(--brand), 0 0 30px var(--brand);
+  box-shadow:
+    0 0 4px var(--brand),
+    0 0 11px var(--brand),
+    0 0 19px var(--brand),
+    0 0 30px var(--brand);
 }
 
 .logoNav {
@@ -55,12 +62,17 @@
 .brand {
   padding-left: 1rem;
   color: var(--brand);
-  font-family: Rocket Rinder, monospace;
+  font-family:
+    Rocket Rinder,
+    monospace;
   font-size: 3rem;
   font-style: italic;
   letter-spacing: 2px;
   line-height: 1;
-  text-shadow: 0 0 4px rgba(243, 33, 61, 0.8), 0 0 11px rgba(243, 33, 61, 0.8), 0 0 19px rgba(243, 33, 61, 0.8);
+  text-shadow:
+    0 0 4px rgba(243, 33, 61, 0.8),
+    0 0 11px rgba(243, 33, 61, 0.8),
+    0 0 19px rgba(243, 33, 61, 0.8);
 }
 
 .subtitle {
@@ -68,7 +80,9 @@
   left: -8px;
   animation: flicker 1.5s infinite alternate;
   color: var(--interlace);
-  font-family: Rocket Clouds DEMO, serif;
+  font-family:
+    Rocket Clouds DEMO,
+    serif;
   font-size: 10px;
   font-weight: bold;
   line-height: 1;
@@ -83,7 +97,10 @@
   53%,
   57%,
   100% {
-    text-shadow: 0 0 4px rgba(121, 152, 238, 0.8), 0 0 11px rgba(121, 152, 238, 0.8), 0 0 19px rgba(121, 152, 238, 0.8);
+    text-shadow:
+      0 0 4px rgba(121, 152, 238, 0.8),
+      0 0 11px rgba(121, 152, 238, 0.8),
+      0 0 19px rgba(121, 152, 238, 0.8);
   }
 
   20%,

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { OrderLineInput, Product } from "../../types";
+import { OrderLineInput, SchemaProduct as Product } from "../../types";
 import { UserCard } from "../users/UserCard";
 import { ProductCard } from "./ProductCard";
 import styles from "./Register.module.css";

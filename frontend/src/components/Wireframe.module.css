@@ -1,30 +1,29 @@
 .wireframe {
   position: absolute;
+  z-index: -1;
   bottom: calc(22% - 512px);
   left: calc(50% - 512px);
+  display: grid;
   width: 1024px;
   height: 1024px;
-  display: grid;
-  grid-template-columns: repeat(8, 128px);
+  animation-duration: 10s;
   animation-iteration-count: infinite;
   animation-name: isometric-rotate;
-  animation-duration: 10s;
   animation-timing-function: linear;
+  grid-template-columns: repeat(8, 128px);
   pointer-events: none;
-  z-index: -1;
 }
 
 .cell {
-  border-bottom: 2px solid var(--sun);
   border-right: 2px solid var(--sun);
-
+  border-bottom: 2px solid var(--sun);
 }
 
 .cell:nth-child(8n) {
   border-right: none;
 }
 
-.cell:nth-child(n+57) {
+.cell:nth-child(n + 57) {
   border-bottom: none;
 }
 

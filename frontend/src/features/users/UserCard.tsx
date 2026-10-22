@@ -2,8 +2,8 @@ import clsx from "clsx";
 import React, { MouseEventHandler } from "react";
 
 import { AllUsersQuery } from "../../types";
+import { formatCurrency } from "../../utils/currency";
 import styles from "./UserCard.module.css";
-import {formatCurrency} from "../../utils/currency";
 
 type UserCardProps = {
   user: AllUsersQuery["allUsers"][0] | null;

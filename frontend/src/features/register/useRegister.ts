@@ -2,15 +2,15 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 
 import { useToast } from "../../components/ToastProvider";
-import { AllProductsDocument, AllUsersDocument, CreateOrderDocument, OrderLineInput, Product } from "../../types";
+import { AllProductsDocument, AllUsersDocument, CreateOrderDocument, OrderLineInput, SchemaProduct } from "../../types";
+import { formatCurrency } from "../../utils/currency";
 import { activeUserFilter } from "../../utils/users";
-import {formatCurrency} from "../../utils/currency";
 
 const USER_EXTERNAL = "external";
 
-const sumTotal = (products: Omit<Product, "userCounts">[], order: OrderLineInput[], isExternal: boolean) => {
+const sumTotal = (products: Omit<SchemaProduct, "userCounts">[], order: OrderLineInput[], isExternal: boolean) => {
   const prices = order.map((orderLine: OrderLineInput) => {
-    const product = products.find((product: Omit<Product, "userCounts">) => product.id === orderLine.productId);
+    const product = products.find((product: Omit<SchemaProduct, "userCounts">) => product.id === orderLine.productId);
     if (!product) return 0;
     return orderLine.amount * (isExternal ? product.salePriceExt : product.salePriceInt);
   });
@@ -60,7 +60,7 @@ export const useRegister = () => {
     let res;
     try {
       res = await createOrderMutation();
-    } catch (e) {
+    } catch {
       showToast("Whoops");
       console.log("woops");
       return;
