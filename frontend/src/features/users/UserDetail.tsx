@@ -35,13 +35,13 @@ const UserDetail = () => {
           <div>Stats</div>
           <ul>
             <li>
-              Saldo: <strong>{profile.balance.toLocaleString("no")} kr</strong>
+              Saldo: <strong>{Number(profile.balance).toLocaleString("no")} kr</strong>
             </li>
             <li>
               Siste kjøp: <strong>{formatTime(profile.lastPurchaseDate)}</strong>
             </li>
             <li>
-              Kjøp totalt: <strong>{profile.orderSumTotal.toLocaleString("no")} kr</strong>
+              Kjøp totalt: <strong>{Number(profile.orderSumTotal).toLocaleString("no")} kr</strong>
             </li>
           </ul>
         </div>

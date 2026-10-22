@@ -36,7 +36,7 @@ class OrderOrdering:
 @strawberry_django.type(models.Order)
 class Order:
     id: auto
-    customer: Annotated["User", strawberry.lazy(".users")]
+    customer: Annotated["User", strawberry.lazy(".users")] | None
     order_sum: auto
     created: auto
     orderlines: list["OrderLine"]

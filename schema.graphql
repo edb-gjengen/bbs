@@ -1,3 +1,5 @@
+directive @oneOf on INPUT_OBJECT
+
 type AboveMaxSaldo implements Error {
   message: String!
   error: Boolean!
@@ -19,6 +21,9 @@ type CreateOrderSuccess {
 
 """Date with time (isoformat)"""
 scalar DateTime
+
+"""Decimal (fixed-point)"""
+scalar Decimal
 
 interface Error {
   message: String!
@@ -56,15 +61,15 @@ type Mutation {
 
 input OffsetPaginationInput {
   offset: Int! = 0
-  limit: Int! = -1
+  limit: Int
 }
 
 type Order {
   id: ID!
   customer: User
-  orderSum: Float!
+  orderSum: Decimal!
   created: DateTime!
-  orderlines: [OrderLine!]
+  orderlines: [OrderLine!]!
   isExternal: Boolean!
 }
 
@@ -73,7 +78,7 @@ type OrderLine {
   order: Order!
   product: Product!
   amount: Int!
-  unitPrice: Float!
+  unitPrice: Decimal!
 }
 
 input OrderLineInput {
@@ -81,7 +86,7 @@ input OrderLineInput {
   amount: Int!
 }
 
-input OrderOrdering {
+input OrderOrdering @oneOf {
   created: Ordering
 }
 
@@ -99,7 +104,11 @@ type OrderStatsByTime {
 
 enum Ordering {
   ASC
+  ASC_NULLS_FIRST
+  ASC_NULLS_LAST
   DESC
+  DESC_NULLS_FIRST
+  DESC_NULLS_LAST
 }
 
 type Point {
@@ -111,14 +120,18 @@ type Product {
   id: ID!
   name: String!
   imageUrl: String!
-  salePriceInt: Float!
-  salePriceExt: Float!
+  salePriceInt: Decimal!
+  salePriceExt: Decimal!
   userCounts: JSONScalar!
 }
 
 input ProductFilter {
   id: ID
   active: Boolean
+  AND: ProductFilter
+  OR: ProductFilter
+  NOT: ProductFilter
+  DISTINCT: Boolean
 }
 
 type ProductOrderStat {
@@ -127,10 +140,10 @@ type ProductOrderStat {
 }
 
 type Query {
-  transactionList(pagination: OffsetPaginationInput, order: TransactionOrdering): [Transaction!]!
+  transactionList(ordering: [TransactionOrdering!]! = [], pagination: OffsetPaginationInput): [Transaction!]!
   allProducts(filters: ProductFilter): [Product!]!
   allOrders: [Order!]!
-  orderList(pagination: OffsetPaginationInput, order: OrderOrdering): [Order!]!
+  orderList(ordering: [OrderOrdering!]! = [], pagination: OffsetPaginationInput): [Order!]!
   orderStats: OrderStats!
   productStats: [ProductOrderStat!]!
   allUsers: [User!]!
@@ -140,17 +153,17 @@ type Query {
 type TopMonth {
   period: String!
   count: Int!
-  sum: Int!
+  sum: Float!
 }
 
 type Transaction {
   id: ID!
   user: User!
-  amount: Float!
+  amount: Decimal!
   created: DateTime!
 }
 
-input TransactionOrdering {
+input TransactionOrdering @oneOf {
   created: Ordering
 }
 
@@ -169,10 +182,10 @@ input UserInput {
 
 type UserProfile {
   id: ID!
-  balance: Float!
+  balance: Decimal!
   image: String!
   lastPurchaseDate: DateTime!
-  orderSumTotal: Float!
-  productOrderStats: [ProductOrderStat!]!
+  orderSumTotal: Decimal!
   topMonths: [TopMonth!]!
+  productOrderStats: [ProductOrderStat!]!
 }

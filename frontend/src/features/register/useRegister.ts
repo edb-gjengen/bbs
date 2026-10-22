@@ -12,7 +12,7 @@ const sumTotal = (products: Omit<SchemaProduct, "userCounts">[], order: OrderLin
   const prices = order.map((orderLine: OrderLineInput) => {
     const product = products.find((product: Omit<SchemaProduct, "userCounts">) => product.id === orderLine.productId);
     if (!product) return 0;
-    return orderLine.amount * (isExternal ? product.salePriceExt : product.salePriceInt);
+    return orderLine.amount * Number(isExternal ? product.salePriceExt : product.salePriceInt);
   });
   return prices.reduce((partialSum, a) => partialSum + a, 0);
 };

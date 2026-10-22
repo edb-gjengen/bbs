@@ -14,6 +14,8 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** Date with time (isoformat) */
   DateTime: { input: string; output: string; }
+  /** Decimal (fixed-point) */
+  Decimal: { input: string; output: string; }
   /** The GenericScalar scalar type represents a generic GraphQL scalar value that could be: List or Object. */
   JSONScalar: { input: unknown; output: Array<{ name: string; count: number }>; }
 };
@@ -93,16 +95,16 @@ export type SchemaMutationCreateUserArgs = {
 
 export type SchemaOffsetPaginationInput = {
   offset?: Scalars['Int']['input'];
-  limit?: Scalars['Int']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type SchemaOrder = {
   __typename?: 'Order';
   id: Scalars['ID']['output'];
   customer?: Maybe<SchemaUser>;
-  orderSum: Scalars['Float']['output'];
+  orderSum: Scalars['Decimal']['output'];
   created: Scalars['DateTime']['output'];
-  orderlines?: Maybe<Array<SchemaOrderLine>>;
+  orderlines: Array<SchemaOrderLine>;
   isExternal: Scalars['Boolean']['output'];
 };
 
@@ -112,7 +114,7 @@ export type SchemaOrderLine = {
   order: SchemaOrder;
   product: SchemaProduct;
   amount: Scalars['Int']['output'];
-  unitPrice: Scalars['Float']['output'];
+  unitPrice: Scalars['Decimal']['output'];
 };
 
 export type SchemaOrderLineInput = {
@@ -120,9 +122,8 @@ export type SchemaOrderLineInput = {
   amount: Scalars['Int']['input'];
 };
 
-export type SchemaOrderOrdering = {
-  created?: InputMaybe<SchemaOrdering>;
-};
+export type SchemaOrderOrdering =
+  { created: SchemaOrdering; };
 
 export type SchemaOrderStats = {
   __typename?: 'OrderStats';
@@ -140,7 +141,11 @@ export type SchemaOrderStatsByTime = {
 
 export enum SchemaOrdering {
   Asc = 'ASC',
-  Desc = 'DESC'
+  AscNullsFirst = 'ASC_NULLS_FIRST',
+  AscNullsLast = 'ASC_NULLS_LAST',
+  Desc = 'DESC',
+  DescNullsFirst = 'DESC_NULLS_FIRST',
+  DescNullsLast = 'DESC_NULLS_LAST'
 }
 
 export type SchemaPoint = {
@@ -154,14 +159,18 @@ export type SchemaProduct = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   imageUrl: Scalars['String']['output'];
-  salePriceInt: Scalars['Float']['output'];
-  salePriceExt: Scalars['Float']['output'];
+  salePriceInt: Scalars['Decimal']['output'];
+  salePriceExt: Scalars['Decimal']['output'];
   userCounts: Scalars['JSONScalar']['output'];
 };
 
 export type SchemaProductFilter = {
   id?: InputMaybe<Scalars['ID']['input']>;
   active?: InputMaybe<Scalars['Boolean']['input']>;
+  AND?: InputMaybe<SchemaProductFilter>;
+  OR?: InputMaybe<SchemaProductFilter>;
+  NOT?: InputMaybe<SchemaProductFilter>;
+  DISTINCT?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type SchemaProductOrderStat = {
@@ -184,8 +193,8 @@ export type SchemaQuery = {
 
 
 export type SchemaQueryTransactionListArgs = {
+  ordering?: Array<SchemaTransactionOrdering>;
   pagination?: InputMaybe<SchemaOffsetPaginationInput>;
-  order?: InputMaybe<SchemaTransactionOrdering>;
 };
 
 
@@ -195,8 +204,8 @@ export type SchemaQueryAllProductsArgs = {
 
 
 export type SchemaQueryOrderListArgs = {
+  ordering?: Array<SchemaOrderOrdering>;
   pagination?: InputMaybe<SchemaOffsetPaginationInput>;
-  order?: InputMaybe<SchemaOrderOrdering>;
 };
 
 
@@ -208,20 +217,19 @@ export type SchemaTopMonth = {
   __typename?: 'TopMonth';
   period: Scalars['String']['output'];
   count: Scalars['Int']['output'];
-  sum: Scalars['Int']['output'];
+  sum: Scalars['Float']['output'];
 };
 
 export type SchemaTransaction = {
   __typename?: 'Transaction';
   id: Scalars['ID']['output'];
   user: SchemaUser;
-  amount: Scalars['Float']['output'];
+  amount: Scalars['Decimal']['output'];
   created: Scalars['DateTime']['output'];
 };
 
-export type SchemaTransactionOrdering = {
-  created?: InputMaybe<SchemaOrdering>;
-};
+export type SchemaTransactionOrdering =
+  { created: SchemaOrdering; };
 
 export type SchemaUser = {
   __typename?: 'User';
@@ -240,12 +248,12 @@ export type SchemaUserInput = {
 export type SchemaUserProfile = {
   __typename?: 'UserProfile';
   id: Scalars['ID']['output'];
-  balance: Scalars['Float']['output'];
+  balance: Scalars['Decimal']['output'];
   image: Scalars['String']['output'];
   lastPurchaseDate: Scalars['DateTime']['output'];
-  orderSumTotal: Scalars['Float']['output'];
-  productOrderStats: Array<SchemaProductOrderStat>;
+  orderSumTotal: Scalars['Decimal']['output'];
   topMonths: Array<SchemaTopMonth>;
+  productOrderStats: Array<SchemaProductOrderStat>;
 };
 
 export type OrderLineInput = {
@@ -269,7 +277,7 @@ export type CreateDepositMutationVariables = Exact<{
 
 
 export type CreateDepositMutation = { __typename: 'Mutation', createDeposit:
-    | { __typename: 'CreateDepositSuccess', transaction: { __typename: 'Transaction', id: string, amount: number, user: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number } | null } } }
+    | { __typename: 'CreateDepositSuccess', transaction: { __typename: 'Transaction', id: string, amount: string, user: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: string } | null } } }
     | { __typename: 'AboveMaxSaldo', error: boolean, message: string, maxSaldo: number, above: number }
     | { __typename: 'FormErrors', error: boolean, message: string, fields: Array<{ __typename: 'FieldError', field: string, message: string }> }
    };
@@ -280,7 +288,7 @@ export type OrderListQueryVariables = Exact<{
 }>;
 
 
-export type OrderListQuery = { __typename: 'Query', orderList: Array<{ __typename: 'Order', id: string, isExternal: boolean, created: string, orderSum: number, customer: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number } | null } | null, orderlines: Array<{ __typename: 'OrderLine', id: string, amount: number, unitPrice: number, product: { __typename: 'Product', id: string, name: string, salePriceExt: number, salePriceInt: number } }> | null }> };
+export type OrderListQuery = { __typename: 'Query', orderList: Array<{ __typename: 'Order', id: string, isExternal: boolean, created: string, orderSum: string, customer: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: string } | null } | null, orderlines: Array<{ __typename: 'OrderLine', id: string, amount: number, unitPrice: string, product: { __typename: 'Product', id: string, name: string, salePriceExt: string, salePriceInt: string } }> }> };
 
 export type TransactionListQueryVariables = Exact<{
   limit?: number | null | undefined;
@@ -288,19 +296,19 @@ export type TransactionListQueryVariables = Exact<{
 }>;
 
 
-export type TransactionListQuery = { __typename: 'Query', transactionList: Array<{ __typename: 'Transaction', id: string, created: string, amount: number, user: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number } | null } }> };
+export type TransactionListQuery = { __typename: 'Query', transactionList: Array<{ __typename: 'Transaction', id: string, created: string, amount: string, user: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: string } | null } }> };
 
 export type AllProductsQueryVariables = Exact<{
   active: boolean;
 }>;
 
 
-export type AllProductsQuery = { __typename: 'Query', allProducts: Array<{ __typename: 'Product', id: string, name: string, imageUrl: string, salePriceExt: number, salePriceInt: number }> };
+export type AllProductsQuery = { __typename: 'Query', allProducts: Array<{ __typename: 'Product', id: string, name: string, imageUrl: string, salePriceExt: string, salePriceInt: string }> };
 
 export type AllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllUsersQuery = { __typename: 'Query', allUsers: Array<{ __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number, image: string, lastPurchaseDate: string } | null }> };
+export type AllUsersQuery = { __typename: 'Query', allUsers: Array<{ __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: string, image: string, lastPurchaseDate: string } | null }> };
 
 export type CreateOrderMutationVariables = Exact<{
   customerId: string | number;
@@ -310,7 +318,7 @@ export type CreateOrderMutationVariables = Exact<{
 
 
 export type CreateOrderMutation = { __typename: 'Mutation', createOrder:
-    | { __typename: 'CreateOrderSuccess', order: { __typename: 'Order', id: string, isExternal: boolean, orderSum: number, customer: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number } | null } | null, orderlines: Array<{ __typename: 'OrderLine', id: string, amount: number, unitPrice: number, product: { __typename: 'Product', id: string, name: string, salePriceExt: number, salePriceInt: number } }> | null } }
+    | { __typename: 'CreateOrderSuccess', order: { __typename: 'Order', id: string, isExternal: boolean, orderSum: string, customer: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: string } | null } | null, orderlines: Array<{ __typename: 'OrderLine', id: string, amount: number, unitPrice: string, product: { __typename: 'Product', id: string, name: string, salePriceExt: string, salePriceInt: string } }> } }
     | { __typename: 'InsufficientFunds', error: boolean, message: string, amountLacking: number }
     | { __typename: 'FormErrors', error: boolean, message: string, fields: Array<{ __typename: 'FieldError', field: string, message: string }> }
    };
@@ -337,13 +345,13 @@ export type UserDetailQueryVariables = Exact<{
 }>;
 
 
-export type UserDetailQuery = { __typename: 'Query', user: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: number, image: string, lastPurchaseDate: string, orderSumTotal: number, topMonths: Array<{ __typename: 'TopMonth', period: string, sum: number, count: number }>, productOrderStats: Array<{ __typename: 'ProductOrderStat', productName: string, data: Array<{ __typename: 'Point', x: string, y: number }> }> } | null } };
+export type UserDetailQuery = { __typename: 'Query', user: { __typename: 'User', id: string, firstName: string, lastName: string, profile: { __typename: 'UserProfile', id: string, balance: string, image: string, lastPurchaseDate: string, orderSumTotal: string, topMonths: Array<{ __typename: 'TopMonth', period: string, sum: number, count: number }>, productOrderStats: Array<{ __typename: 'ProductOrderStat', productName: string, data: Array<{ __typename: 'Point', x: string, y: number }> }> } | null } };
 
 
 export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"firstName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"lastName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"firstName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"firstName"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"lastName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"lastName"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
 export const CreateDepositDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateDeposit"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"amount"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createDeposit"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}},{"kind":"Argument","name":{"kind":"Name","value":"amount"},"value":{"kind":"Variable","name":{"kind":"Name","value":"amount"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CreateDepositSuccess"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"transaction"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}}]}}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"AboveMaxSaldo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"maxSaldo"}},{"kind":"Field","name":{"kind":"Name","value":"above"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormErrors"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CreateDepositMutation, CreateDepositMutationVariables>;
-export const OrderListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"orderList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"10"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"0"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"orderList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"created"},"value":{"kind":"EnumValue","value":"DESC"}}]}},{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isExternal"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"orderSum"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"orderlines"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"unitPrice"}},{"kind":"Field","name":{"kind":"Name","value":"product"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"salePriceExt"}},{"kind":"Field","name":{"kind":"Name","value":"salePriceInt"}}]}}]}}]}}]}}]} as unknown as DocumentNode<OrderListQuery, OrderListQueryVariables>;
-export const TransactionListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"transactionList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"10"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"0"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"transactionList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"created"},"value":{"kind":"EnumValue","value":"DESC"}}]}},{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}}]}}]}}]}}]}}]} as unknown as DocumentNode<TransactionListQuery, TransactionListQueryVariables>;
+export const OrderListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"orderList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"10"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"0"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"orderList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ordering"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"created"},"value":{"kind":"EnumValue","value":"DESC"}}]}]}},{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isExternal"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"orderSum"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"orderlines"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"unitPrice"}},{"kind":"Field","name":{"kind":"Name","value":"product"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"salePriceExt"}},{"kind":"Field","name":{"kind":"Name","value":"salePriceInt"}}]}}]}}]}}]}}]} as unknown as DocumentNode<OrderListQuery, OrderListQueryVariables>;
+export const TransactionListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"transactionList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"10"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"0"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"transactionList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ordering"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"created"},"value":{"kind":"EnumValue","value":"DESC"}}]}]}},{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}}]}}]}}]}}]}}]} as unknown as DocumentNode<TransactionListQuery, TransactionListQueryVariables>;
 export const AllProductsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"allProducts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"active"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allProducts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"active"},"value":{"kind":"Variable","name":{"kind":"Name","value":"active"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"salePriceExt"}},{"kind":"Field","name":{"kind":"Name","value":"salePriceInt"}}]}}]}}]} as unknown as DocumentNode<AllProductsQuery, AllProductsQueryVariables>;
 export const AllUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"allUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"lastPurchaseDate"}}]}}]}}]}}]} as unknown as DocumentNode<AllUsersQuery, AllUsersQueryVariables>;
 export const CreateOrderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOrder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderLines"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"OrderLineInput"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isExternal"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createOrder"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"customerId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderLines"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderLines"}}},{"kind":"Argument","name":{"kind":"Name","value":"isExternal"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isExternal"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOrderSuccess"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"order"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isExternal"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"orderlines"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"unitPrice"}},{"kind":"Field","name":{"kind":"Name","value":"product"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"salePriceExt"}},{"kind":"Field","name":{"kind":"Name","value":"salePriceInt"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"orderSum"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"InsufficientFunds"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"amountLacking"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormErrors"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"error"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CreateOrderMutation, CreateOrderMutationVariables>;

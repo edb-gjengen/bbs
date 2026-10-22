@@ -40,3 +40,26 @@ def test_demo_data_is_available_when_an_admin_has_no_profile():
     assert result.data
     assert len(result.data["allProducts"]) == 4
     assert len(result.data["allUsers"]) == 3
+
+    ada = user_model.objects.get(username="demo-ada")
+    detail_result = gql_client.query(
+        """
+        query UserDetail($userId: ID!) {
+          user(userId: $userId) {
+            firstName
+            profile {
+              balance
+              lastPurchaseDate
+              orderSumTotal
+              topMonths { period sum count }
+              productOrderStats { productName data { x y } }
+            }
+          }
+        }
+        """,
+        variables={"userId": str(ada.pk)},
+    )
+
+    assert not detail_result.errors
+    assert detail_result.data["user"]["profile"]["topMonths"]
+    assert isinstance(detail_result.data["user"]["profile"]["topMonths"][0]["sum"], float)

@@ -9,6 +9,9 @@ generates:
             DateTime:
               input: string
               output: string
+            Decimal:
+              input: string
+              output: string
             JSONScalar:
               input: unknown
               output: "Array<{ name: string; count: number }>"
@@ -16,6 +19,9 @@ generates:
           nonOptionalTypename: true
           scalars:
             DateTime:
+              input: string
+              output: string
+            Decimal:
               input: string
               output: string
             JSONScalar:
