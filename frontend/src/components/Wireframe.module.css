@@ -1,6 +1,16 @@
-.wireframe {
+.decoration {
   position: absolute;
   z-index: -1;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100vh;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.wireframe {
+  position: absolute;
   bottom: calc(22% - 512px);
   left: calc(50% - 512px);
   display: grid;
@@ -11,7 +21,6 @@
   animation-name: isometric-rotate;
   animation-timing-function: linear;
   grid-template-columns: repeat(8, 128px);
-  pointer-events: none;
 }
 
 .cell {
@@ -28,7 +37,7 @@
 }
 
 @media (max-width: 640px) {
-  .wireframe {
+  .decoration {
     display: none;
   }
 }

@@ -32,6 +32,12 @@ html {
   box-sizing: inherit;
 }
 
+@media (min-width: 641px) {
+  html {
+    scrollbar-gutter: stable;
+  }
+}
+
 /* Body and interitable styles */
 body {
   background: linear-gradient(rgba(0, 0, 0, 0.8) 60%, var(--background) 100%);
