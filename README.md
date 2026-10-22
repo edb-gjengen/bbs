@@ -1,6 +1,6 @@
 # Getting started
 
-Before starting, make sure you have Python 3.9 and Node.js 20 available.
+Before starting, make sure you have Python 3.11 or newer and Node.js 20 available.
 
 ```bash
 uv run manage.py migrate
