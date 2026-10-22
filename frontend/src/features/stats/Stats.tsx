@@ -44,7 +44,8 @@ const Stats = () => {
         axisBottom={{
           format: "%b %Y",
           legend: "Date",
-          legendOffset: -40,
+          legendPosition: "middle",
+          legendOffset: -20,
         }}
         useMesh
         pointLabelYOffset={0}
