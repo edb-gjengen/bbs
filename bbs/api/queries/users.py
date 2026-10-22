@@ -1,5 +1,4 @@
 import strawberry
-import strawberry_django
 from django.contrib.auth.models import User as DjangoUser
 from strawberry import ID
 
@@ -8,7 +7,9 @@ from bbs.api.types.users import User
 
 @strawberry.type
 class UsersQueries:
-    all_users: list[User] = strawberry_django.field()
+    @strawberry.field
+    def all_users(self) -> list[User]:
+        return DjangoUser.objects.filter(profile__isnull=False)
 
     @strawberry.field
     def user(self, user_id: ID) -> User:
