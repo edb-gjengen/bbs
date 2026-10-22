@@ -34,10 +34,6 @@ To create the admin during data seeding instead, set `BBS_SEED_ADMIN_PASSWORD` f
 
 - We use JS code generation to work with queries/mutations in our graphql API: <https://github.com/dotansimha/graphql-typed-document-node>
 
-## TODO
-
-- Stats: Implement users tab
-
 ## TODO-old
 
 - Larger pictures

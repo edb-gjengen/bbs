@@ -25,7 +25,7 @@ export const StatsNav = () => (
         </NavLink>
       </li>
       <li>
-        <NavLink className="disabled" to="/stats/users" title="TODO" hidden={true}>
+        <NavLink className={navLinkStyles} to="/stats/users">
           Folk
         </NavLink>
       </li>

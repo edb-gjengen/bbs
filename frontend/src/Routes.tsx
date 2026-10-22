@@ -12,6 +12,7 @@ const Register = React.lazy(() => import("./features/register/Register"));
 const OrderStats = React.lazy(() => import("./features/stats/OrderStats"));
 const ProductStats = React.lazy(() => import("./features/stats/ProductStats"));
 const Stats = React.lazy(() => import("./features/stats/Stats"));
+const UserStats = React.lazy(() => import("./features/stats/UserStats"));
 const UserDetail = React.lazy(() => import("./features/users/UserDetail"));
 const UserList = React.lazy(() => import("./features/users/UserList"));
 
@@ -26,6 +27,7 @@ export const Routes = (): JSX.Element => (
       <Route path="/stats" element={<Stats />} />
       <Route path="/stats/orders" element={<OrderStats />} />
       <Route path="/stats/products" element={<ProductStats />} />
+      <Route path="/stats/users" element={<UserStats />} />
       <Route path="/users" element={<UserList />} />
       <Route path="/users/create" element={<UserCreate />} />
       <Route path="/user/:userId" element={<UserDetail />} />
