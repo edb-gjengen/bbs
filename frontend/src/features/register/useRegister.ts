@@ -47,6 +47,10 @@ export const useRegister = () => {
     setSelectedUser("");
   };
 
+  const toggleSelectedUser = (userId: string) => {
+    setSelectedUser((currentUserId) => (currentUserId === userId ? "" : userId));
+  };
+
   const addToOrder = (productId: string) => {
     let added = false;
     const newOrder = order.map((orderLine: OrderLineInput) => {
@@ -101,7 +105,7 @@ export const useRegister = () => {
     products,
     showAll,
     setShowAll,
-    setSelectedUser,
+    toggleSelectedUser,
     selectedUser,
     addToOrder,
     order,

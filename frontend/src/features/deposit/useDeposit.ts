@@ -10,6 +10,9 @@ export const useDeposit = () => {
   const [selectedUser, setSelectedUser] = useState("");
   const [amount, setAmount] = useState("");
   const [userQuery, setUserQuery] = useState("");
+  const toggleSelectedUser = (userId: string) => {
+    setSelectedUser((currentUserId) => (currentUserId === userId ? "" : userId));
+  };
   const filteredUsers = (data?.allUsers || []).filter((user) =>
     `${user.firstName.toLowerCase()} ${user.lastName.toLowerCase()}`.includes(userQuery.toLowerCase()),
   );
@@ -56,7 +59,7 @@ export const useDeposit = () => {
   return {
     loading,
     selectedUser,
-    setSelectedUser,
+    toggleSelectedUser,
     amount,
     setAmount,
     userQuery,

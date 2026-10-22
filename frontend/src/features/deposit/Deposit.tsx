@@ -8,7 +8,7 @@ const Deposit = (): JSX.Element => {
   const {
     loading,
     selectedUser,
-    setSelectedUser,
+    toggleSelectedUser,
     amount,
     setAmount,
     userQuery,
@@ -80,9 +80,7 @@ const Deposit = (): JSX.Element => {
           <UserCard
             key={user.id}
             active={selectedUser === user.id}
-            onUser={() => {
-              setSelectedUser(user.id);
-            }}
+            onUser={() => toggleSelectedUser(user.id)}
             user={user}
           />
         ))}
