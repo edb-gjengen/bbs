@@ -1,0 +1,20 @@
+mutation createInventoryTransaction($data: InventoryTransactionInput!) {
+  createInventoryTransaction(data: $data) {
+    ... on CreateInventoryTransactionSuccess {
+      inventoryTransaction {
+        id
+        product {
+          name
+          inventoryAmount
+        }
+      }
+    }
+    ... on FormErrors {
+      message
+      fields {
+        field
+        message
+      }
+    }
+  }
+}

@@ -1,11 +1,11 @@
 import clsx from "clsx";
 import React, { MouseEventHandler } from "react";
 
-import { SchemaProduct as Product } from "../../types";
+import { AllProductsQuery } from "../../types";
 import styles from "./ProductCard.module.css";
 
 type ProductCardProps = {
-  product: Omit<Product, "userCounts">;
+  product: AllProductsQuery["allProducts"][number];
   onProduct: MouseEventHandler;
   active: boolean;
   amount: number;

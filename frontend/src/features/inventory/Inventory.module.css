@@ -1,0 +1,71 @@
+.section {
+  margin-top: 2rem;
+}
+
+.tableWrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.tableWrap table {
+  width: 100%;
+}
+
+.inactive {
+  opacity: 0.65;
+}
+
+.transactions {
+  margin-top: 2rem;
+}
+
+.pagination {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.form {
+  display: grid;
+  max-width: 36rem;
+  gap: 1rem;
+}
+
+.form label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.form textarea,
+.form select {
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: rgb(35, 15, 41);
+  color: var(--text);
+  font: inherit;
+}
+
+.form textarea {
+  min-height: 6rem;
+}
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+}
+
+.report {
+  margin-top: 2rem;
+}
+
+.error {
+  color: var(--sun);
+}
+
+@media (max-width: 640px) {
+  .tableWrap table {
+    min-width: 42rem;
+  }
+}

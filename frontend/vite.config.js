@@ -12,7 +12,7 @@ export default defineConfig({
   server: {
     host: "127.0.0.1",
     proxy: Object.fromEntries(
-      ["/admin", "/accounts", "/inventory", "/report", "/static", "/media", "/graphql"].map(
+      ["/admin", "/accounts", "/static", "/media", "/graphql"].map(
         (path) => [path, process.env.VITE_DEV_API_PROXY || "http://127.0.0.1:3000"],
       ),
     ),

@@ -2,6 +2,7 @@ import strawberry
 from django.core.exceptions import ObjectDoesNotExist
 from strawberry.extensions import SchemaExtension
 
+from bbs.api.mutations.inventory import InventoryMutations
 from bbs.api.mutations.shop import ShopMutations
 from bbs.api.mutations.users import UsersMutations
 from bbs.api.queries.inventory import InventoryQueries
@@ -15,7 +16,7 @@ class Query(InventoryQueries, ShopQueries, UsersQueries):
 
 
 @strawberry.type
-class Mutation(ShopMutations, UsersMutations):
+class Mutation(InventoryMutations, ShopMutations, UsersMutations):
     pass
 
 

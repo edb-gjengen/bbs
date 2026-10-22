@@ -4,6 +4,9 @@ import { Route, Routes as ReactRouterRoutes } from "react-router-dom";
 const Splash = React.lazy(() => import("./components/Splash"));
 const UserCreate = React.lazy(() => import("./features/auth/UserCreate"));
 const Deposit = React.lazy(() => import("./features/deposit/Deposit"));
+const Inventory = React.lazy(() => import("./features/inventory/Inventory"));
+const InventoryAdd = React.lazy(() => import("./features/inventory/InventoryAdd"));
+const InventoryReport = React.lazy(() => import("./features/inventory/InventoryReport"));
 const Log = React.lazy(() => import("./features/log/Log"));
 const Register = React.lazy(() => import("./features/register/Register"));
 const OrderStats = React.lazy(() => import("./features/stats/OrderStats"));
@@ -16,6 +19,9 @@ export const Routes = (): JSX.Element => (
   <React.Suspense fallback={<div>Loading...</div>}>
     <ReactRouterRoutes>
       <Route path="/deposit" element={<Deposit />} />
+      <Route path="/inventory" element={<Inventory />} />
+      <Route path="/inventory/add" element={<InventoryAdd />} />
+      <Route path="/report" element={<InventoryReport />} />
       <Route path="/log" element={<Log />} />
       <Route path="/stats" element={<Stats />} />
       <Route path="/stats/orders" element={<OrderStats />} />

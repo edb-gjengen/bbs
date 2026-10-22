@@ -36,7 +36,6 @@ To create the admin during data seeding instead, set `BBS_SEED_ADMIN_PASSWORD` f
 
 ## TODO
 
-- Migrate inventory and report views to the SPA
 - Stats: Implement users tab
 
 ## TODO-old

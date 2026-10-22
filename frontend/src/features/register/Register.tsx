@@ -1,6 +1,6 @@
 import React from "react";
 
-import { OrderLineInput, SchemaProduct as Product } from "../../types";
+import { AllProductsQuery, OrderLineInput } from "../../types";
 import { UserCard } from "../users/UserCard";
 import { ProductCard } from "./ProductCard";
 import styles from "./Register.module.css";
@@ -55,7 +55,7 @@ const Register = (): JSX.Element => {
       <section className={styles.productListSection}>
         <h2>Kjøper hva?</h2>
         <div className={styles.productList}>
-          {products.map((product: Omit<Product, "userCounts">) => (
+          {products.map((product: AllProductsQuery["allProducts"][number]) => (
             <ProductCard
               key={product.id}
               product={product}

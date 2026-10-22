@@ -13,6 +13,12 @@ type CreateDepositSuccess {
   transaction: Transaction!
 }
 
+union CreateInventoryTransactionResponse = CreateInventoryTransactionSuccess | FormErrors
+
+type CreateInventoryTransactionSuccess {
+  inventoryTransaction: InventoryTransaction!
+}
+
 union CreateOrderResponse = CreateOrderSuccess | InsufficientFunds | FormErrors
 
 type CreateOrderSuccess {
@@ -48,12 +54,53 @@ type InsufficientFunds implements Error {
   amountLacking: Float!
 }
 
+type InventoryReport {
+  products: [InventoryReportProduct!]!
+  inventoryPurchases: Decimal!
+  productSales: Decimal!
+  deposits: Decimal!
+  orderPurchases: Decimal!
+  balanceAtStart: Decimal!
+  balanceAtEnd: Decimal!
+}
+
+type InventoryReportProduct {
+  productId: ID!
+  productName: String!
+  purchaseUnits: Int!
+  purchaseValue: Decimal!
+  salesUnits: Int!
+  salesValue: Decimal!
+}
+
+type InventoryTransaction {
+  id: ID!
+  user: User!
+  product: Product!
+  amount: Int!
+  unitPrice: Decimal!
+  comment: String!
+  created: DateTime!
+}
+
+input InventoryTransactionInput {
+  productId: ID!
+  amount: Int!
+  unitPrice: Decimal!
+  comment: String! = ""
+}
+
+input InventoryTransactionOrdering @oneOf {
+  created: Ordering
+}
+
 """
 The GenericScalar scalar type represents a generic GraphQL scalar value that could be: List or Object.
 """
 scalar JSONScalar
 
 type Mutation {
+  createInventoryTransaction(data: InventoryTransactionInput!): CreateInventoryTransactionResponse!
   createOrder(customerId: ID!, orderLines: [OrderLineInput!]!, isExternal: Boolean! = false): CreateOrderResponse!
   createDeposit(userId: ID!, amount: Int!): CreateDepositResponse!
   createUser(input: UserInput!): User!
@@ -122,6 +169,11 @@ type Product {
   imageUrl: String!
   salePriceInt: Decimal!
   salePriceExt: Decimal!
+  active: Boolean!
+  inventoryAmount: Int!
+  updated: DateTime!
+  wholesaleUnitPrice: Decimal!
+  wholesaleValue: Decimal!
   userCounts: JSONScalar!
 }
 
@@ -141,6 +193,8 @@ type ProductOrderStat {
 
 type Query {
   transactionList(ordering: [TransactionOrdering!]! = [], pagination: OffsetPaginationInput): [Transaction!]!
+  inventoryTransactionList(ordering: [InventoryTransactionOrdering!]! = [], pagination: OffsetPaginationInput): [InventoryTransaction!]!
+  inventoryReport(startTime: DateTime!, endTime: DateTime!): InventoryReport!
   allProducts(filters: ProductFilter): [Product!]!
   allOrders: [Order!]!
   orderList(ordering: [OrderOrdering!]! = [], pagination: OffsetPaginationInput): [Order!]!

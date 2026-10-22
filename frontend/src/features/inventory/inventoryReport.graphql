@@ -1,0 +1,18 @@
+query inventoryReport($startTime: DateTime!, $endTime: DateTime!) {
+  inventoryReport(startTime: $startTime, endTime: $endTime) {
+    products {
+      productId
+      productName
+      purchaseUnits
+      purchaseValue
+      salesUnits
+      salesValue
+    }
+    inventoryPurchases
+    productSales
+    deposits
+    orderPurchases
+    balanceAtStart
+    balanceAtEnd
+  }
+}

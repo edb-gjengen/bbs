@@ -2,15 +2,23 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 
 import { useToast } from "../../components/ToastProvider";
-import { AllProductsDocument, AllUsersDocument, CreateOrderDocument, OrderLineInput, SchemaProduct } from "../../types";
+import {
+  AllProductsDocument,
+  AllProductsQuery,
+  AllUsersDocument,
+  CreateOrderDocument,
+  OrderLineInput,
+} from "../../types";
 import { formatCurrency } from "../../utils/currency";
 import { activeUserFilter } from "../../utils/users";
 
 const USER_EXTERNAL = "external";
 
-const sumTotal = (products: Omit<SchemaProduct, "userCounts">[], order: OrderLineInput[], isExternal: boolean) => {
+type Product = AllProductsQuery["allProducts"][number];
+
+const sumTotal = (products: Product[], order: OrderLineInput[], isExternal: boolean) => {
   const prices = order.map((orderLine: OrderLineInput) => {
-    const product = products.find((product: Omit<SchemaProduct, "userCounts">) => product.id === orderLine.productId);
+    const product = products.find((product) => product.id === orderLine.productId);
     if (!product) return 0;
     return orderLine.amount * Number(isExternal ? product.salePriceExt : product.salePriceInt);
   });

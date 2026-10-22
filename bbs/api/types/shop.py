@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import TYPE_CHECKING, Annotated
 
 import strawberry
@@ -24,6 +25,11 @@ class Product:
     image_url: str
     sale_price_int: auto
     sale_price_ext: auto
+    active: auto
+    inventory_amount: auto
+    updated: auto
+    wholesale_unit_price: Decimal
+    wholesale_value: Decimal
     # FIXME: stricter types
     user_counts: JSONScalar
 
