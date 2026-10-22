@@ -13,6 +13,7 @@ export const useDeposit = () => {
   const filteredUsers = (data?.allUsers || []).filter((user) =>
     `${user.firstName.toLowerCase()} ${user.lastName.toLowerCase()}`.includes(userQuery.toLowerCase()),
   );
+  const selectedUserDetails = data?.allUsers.find((user) => user.id === selectedUser);
   const { showToast } = useToast();
 
   const onSubmit = async () => {
@@ -61,6 +62,7 @@ export const useDeposit = () => {
     userQuery,
     setUserQuery,
     filteredUsers,
+    selectedUserDetails,
     reset,
     onSubmit,
   };
