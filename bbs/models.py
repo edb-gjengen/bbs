@@ -1,5 +1,5 @@
 import hashlib  # noqa: EXE002
-from datetime import datetime
+from datetime import UTC, datetime
 from decimal import Decimal
 from itertools import groupby
 
@@ -224,7 +224,7 @@ class UserProfile(models.Model):
 
     def last_purchase_date(self) -> datetime:
         last = self.last_purchase()
-        return last.created if last else datetime.min  # noqa: DTZ901
+        return last.created if last else datetime.min.replace(tzinfo=UTC)
 
     def top_months(self, limit=5):
         return (

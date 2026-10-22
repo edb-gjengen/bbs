@@ -33,6 +33,16 @@ export const Header = (): JSX.Element => {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/inventory" className={navLinkStyles}>
+              Varebeholdning
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/report" className={navLinkStyles}>
+              Rapport
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/stats" className={navLinkStyles}>
               Statistikk
             </NavLink>

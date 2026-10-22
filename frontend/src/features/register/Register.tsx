@@ -1,6 +1,6 @@
 import React from "react";
 
-import { OrderLineInput, Product } from "../../types";
+import { AllProductsQuery, OrderLineInput } from "../../types";
 import { UserCard } from "../users/UserCard";
 import { ProductCard } from "./ProductCard";
 import styles from "./Register.module.css";
@@ -15,7 +15,7 @@ const Register = (): JSX.Element => {
     loading,
     showAll,
     setShowAll,
-    setSelectedUser,
+    toggleSelectedUser,
     selectedUser,
     addToOrder,
     order,
@@ -36,14 +36,14 @@ const Register = (): JSX.Element => {
           <UserCard
             key={USER_EXTERNAL}
             user={null}
-            onUser={() => setSelectedUser(USER_EXTERNAL)}
+            onUser={() => toggleSelectedUser(USER_EXTERNAL)}
             active={selectedUser == USER_EXTERNAL}
           />
           {users.map((user) => (
             <UserCard
               key={user.id}
               user={user}
-              onUser={() => setSelectedUser(user.id)}
+              onUser={() => toggleSelectedUser(user.id)}
               active={selectedUser == user.id}
             />
           ))}
@@ -55,7 +55,7 @@ const Register = (): JSX.Element => {
       <section className={styles.productListSection}>
         <h2>Kjøper hva?</h2>
         <div className={styles.productList}>
-          {products.map((product: Omit<Product, "userCounts">) => (
+          {products.map((product: AllProductsQuery["allProducts"][number]) => (
             <ProductCard
               key={product.id}
               product={product}

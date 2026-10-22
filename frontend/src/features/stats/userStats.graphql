@@ -1,0 +1,10 @@
+query userStats {
+  allUsers {
+    id
+    firstName
+    lastName
+    profile {
+      orderSumTotal
+    }
+  }
+}

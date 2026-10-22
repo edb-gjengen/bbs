@@ -1,17 +1,113 @@
+.deposit {
+  display: grid;
+  align-items: start;
+  gap: 1rem 2rem;
+  grid-template:
+    "heading amount" auto
+    "search amount" auto
+    "users amount" 1fr
+    / minmax(0, 1fr) minmax(260px, 320px);
+}
+
+.heading {
+  grid-area: heading;
+  margin-bottom: 0;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  grid-area: search;
+}
+
+.search input {
+  width: min(100%, 420px);
+}
+
 .userList {
   display: grid;
-  height: 800px;
-  padding-top: 2rem;
-  grid-template-columns: repeat(5, 220px);
+  max-height: min(62vh, 680px);
+  padding: 0.5rem 0.5rem 0.5rem 0;
+  gap: 1rem;
+  grid-area: users;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   overflow-y: auto;
-  column-gap: 16px;
-  row-gap: 24px;
 }
 
 .amountSection {
-  margin-top: 32px;
+  position: sticky;
+  top: 1rem;
+  padding: 1.25rem;
+  border: 1px solid rgba(221, 81, 127, 0.45);
+  border-radius: 8px;
+  background: rgba(35, 15, 41, 0.84);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+  grid-area: amount;
+}
+
+.amountSection h2 {
+  margin-top: 0;
+}
+
+.selectedUser {
+  min-height: 1.5em;
+  margin: 0 0 1.25rem;
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow: none;
+}
+
+.selectedUser strong {
+  color: var(--text);
+}
+
+.amountLabel {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--sun);
+}
+
+.amountInput {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.amountInput input {
+  width: 100%;
+  min-width: 0;
+  font-size: 1.8rem;
+}
+
+.amountInput span {
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: none;
 }
 
 .checkout {
-  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 760px) {
+  .deposit {
+    gap: 0.75rem;
+    grid-template:
+      "heading" auto
+      "search" auto
+      "amount" auto
+      "users" auto
+      / minmax(0, 1fr);
+  }
+
+  .amountSection {
+    position: static;
+  }
+
+  .userList {
+    max-height: 45vh;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  }
 }

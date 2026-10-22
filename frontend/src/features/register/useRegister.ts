@@ -2,17 +2,25 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 
 import { useToast } from "../../components/ToastProvider";
-import { AllProductsDocument, AllUsersDocument, CreateOrderDocument, OrderLineInput, Product } from "../../types";
+import {
+  AllProductsDocument,
+  AllProductsQuery,
+  AllUsersDocument,
+  CreateOrderDocument,
+  OrderLineInput,
+} from "../../types";
+import { formatCurrency } from "../../utils/currency";
 import { activeUserFilter } from "../../utils/users";
-import {formatCurrency} from "../../utils/currency";
 
 const USER_EXTERNAL = "external";
 
-const sumTotal = (products: Omit<Product, "userCounts">[], order: OrderLineInput[], isExternal: boolean) => {
+type Product = AllProductsQuery["allProducts"][number];
+
+const sumTotal = (products: Product[], order: OrderLineInput[], isExternal: boolean) => {
   const prices = order.map((orderLine: OrderLineInput) => {
-    const product = products.find((product: Omit<Product, "userCounts">) => product.id === orderLine.productId);
+    const product = products.find((product) => product.id === orderLine.productId);
     if (!product) return 0;
-    return orderLine.amount * (isExternal ? product.salePriceExt : product.salePriceInt);
+    return orderLine.amount * Number(isExternal ? product.salePriceExt : product.salePriceInt);
   });
   return prices.reduce((partialSum, a) => partialSum + a, 0);
 };
@@ -39,6 +47,10 @@ export const useRegister = () => {
     setSelectedUser("");
   };
 
+  const toggleSelectedUser = (userId: string) => {
+    setSelectedUser((currentUserId) => (currentUserId === userId ? "" : userId));
+  };
+
   const addToOrder = (productId: string) => {
     let added = false;
     const newOrder = order.map((orderLine: OrderLineInput) => {
@@ -60,7 +72,7 @@ export const useRegister = () => {
     let res;
     try {
       res = await createOrderMutation();
-    } catch (e) {
+    } catch {
       showToast("Whoops");
       console.log("woops");
       return;
@@ -93,7 +105,7 @@ export const useRegister = () => {
     products,
     showAll,
     setShowAll,
-    setSelectedUser,
+    toggleSelectedUser,
     selectedUser,
     addToOrder,
     order,

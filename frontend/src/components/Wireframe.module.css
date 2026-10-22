@@ -1,31 +1,45 @@
+.decoration {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100vh;
+  overflow: clip;
+  pointer-events: none;
+}
+
 .wireframe {
   position: absolute;
   bottom: calc(22% - 512px);
   left: calc(50% - 512px);
+  display: grid;
   width: 1024px;
   height: 1024px;
-  display: grid;
-  grid-template-columns: repeat(8, 128px);
+  animation-duration: 10s;
   animation-iteration-count: infinite;
   animation-name: isometric-rotate;
-  animation-duration: 10s;
   animation-timing-function: linear;
-  pointer-events: none;
-  z-index: -1;
+  grid-template-columns: repeat(8, 128px);
 }
 
 .cell {
-  border-bottom: 2px solid var(--sun);
   border-right: 2px solid var(--sun);
-
+  border-bottom: 2px solid var(--sun);
 }
 
 .cell:nth-child(8n) {
   border-right: none;
 }
 
-.cell:nth-child(n+57) {
+.cell:nth-child(n + 57) {
   border-bottom: none;
+}
+
+@media (max-width: 640px) {
+  .decoration {
+    display: none;
+  }
 }
 
 @keyframes isometric-rotate {

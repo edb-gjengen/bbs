@@ -1,14 +1,16 @@
 .user {
   display: flex;
+  max-height: 82px;
   align-items: center;
   padding: 0;
   border: none;
+  border-radius: 4px;
   border-left: 4px solid transparent;
   background: rgb(35, 15, 41);
-  border-radius: 4px;
   color: var(--text);
-  transition: background-color 0.1s ease-out, border 0.1s ease-out;
-  max-height: 82px;
+  transition:
+    background-color 0.1s ease-out,
+    border 0.1s ease-out;
 }
 
 .user:hover {
@@ -17,16 +19,19 @@
 .user:hover,
 .active.user {
   background-color: var(--background);
-  box-shadow: 0 0 4px var(--background), 0 0 11px var(--background), 0 0 19px var(--background);
+  box-shadow:
+    0 0 4px var(--background),
+    0 0 11px var(--background),
+    0 0 19px var(--background);
 }
 .active.user {
-  border-left: 4px solid var(--sun)
+  border-left: 4px solid var(--sun);
 }
 
 .avatar {
-  margin-left: 1rem;
   width: 50px;
   height: 50px;
+  margin-left: 1rem;
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
 }
 .avatarWrap {
@@ -35,10 +40,10 @@
 }
 
 .noAvatar {
-  margin-left: 1rem;
   display: block;
   width: 50px;
   height: 50px;
+  margin-left: 1rem;
   background-color: black;
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
   content: "";
@@ -46,16 +51,16 @@
 
 .meta {
   display: flex;
-  padding: 1rem;
+  overflow: hidden;
   flex-direction: column;
   align-items: flex-start;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  padding: 1rem;
   font-size: 1.2rem;
+  text-overflow: ellipsis;
   text-shadow: none;
+  white-space: nowrap;
 }
 
 .balance {
-  color: var(--sun)
+  color: var(--sun);
 }

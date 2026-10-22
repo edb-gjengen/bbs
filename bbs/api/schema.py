@@ -2,6 +2,7 @@ import strawberry
 from django.core.exceptions import ObjectDoesNotExist
 from strawberry.extensions import SchemaExtension
 
+from bbs.api.mutations.inventory import InventoryMutations
 from bbs.api.mutations.shop import ShopMutations
 from bbs.api.mutations.users import UsersMutations
 from bbs.api.queries.inventory import InventoryQueries
@@ -15,12 +16,13 @@ class Query(InventoryQueries, ShopQueries, UsersQueries):
 
 
 @strawberry.type
-class Mutation(ShopMutations, UsersMutations):
+class Mutation(InventoryMutations, ShopMutations, UsersMutations):
     pass
 
 
 class HandleNotFound(SchemaExtension):
-    def on_request_end(self):
+    def on_operation(self):
+        yield
         result = self.execution_context.result
         if result.errors:
             for error in result.errors:

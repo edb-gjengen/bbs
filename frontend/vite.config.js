@@ -9,5 +9,13 @@ export default defineConfig({
     __DEV__: process.env.NODE_ENV !== "production",
   },
   envDir: "..",
+  server: {
+    host: "127.0.0.1",
+    proxy: Object.fromEntries(
+      ["/admin", "/accounts", "/static", "/media", "/graphql"].map(
+        (path) => [path, process.env.VITE_DEV_API_PROXY || "http://127.0.0.1:3000"],
+      ),
+    ),
+  },
   build: { outDir: "../static", emptyOutDir: false },
 });

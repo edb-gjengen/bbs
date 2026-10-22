@@ -10,9 +10,13 @@ export const useDeposit = () => {
   const [selectedUser, setSelectedUser] = useState("");
   const [amount, setAmount] = useState("");
   const [userQuery, setUserQuery] = useState("");
+  const toggleSelectedUser = (userId: string) => {
+    setSelectedUser((currentUserId) => (currentUserId === userId ? "" : userId));
+  };
   const filteredUsers = (data?.allUsers || []).filter((user) =>
-    `${user.firstName.toLowerCase()} ${user.lastName.toLowerCase()}`.includes(userQuery.toLowerCase())
+    `${user.firstName.toLowerCase()} ${user.lastName.toLowerCase()}`.includes(userQuery.toLowerCase()),
   );
+  const selectedUserDetails = data?.allUsers.find((user) => user.id === selectedUser);
   const { showToast } = useToast();
 
   const onSubmit = async () => {
@@ -30,7 +34,7 @@ export const useDeposit = () => {
     if (res.data?.createDeposit?.__typename === "CreateDepositSuccess") {
       const { transaction } = res.data?.createDeposit;
       showToast(
-        `${transaction.user.firstName} har satt inn${transaction.amount}. Ny saldo er ${transaction.user.profile?.balance}.`
+        `${transaction.user.firstName} har satt inn${transaction.amount}. Ny saldo er ${transaction.user.profile?.balance}.`,
       );
       reset();
       return;
@@ -42,7 +46,7 @@ export const useDeposit = () => {
     if (res.data?.createDeposit?.__typename === "AboveMaxSaldo") {
       showToast(
         `${res.data.createDeposit.message}. Ny saldo ville vært ${res.data.createDeposit.above} mer enn maksimalt ${res.data.createDeposit.maxSaldo}.`,
-        "danger"
+        "danger",
       );
     }
   };
@@ -55,12 +59,13 @@ export const useDeposit = () => {
   return {
     loading,
     selectedUser,
-    setSelectedUser,
+    toggleSelectedUser,
     amount,
     setAmount,
     userQuery,
     setUserQuery,
     filteredUsers,
+    selectedUserDetails,
     reset,
     onSubmit,
   };

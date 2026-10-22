@@ -14,7 +14,7 @@ from bbs.api.types.shop import Point, ProductOrderStat
 class TopMonth:
     period: str
     count: int
-    sum: int
+    sum: float
 
 
 @strawberry_django.type(models.UserProfile)
@@ -27,7 +27,10 @@ class UserProfile:
 
     @strawberry.field()
     def top_months(self) -> list[TopMonth]:
-        return [TopMonth(**month) for month in self.top_months()]
+        return [
+            TopMonth(period=month["period"], count=month["count"], sum=float(month["sum"]))
+            for month in self.top_months()
+        ]
 
     @strawberry.field()
     def product_order_stats(self) -> list[ProductOrderStat]:
@@ -45,4 +48,4 @@ class User:
     id: auto
     first_name: auto
     last_name: auto
-    profile: UserProfile
+    profile: UserProfile | None

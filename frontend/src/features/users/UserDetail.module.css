@@ -1,5 +1,21 @@
 .userDetail {
   display: grid;
+  min-width: 0;
   gap: 1rem;
-  grid-template-columns: 400px 1fr;
+  grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+}
+
+.chart {
+  width: 100%;
+  height: 360px;
+}
+
+@media (max-width: 760px) {
+  .userDetail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chart {
+    height: 300px;
+  }
 }

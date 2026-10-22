@@ -1,11 +1,12 @@
+from decimal import Decimal
 from typing import TYPE_CHECKING, Annotated
 
 import strawberry
 import strawberry_django
 from strawberry import auto
+from strawberry.scalars import JSON
 
 from bbs import models
-from bbs.api.types.utils import JSONScalar
 
 if TYPE_CHECKING:
     from .users import User
@@ -24,8 +25,13 @@ class Product:
     image_url: str
     sale_price_int: auto
     sale_price_ext: auto
+    active: auto
+    inventory_amount: auto
+    updated: auto
+    wholesale_unit_price: Decimal
+    wholesale_value: Decimal
     # FIXME: stricter types
-    user_counts: JSONScalar
+    user_counts: JSON
 
 
 @strawberry_django.order_type(models.Order)
@@ -36,7 +42,7 @@ class OrderOrdering:
 @strawberry_django.type(models.Order)
 class Order:
     id: auto
-    customer: Annotated["User", strawberry.lazy(".users")]
+    customer: Annotated["User", strawberry.lazy(".users")] | None
     order_sum: auto
     created: auto
     orderlines: list["OrderLine"]

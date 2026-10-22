@@ -8,12 +8,13 @@ const Deposit = (): JSX.Element => {
   const {
     loading,
     selectedUser,
-    setSelectedUser,
+    toggleSelectedUser,
     amount,
     setAmount,
     userQuery,
     setUserQuery,
     filteredUsers,
+    selectedUserDetails,
     reset,
     onSubmit,
   } = useDeposit();
@@ -23,45 +24,67 @@ const Deposit = (): JSX.Element => {
   }
 
   return (
-    <div>
-      <section>
-        <h2>Hvem skal sette inn penger?</h2>
+    <div className={styles.deposit}>
+      <h2 className={styles.heading}>Hvem skal sette inn penger?</h2>
+      <div className={styles.search}>
         <input
           name="userQuery"
           onChange={(event: React.FormEvent<HTMLInputElement>) => setUserQuery(event.currentTarget.value)}
           value={userQuery}
           placeholder="Filtrér på navn"
+          aria-label="Filtrér personer på navn"
         />
         {userQuery !== "" && (
           <button type="button" onClick={() => setUserQuery("")}>
             Vis alle
           </button>
         )}
-        <div className={styles.userList}>
-          {filteredUsers.map((user) => (
-            <UserCard
-              key={user.id}
-              active={selectedUser === user.id}
-              onUser={() => {
-                setSelectedUser(user.id);
-              }}
-              user={user}
-            />
-          ))}
+      </div>
+      <section className={styles.amountSection} aria-label="Innskudd">
+        <h2>Hvor mye?</h2>
+        {selectedUserDetails ? (
+          <p className={styles.selectedUser}>
+            Innskudd til{" "}
+            <strong>
+              {selectedUserDetails.firstName} {selectedUserDetails.lastName}
+            </strong>
+          </p>
+        ) : (
+          <p className={styles.selectedUser}>Velg en person fra listen</p>
+        )}
+        <label className={styles.amountLabel} htmlFor="deposit-amount">
+          Beløp
+        </label>
+        <div className={styles.amountInput}>
+          <input
+            id="deposit-amount"
+            name="amount"
+            inputMode="decimal"
+            value={amount}
+            onChange={(event) => setAmount(event.target.value)}
+            placeholder="0"
+          />
+          <span>kr</span>
+        </div>
+        <div className={styles.checkout}>
+          <button type="button" onClick={onSubmit} className="primary">
+            Sett inn
+          </button>
+          <button type="button" onClick={reset}>
+            Start på nytt
+          </button>
         </div>
       </section>
-      <section className={styles.amountSection}>
-        <h2>Hvor mye?</h2>
-        <input name="amount" value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="0" />
-      </section>
-      <section className={styles.checkout}>
-        <button type="button" onClick={onSubmit} className="primary">
-          Sett inn
-        </button>{" "}
-        <button type="button" onClick={reset}>
-          Start på nytt
-        </button>
-      </section>
+      <div className={styles.userList}>
+        {filteredUsers.map((user) => (
+          <UserCard
+            key={user.id}
+            active={selectedUser === user.id}
+            onUser={() => toggleSelectedUser(user.id)}
+            user={user}
+          />
+        ))}
+      </div>
     </div>
   );
 };

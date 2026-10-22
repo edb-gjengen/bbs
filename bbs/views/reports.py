@@ -1,8 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from itertools import groupby
 
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.utils import timezone
 
 from bbs.forms import DateRangeForm, InventoryTransactionForm
 from bbs.models import InventoryTransaction, Order, Product, Transaction, UserProfile
@@ -10,12 +11,12 @@ from bbs.models import InventoryTransaction, Order, Product, Transaction, UserPr
 
 def report(request):
     # FIXME: split this up in smaller pieces
-    datetime_now = datetime.now()  # noqa: DTZ005
-    start_time = datetime.now() - timedelta(days=30)  # noqa: DTZ005
+    datetime_now = timezone.localtime()
+    start_time = timezone.localtime() - timedelta(days=30)
     # start of day, 1 month
     start_time = start_time.replace(hour=0, minute=0, second=0, microsecond=0)
     # end of day
-    end_time = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999)  # noqa: DTZ005
+    end_time = timezone.localtime().replace(hour=23, minute=59, second=59, microsecond=999)
 
     if request.GET.get("start_time", False) or request.GET.get("end_time", False):
         form = DateRangeForm(request.GET)

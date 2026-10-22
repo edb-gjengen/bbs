@@ -19,6 +19,7 @@ module.exports = {
   rules: {
     "no-console": "off",
     "prefer-destructuring": "off",
+    "import/no-unresolved": ["error", { ignore: ["\\?react$"] }],
     "import/no-extraneous-dependencies": [
       "error",
       {

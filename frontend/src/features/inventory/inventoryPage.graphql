@@ -1,0 +1,25 @@
+query inventoryPage($limit: Int = 20, $offset: Int = 0) {
+  allProducts {
+    id
+    name
+    active
+    inventoryAmount
+    updated
+    wholesaleUnitPrice
+    wholesaleValue
+  }
+  inventoryTransactionList(ordering: [{ created: DESC }], pagination: { limit: $limit, offset: $offset }) {
+    id
+    created
+    amount
+    unitPrice
+    comment
+    product {
+      name
+    }
+    user {
+      firstName
+      lastName
+    }
+  }
+}

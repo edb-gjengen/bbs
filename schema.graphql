@@ -1,3 +1,5 @@
+directive @oneOf on INPUT_OBJECT
+
 type AboveMaxSaldo implements Error {
   message: String!
   error: Boolean!
@@ -11,6 +13,12 @@ type CreateDepositSuccess {
   transaction: Transaction!
 }
 
+union CreateInventoryTransactionResponse = CreateInventoryTransactionSuccess | FormErrors
+
+type CreateInventoryTransactionSuccess {
+  inventoryTransaction: InventoryTransaction!
+}
+
 union CreateOrderResponse = CreateOrderSuccess | InsufficientFunds | FormErrors
 
 type CreateOrderSuccess {
@@ -19,6 +27,9 @@ type CreateOrderSuccess {
 
 """Date with time (isoformat)"""
 scalar DateTime
+
+"""Decimal (fixed-point)"""
+scalar Decimal
 
 interface Error {
   message: String!
@@ -43,12 +54,53 @@ type InsufficientFunds implements Error {
   amountLacking: Float!
 }
 
+type InventoryReport {
+  products: [InventoryReportProduct!]!
+  inventoryPurchases: Decimal!
+  productSales: Decimal!
+  deposits: Decimal!
+  orderPurchases: Decimal!
+  balanceAtStart: Decimal!
+  balanceAtEnd: Decimal!
+}
+
+type InventoryReportProduct {
+  productId: ID!
+  productName: String!
+  purchaseUnits: Int!
+  purchaseValue: Decimal!
+  salesUnits: Int!
+  salesValue: Decimal!
+}
+
+type InventoryTransaction {
+  id: ID!
+  user: User!
+  product: Product!
+  amount: Int!
+  unitPrice: Decimal!
+  comment: String!
+  created: DateTime!
+}
+
+input InventoryTransactionInput {
+  productId: ID!
+  amount: Int!
+  unitPrice: Decimal!
+  comment: String! = ""
+}
+
+input InventoryTransactionOrdering @oneOf {
+  created: Ordering
+}
+
 """
-The GenericScalar scalar type represents a generic GraphQL scalar value that could be: List or Object.
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](https://ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf).
 """
-scalar JSONScalar
+scalar JSON @specifiedBy(url: "https://ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf")
 
 type Mutation {
+  createInventoryTransaction(data: InventoryTransactionInput!): CreateInventoryTransactionResponse!
   createOrder(customerId: ID!, orderLines: [OrderLineInput!]!, isExternal: Boolean! = false): CreateOrderResponse!
   createDeposit(userId: ID!, amount: Int!): CreateDepositResponse!
   createUser(input: UserInput!): User!
@@ -56,15 +108,15 @@ type Mutation {
 
 input OffsetPaginationInput {
   offset: Int! = 0
-  limit: Int! = -1
+  limit: Int
 }
 
 type Order {
   id: ID!
   customer: User
-  orderSum: Float!
+  orderSum: Decimal!
   created: DateTime!
-  orderlines: [OrderLine!]
+  orderlines: [OrderLine!]!
   isExternal: Boolean!
 }
 
@@ -73,7 +125,7 @@ type OrderLine {
   order: Order!
   product: Product!
   amount: Int!
-  unitPrice: Float!
+  unitPrice: Decimal!
 }
 
 input OrderLineInput {
@@ -81,7 +133,7 @@ input OrderLineInput {
   amount: Int!
 }
 
-input OrderOrdering {
+input OrderOrdering @oneOf {
   created: Ordering
 }
 
@@ -99,7 +151,11 @@ type OrderStatsByTime {
 
 enum Ordering {
   ASC
+  ASC_NULLS_FIRST
+  ASC_NULLS_LAST
   DESC
+  DESC_NULLS_FIRST
+  DESC_NULLS_LAST
 }
 
 type Point {
@@ -111,14 +167,23 @@ type Product {
   id: ID!
   name: String!
   imageUrl: String!
-  salePriceInt: Float!
-  salePriceExt: Float!
-  userCounts: JSONScalar!
+  salePriceInt: Decimal!
+  salePriceExt: Decimal!
+  active: Boolean!
+  inventoryAmount: Int!
+  updated: DateTime!
+  wholesaleUnitPrice: Decimal!
+  wholesaleValue: Decimal!
+  userCounts: JSON!
 }
 
 input ProductFilter {
   id: ID
   active: Boolean
+  AND: ProductFilter
+  OR: ProductFilter
+  NOT: ProductFilter
+  DISTINCT: Boolean
 }
 
 type ProductOrderStat {
@@ -127,10 +192,12 @@ type ProductOrderStat {
 }
 
 type Query {
-  transactionList(pagination: OffsetPaginationInput, order: TransactionOrdering): [Transaction!]!
+  transactionList(ordering: [TransactionOrdering!]! = [], pagination: OffsetPaginationInput): [Transaction!]!
+  inventoryTransactionList(ordering: [InventoryTransactionOrdering!]! = [], pagination: OffsetPaginationInput): [InventoryTransaction!]!
+  inventoryReport(startTime: DateTime!, endTime: DateTime!): InventoryReport!
   allProducts(filters: ProductFilter): [Product!]!
   allOrders: [Order!]!
-  orderList(pagination: OffsetPaginationInput, order: OrderOrdering): [Order!]!
+  orderList(ordering: [OrderOrdering!]! = [], pagination: OffsetPaginationInput): [Order!]!
   orderStats: OrderStats!
   productStats: [ProductOrderStat!]!
   allUsers: [User!]!
@@ -140,17 +207,17 @@ type Query {
 type TopMonth {
   period: String!
   count: Int!
-  sum: Int!
+  sum: Float!
 }
 
 type Transaction {
   id: ID!
   user: User!
-  amount: Float!
+  amount: Decimal!
   created: DateTime!
 }
 
-input TransactionOrdering {
+input TransactionOrdering @oneOf {
   created: Ordering
 }
 
@@ -169,10 +236,10 @@ input UserInput {
 
 type UserProfile {
   id: ID!
-  balance: Float!
+  balance: Decimal!
   image: String!
   lastPurchaseDate: DateTime!
-  orderSumTotal: Float!
-  productOrderStats: [ProductOrderStat!]!
+  orderSumTotal: Decimal!
   topMonths: [TopMonth!]!
+  productOrderStats: [ProductOrderStat!]!
 }

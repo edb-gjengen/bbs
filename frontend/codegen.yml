@@ -3,6 +3,28 @@ documents: ./src/**/*.graphql
 generates:
   ./src/types.ts:
     plugins:
-      - typescript
-      - typescript-operations
+      - typescript:
+          typesPrefix: Schema
+          scalars:
+            DateTime:
+              input: string
+              output: string
+            Decimal:
+              input: string
+              output: string
+            JSON:
+              input: unknown
+              output: "Array<{ name: string; count: number }>"
+      - typescript-operations:
+          nonOptionalTypename: true
+          scalars:
+            DateTime:
+              input: string
+              output: string
+            Decimal:
+              input: string
+              output: string
+            JSON:
+              input: unknown
+              output: "Array<{ name: string; count: number }>"
       - typed-document-node
