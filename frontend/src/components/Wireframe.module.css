@@ -27,6 +27,12 @@
   border-bottom: none;
 }
 
+@media (max-width: 640px) {
+  .wireframe {
+    display: none;
+  }
+}
+
 @keyframes isometric-rotate {
   0% {
     transform: rotateX(70deg) rotateY(0deg) rotateZ(-45deg);

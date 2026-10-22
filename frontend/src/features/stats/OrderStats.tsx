@@ -1,8 +1,9 @@
 import { useQuery } from "@apollo/client";
-import { Bar, BarDatum } from "@nivo/bar";
+import { BarDatum, ResponsiveBar } from "@nivo/bar";
 import React from "react";
 
 import { OrderStatsDocument, SchemaOrderStatsByTime } from "../../types";
+import styles from "./Stats.module.css";
 import { StatsView } from "./StatsView";
 import { chartTheme } from "./chartTheme";
 
@@ -24,17 +25,18 @@ const months = {
 };
 
 const OrderBar = ({ data }: { data: BarDatum[] }) => (
-  <Bar
-    data={data}
-    theme={chartTheme}
-    margin={{ left: 60, bottom: 40 }}
-    width={1200}
-    height={400}
-    colorBy="indexValue"
-    enableLabel={false}
-    tooltipLabel={(d) => d.id.toString()}
-    axisLeft={{ legend: "Ordre", legendPosition: "middle", legendOffset: -50 }}
-  />
+  <div className={styles.chart}>
+    <ResponsiveBar
+      data={data}
+      theme={chartTheme}
+      margin={{ top: 10, right: 10, bottom: 70, left: 60 }}
+      colorBy="indexValue"
+      enableLabel={false}
+      tooltipLabel={(d) => d.id.toString()}
+      axisLeft={{ legend: "Ordre", legendPosition: "middle", legendOffset: -50 }}
+      axisBottom={{ tickRotation: -35 }}
+    />
+  </div>
 );
 
 const OrderStats = () => {

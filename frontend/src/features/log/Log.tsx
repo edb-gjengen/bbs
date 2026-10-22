@@ -34,32 +34,34 @@ const Log = () => {
     <div className={styles.log}>
       <div>
         <h2>Ordre</h2>
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Når</th>
-              <th scope="col">Hvem</th>
-              <th scope="col">Hva</th>
-              <th scope="col">Sum</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td>{formatTime(order.created)}</td>
-                <td>{order.isExternal ? "Ekstern" : `${order.customer?.firstName} ${order.customer?.lastName}`}</td>
-                <td>
-                  {(order.orderlines ?? []).map((line) => (
-                    <div key={line.id}>
-                      {Number(line.amount)}x {line.product.name}
-                    </div>
-                  ))}
-                </td>
-                <td>{Number(order.orderSum)}</td>
+        <div className={styles.tableWrap}>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Når</th>
+                <th scope="col">Hvem</th>
+                <th scope="col">Hva</th>
+                <th scope="col">Sum</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr key={order.id}>
+                  <td>{formatTime(order.created)}</td>
+                  <td>{order.isExternal ? "Ekstern" : `${order.customer?.firstName} ${order.customer?.lastName}`}</td>
+                  <td>
+                    {(order.orderlines ?? []).map((line) => (
+                      <div key={line.id}>
+                        {Number(line.amount)}x {line.product.name}
+                      </div>
+                    ))}
+                  </td>
+                  <td>{Number(order.orderSum)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <nav aria-label="Order pagination">
           <ul className={styles.pagination}>
             <li className={clsx({ [styles.disabled]: orderOffset <= 0 })}>
@@ -89,26 +91,28 @@ const Log = () => {
       </div>
       <div>
         <h2>Transaksjoner</h2>
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Når</th>
-              <th scope="col">Hvem</th>
-              <th scope="col">Innskudd</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((trans) => (
-              <tr key={trans.id}>
-                <td>{formatTime(trans.created)}</td>
-                <td>
-                  {trans.user.firstName} {trans.user.lastName}
-                </td>
-                <td>{Number(trans.amount)}</td>
+        <div className={styles.tableWrap}>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Når</th>
+                <th scope="col">Hvem</th>
+                <th scope="col">Innskudd</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {transactions.map((trans) => (
+                <tr key={trans.id}>
+                  <td>{formatTime(trans.created)}</td>
+                  <td>
+                    {trans.user.firstName} {trans.user.lastName}
+                  </td>
+                  <td>{Number(trans.amount)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <nav aria-label="Transaction pagination">
           <ul className={styles.pagination}>
             <li className={clsx({ [styles.disabled]: transactionOffset <= 0 })}>

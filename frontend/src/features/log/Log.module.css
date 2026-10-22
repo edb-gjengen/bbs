@@ -1,7 +1,17 @@
 .log {
   display: grid;
+  min-width: 0;
   gap: 1rem;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tableWrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.tableWrap table {
+  width: 100%;
 }
 .disabled,
 .disabled a:link {
@@ -29,4 +39,21 @@
 
 .disabled a:hover {
   color: rgba(121, 152, 238, 0.5);
+}
+
+@media (max-width: 760px) {
+  .log {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    gap: 0 0.5rem;
+  }
+
+  .pagination a {
+    display: inline-block;
+    padding: 0.6rem 0.8rem;
+  }
 }

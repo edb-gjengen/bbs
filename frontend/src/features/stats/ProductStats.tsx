@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { Pie } from "@nivo/pie";
+import { ResponsivePie } from "@nivo/pie";
 import React from "react";
 
 import { AllProductStatsDocument } from "../../types";
@@ -23,19 +23,19 @@ const ProductStats = () => {
         {(data?.allProducts || []).map((product) => (
           <div key={product.id}>
             {product.name}
-            <Pie
-              margin={{ top: 40, right: 120, bottom: 40, left: 120 }}
-              data={product.userCounts.map((uc: UserCount) => ({
-                id: uc.name,
-                label: uc.name,
-                value: uc.count,
-              }))}
-              width={400}
-              height={300}
-              theme={chartTheme}
-              arcLabelsTextColor="#17121a"
-              arcLabelsSkipAngle={8}
-            />
+            <div className={styles.productChart}>
+              <ResponsivePie
+                margin={{ top: 30, right: 50, bottom: 30, left: 50 }}
+                data={product.userCounts.map((uc: UserCount) => ({
+                  id: uc.name,
+                  label: uc.name,
+                  value: uc.count,
+                }))}
+                theme={chartTheme}
+                arcLabelsTextColor="#17121a"
+                arcLabelsSkipAngle={8}
+              />
+            </div>
           </div>
         ))}
       </div>

@@ -1,8 +1,17 @@
 .products {
   display: grid;
-  max-width: 1200px;
-  gap: 1rem;
-  grid-template-columns: repeat(3, 1fr);
+  max-width: 100%;
+  gap: 1.5rem 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+}
+
+.productChart {
+  height: 300px;
+}
+
+.chart {
+  width: 100%;
+  height: 360px;
 }
 
 .statsNav {
@@ -26,4 +35,15 @@
 .statsNav a:hover {
   border: 1px solid var(--border);
   border-radius: 4px;
+}
+
+@media (max-width: 640px) {
+  .statsNav ul {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chart {
+    height: 300px;
+  }
 }
