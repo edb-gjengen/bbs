@@ -1,4 +1,4 @@
-import pytest  # noqa: INP001
+import pytest
 from django.test import Client
 
 

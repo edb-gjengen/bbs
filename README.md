@@ -30,6 +30,12 @@ To test the frontend against a different backend, set `VITE_DEV_API_PROXY` when 
 
 To create the admin during data seeding instead, set `BBS_SEED_ADMIN_PASSWORD` for that command; the command only creates a local `admin` superuser if one does not already exist.
 
+## Testing
+
+```bash
+mise run test
+```
+
 ## References
 
 - We use JS code generation to work with queries/mutations in our graphql API: <https://github.com/dotansimha/graphql-typed-document-node>

@@ -16,8 +16,8 @@ export type Scalars = {
   DateTime: { input: string; output: string; }
   /** Decimal (fixed-point) */
   Decimal: { input: string; output: string; }
-  /** The GenericScalar scalar type represents a generic GraphQL scalar value that could be: List or Object. */
-  JSONScalar: { input: unknown; output: Array<{ name: string; count: number }>; }
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](https://ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf). */
+  JSON: { input: unknown; output: Array<{ name: string; count: number }>; }
 };
 
 export type SchemaAboveMaxSaldo = SchemaError & {
@@ -221,7 +221,7 @@ export type SchemaProduct = {
   updated: Scalars['DateTime']['output'];
   wholesaleUnitPrice: Scalars['Decimal']['output'];
   wholesaleValue: Scalars['Decimal']['output'];
-  userCounts: Scalars['JSONScalar']['output'];
+  userCounts: Scalars['JSON']['output'];
 };
 
 export type SchemaProductFilter = {

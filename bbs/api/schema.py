@@ -21,7 +21,8 @@ class Mutation(InventoryMutations, ShopMutations, UsersMutations):
 
 
 class HandleNotFound(SchemaExtension):
-    def on_request_end(self):
+    def on_operation(self):
+        yield
         result = self.execution_context.result
         if result.errors:
             for error in result.errors:

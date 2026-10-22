@@ -1,3 +1,6 @@
 [tools]
 python = "3.11"
 uv = "latest"
+
+[tasks.test]
+run = "uv run pytest --cov"

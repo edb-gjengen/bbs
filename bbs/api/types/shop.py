@@ -4,9 +4,9 @@ from typing import TYPE_CHECKING, Annotated
 import strawberry
 import strawberry_django
 from strawberry import auto
+from strawberry.scalars import JSON
 
 from bbs import models
-from bbs.api.types.utils import JSONScalar
 
 if TYPE_CHECKING:
     from .users import User
@@ -31,7 +31,7 @@ class Product:
     wholesale_unit_price: Decimal
     wholesale_value: Decimal
     # FIXME: stricter types
-    user_counts: JSONScalar
+    user_counts: JSON
 
 
 @strawberry_django.order_type(models.Order)

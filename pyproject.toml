@@ -22,11 +22,20 @@ dependencies = [
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "bbs.settings"
 
+[tool.coverage.run]
+source = ["bbs"]
+omit = ["bbs/tests/*", "**/test_*.py", "manage.py", "bbs/wsgi.py"]
+
+[tool.coverage.report]
+skip_covered = true
+show_missing = true
+
 [dependency-groups]
 dev = [
     "ruff==0.11.7",
     "pytest-django",
     "pytest",
+    "pytest-cov>=7.1.0",
 ]
 
 [tool.ruff]

@@ -1,4 +1,4 @@
-import pytest  # noqa: INP001
+import pytest
 from django.contrib.auth import get_user_model
 from django.test import Client
 from django.utils import timezone
@@ -15,6 +15,26 @@ def gql_client_fixture(client: Client):
 @pytest.fixture(name="product")
 def product_fix(db):  # noqa: ARG001
     return Product.objects.create(name="borg", sale_price_ext=35, sale_price_int=30)
+
+
+def test_user_not_found(db, gql_client):  # noqa: ARG001
+    result = gql_client.query(
+        """
+        query User($userId: ID!) {
+          user(userId: $userId) {
+            id
+          }
+        }
+        """,
+        {"userId": "999"},
+        assert_no_errors=False,
+    )
+
+    assert result.errors
+    error = result.errors[0]
+    assert error["path"] == ["user"]
+    assert error["extensions"]["code"] == "NOT_FOUND"
+    assert error["extensions"]["model"] == "User"
 
 
 def test_create_order(product, gql_client):
