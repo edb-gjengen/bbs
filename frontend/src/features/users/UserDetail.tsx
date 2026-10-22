@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { GQLError } from "../../components/GQLError";
 import { SchemaUser as User, UserDetailDocument, SchemaUserProfile as UserProfile } from "../../types";
 import { formatMonth, formatTime } from "../../utils/time";
+import { chartTheme, chartTooltipStyle } from "../stats/chartTheme";
 import styles from "./UserDetail.module.css";
 
 const UserDetail = () => {
@@ -62,6 +63,7 @@ const UserDetail = () => {
         <h2>Kjøp over tid</h2>
         <Line
           data={series}
+          theme={chartTheme}
           width={1000}
           height={400}
           margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
@@ -88,13 +90,7 @@ const UserDetail = () => {
           useMesh
           pointLabelYOffset={0}
           tooltip={({ point }) => (
-            <div
-              style={{
-                background: "white",
-                padding: "9px 12px",
-                border: "1px solid #ccc",
-              }}
-            >
+            <div style={chartTooltipStyle}>
               <div>
                 <strong>{point.data.xFormatted}</strong>
               </div>

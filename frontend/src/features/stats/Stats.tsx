@@ -4,6 +4,7 @@ import React from "react";
 
 import { ProductStatsDocument } from "../../types";
 import { StatsView } from "./StatsView";
+import { chartTheme, chartTooltipStyle } from "./chartTheme";
 
 const Stats = () => {
   const { data, loading } = useQuery(ProductStatsDocument);
@@ -21,6 +22,7 @@ const Stats = () => {
       <h2>Kjøp over tid</h2>
       <Line
         data={series}
+        theme={chartTheme}
         width={1000}
         height={400}
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
@@ -47,13 +49,7 @@ const Stats = () => {
         useMesh
         pointLabelYOffset={0}
         tooltip={({ point }) => (
-          <div
-            style={{
-              background: "white",
-              padding: "9px 12px",
-              border: "1px solid #ccc",
-            }}
-          >
+          <div style={chartTooltipStyle}>
             <div>
               <strong>{point.data.xFormatted}</strong>
             </div>

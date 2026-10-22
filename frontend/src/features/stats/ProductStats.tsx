@@ -5,6 +5,7 @@ import React from "react";
 import { AllProductStatsDocument } from "../../types";
 import styles from "./Stats.module.css";
 import { StatsView } from "./StatsView";
+import { chartTheme } from "./chartTheme";
 
 type UserCount = {
   name: string;
@@ -31,6 +32,9 @@ const ProductStats = () => {
               }))}
               width={400}
               height={300}
+              theme={chartTheme}
+              arcLabelsTextColor="#17121a"
+              arcLabelsSkipAngle={8}
             />
           </div>
         ))}

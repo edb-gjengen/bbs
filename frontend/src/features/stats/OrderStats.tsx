@@ -4,6 +4,7 @@ import React from "react";
 
 import { OrderStatsDocument, SchemaOrderStatsByTime } from "../../types";
 import { StatsView } from "./StatsView";
+import { chartTheme } from "./chartTheme";
 
 const days = { 1: "Mandag", 2: "Tirsdag", 3: "Onsdag", 4: "Torsdag", 5: "Fredag", 6: "Lørdag", 7: "Søndag" };
 
@@ -25,6 +26,7 @@ const months = {
 const OrderBar = ({ data }: { data: BarDatum[] }) => (
   <Bar
     data={data}
+    theme={chartTheme}
     margin={{ left: 60, bottom: 40 }}
     width={1200}
     height={400}
