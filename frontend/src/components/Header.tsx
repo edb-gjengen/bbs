@@ -8,7 +8,7 @@ const ADMIN_URL = `${import.meta.env.VITE_API_URL}/admin/`;
 
 const navLinkStyles = ({ isActive }: { isActive: boolean }) => clsx(styles.navLink, { [styles.active]: isActive });
 
-export const Header = (): JSX.Element => {
+export const Header = (): React.JSX.Element => {
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>

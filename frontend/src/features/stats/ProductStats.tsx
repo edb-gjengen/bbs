@@ -1,11 +1,10 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { ResponsivePie } from "@nivo/pie";
-import React from "react";
 
-import { AllProductStatsDocument } from "../../types";
 import styles from "./Stats.module.css";
 import { StatsView } from "./StatsView";
 import { chartTheme } from "./chartTheme";
+import { AllProductStatsDocument } from "../../types";
 
 type UserCount = {
   name: string;

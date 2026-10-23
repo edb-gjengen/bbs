@@ -1,11 +1,10 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { BarDatum, ResponsiveBar } from "@nivo/bar";
-import React from "react";
 
-import { OrderStatsDocument, SchemaOrderStatsByTime } from "../../types";
 import styles from "./Stats.module.css";
 import { StatsView } from "./StatsView";
 import { chartTheme } from "./chartTheme";
+import { OrderStatsDocument, SchemaOrderStatsByTime } from "../../types";
 
 const days = { 1: "Mandag", 2: "Tirsdag", 3: "Onsdag", 4: "Torsdag", 5: "Fredag", 6: "Lørdag", 7: "Søndag" };
 

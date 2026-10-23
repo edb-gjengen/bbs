@@ -16,7 +16,7 @@ const UserStats = React.lazy(() => import("./features/stats/UserStats"));
 const UserDetail = React.lazy(() => import("./features/users/UserDetail"));
 const UserList = React.lazy(() => import("./features/users/UserList"));
 
-export const Routes = (): JSX.Element => (
+export const Routes = (): React.JSX.Element => (
   <React.Suspense fallback={<div>Loading...</div>}>
     <ReactRouterRoutes>
       <Route path="/deposit" element={<Deposit />} />

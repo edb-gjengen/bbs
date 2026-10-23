@@ -1,14 +1,14 @@
 import React from "react";
 
-import { AllProductsQuery, OrderLineInput } from "../../types";
-import { UserCard } from "../users/UserCard";
 import { ProductCard } from "./ProductCard";
 import styles from "./Register.module.css";
 import { useRegister } from "./useRegister";
+import { AllProductsQuery, OrderLineInput } from "../../types";
+import { UserCard } from "../users/UserCard";
 
 const USER_EXTERNAL = "external";
 
-const Register = (): JSX.Element => {
+const Register = (): React.JSX.Element => {
   const {
     users,
     products,

@@ -1,12 +1,12 @@
-import { useQuery } from "@apollo/client";
-import React, { useState } from "react";
+import { useQuery } from "@apollo/client/react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import styles from "./Inventory.module.css";
 import { GQLError } from "../../components/GQLError";
 import { InventoryPageDocument } from "../../types";
 import { formatCurrency } from "../../utils/currency";
 import { formatTime } from "../../utils/time";
-import styles from "./Inventory.module.css";
 
 const PAGE_SIZE = 20;
 

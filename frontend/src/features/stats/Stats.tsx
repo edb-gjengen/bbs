@@ -1,11 +1,10 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { ResponsiveLine } from "@nivo/line";
-import React from "react";
 
-import { ProductStatsDocument } from "../../types";
 import styles from "./Stats.module.css";
 import { StatsView } from "./StatsView";
 import { chartTheme, chartTooltipStyle } from "./chartTheme";
+import { ProductStatsDocument } from "../../types";
 
 const Stats = () => {
   const { data, loading } = useQuery(ProductStatsDocument);

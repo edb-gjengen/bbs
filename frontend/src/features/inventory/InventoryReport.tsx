@@ -1,11 +1,11 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { format, subDays } from "date-fns";
 import React, { useState } from "react";
 
+import styles from "./Inventory.module.css";
 import { GQLError } from "../../components/GQLError";
 import { InventoryReportDocument } from "../../types";
 import { formatCurrency } from "../../utils/currency";
-import styles from "./Inventory.module.css";
 
 const today = () => format(new Date(), "yyyy-MM-dd");
 const monthAgo = () => format(subDays(new Date(), 30), "yyyy-MM-dd");

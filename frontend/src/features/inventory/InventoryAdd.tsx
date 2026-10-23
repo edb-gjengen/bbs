@@ -1,11 +1,11 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client/react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { GQLError } from "../../components/GQLError";
-import { useToast } from "../../components/ToastProvider";
-import { CreateInventoryTransactionDocument, InventoryProductsDocument } from "../../types";
 import styles from "./Inventory.module.css";
+import { GQLError } from "../../components/GQLError";
+import { useToast } from "../../hooks/useToast";
+import { CreateInventoryTransactionDocument, InventoryProductsDocument } from "../../types";
 
 const InventoryAdd = () => {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { ApolloProvider } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client/react";
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 
@@ -11,7 +11,7 @@ import { Toast } from "./components/Toast";
 import { ToastProvider } from "./components/ToastProvider";
 import { Wireframe } from "./components/Wireframe";
 
-const App = (): JSX.Element => (
+const App = (): React.JSX.Element => (
   <ApolloProvider client={client}>
     <Router>
       <ToastProvider>

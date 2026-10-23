@@ -2,9 +2,9 @@ import clsx from "clsx";
 import React from "react";
 
 import styles from "./Toast.module.css";
-import { useToast } from "./ToastProvider";
+import { useToast } from "../hooks/useToast";
 
-export const Toast = (): JSX.Element => {
+export const Toast = (): React.JSX.Element => {
   const { showToast, message, background, visible } = useToast();
 
   const classes = clsx([styles[background], styles.toast], { [styles.visible]: visible });

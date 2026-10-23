@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import React, { MouseEventHandler } from "react";
 
+import styles from "./UserCard.module.css";
 import { AllUsersQuery } from "../../types";
 import { formatCurrency } from "../../utils/currency";
-import styles from "./UserCard.module.css";
 
 type UserCardProps = {
   user: AllUsersQuery["allUsers"][0] | null;
@@ -12,7 +12,7 @@ type UserCardProps = {
 };
 
 /** If user is null, then it's the special external user */
-export const UserCard = ({ user, onUser, active = false }: UserCardProps): JSX.Element => {
+export const UserCard = ({ user, onUser, active = false }: UserCardProps): React.JSX.Element => {
   const classes = clsx(styles.user, { [styles.active]: active });
   const userBalanceString = formatCurrency(Number(user?.profile?.balance));
   return (

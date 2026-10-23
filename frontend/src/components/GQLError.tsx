@@ -1,5 +1,5 @@
-import { ApolloError } from "@apollo/client";
-import React from "react";
+import type { ErrorLike } from "@apollo/client";
+import { CombinedGraphQLErrors } from "@apollo/client/errors";
 
 import styles from "./GQLError.module.css";
 
@@ -11,9 +11,9 @@ const formatModel = (text: string) => {
   return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
 };
 
-export const GQLError = ({ error }: { error: ApolloError }) => {
-  if (error?.graphQLErrors?.length == 1) {
-    const single = error?.graphQLErrors[0];
+export const GQLError = ({ error }: { error: ErrorLike }) => {
+  if (error instanceof CombinedGraphQLErrors && error.errors.length === 1) {
+    const single = error.errors[0];
     if (single?.extensions?.code === "NOT_FOUND") {
       const modelPretty = formatModel(single?.extensions?.model as string);
       return <div className={styles.errorMessage}>{`${modelPretty} not found`}</div>;

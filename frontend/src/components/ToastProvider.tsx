@@ -1,35 +1,17 @@
-import React, { ReactNode, useContext, useState } from "react";
+import React, { useState } from "react";
+import type { ReactNode } from "react";
 
-type Background = "primary" | "danger";
-
-interface ToastProps {
-  visible: boolean;
-  message: string;
-  showToast: (message: string, background?: Background) => void;
-  hide: () => void;
-  background: Background;
-}
-
-const defaultState = {
-  // FIXME: revert
-  visible: false,
-  message: "",
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  showToast: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  hide: () => {},
-  background: "primary" as Background,
-};
-
-const ToastContext = React.createContext<ToastProps>(defaultState);
+import { ToastContext, defaultToastState } from "../contexts/ToastContext";
+import type { Background } from "../contexts/ToastContext";
 
 type ToastProviderProps = {
   children: ReactNode;
 };
-export const ToastProvider = ({ children }: ToastProviderProps): JSX.Element => {
-  const [visible, setVisible] = useState(defaultState.visible);
-  const [message, setMessage] = useState(defaultState.message);
-  const [background, setBackground] = useState(defaultState.background);
+
+export const ToastProvider = ({ children }: ToastProviderProps): React.JSX.Element => {
+  const [visible, setVisible] = useState(defaultToastState.visible);
+  const [message, setMessage] = useState(defaultToastState.message);
+  const [background, setBackground] = useState(defaultToastState.background);
 
   const showToast = (newMessage: string, background: Background = "primary") => {
     setMessage(newMessage);
@@ -49,5 +31,3 @@ export const ToastProvider = ({ children }: ToastProviderProps): JSX.Element => 
     <ToastContext.Provider value={{ visible, showToast, message, hide, background }}>{children}</ToastContext.Provider>
   );
 };
-
-export const useToast = (): ToastProps => useContext(ToastContext);

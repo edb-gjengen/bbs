@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import React, { MouseEventHandler } from "react";
 
-import { AllProductsQuery } from "../../types";
 import styles from "./ProductCard.module.css";
+import { AllProductsQuery } from "../../types";
 
 type ProductCardProps = {
   product: AllProductsQuery["allProducts"][number];
@@ -11,7 +11,7 @@ type ProductCardProps = {
   amount: number;
 };
 
-export const ProductCard = ({ product, onProduct, amount, active = false }: ProductCardProps): JSX.Element => {
+export const ProductCard = ({ product, onProduct, amount, active = false }: ProductCardProps): React.JSX.Element => {
   const classes = clsx(styles.product, { [styles.active]: active });
   return (
     <button className={classes} type="button" onClick={onProduct} title={product.name}>

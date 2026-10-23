@@ -1,7 +1,7 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { useState } from "react";
 
-import { useToast } from "../../components/ToastProvider";
+import { useToast } from "../../hooks/useToast";
 import { AllUsersDocument, CreateDepositDocument } from "../../types";
 
 export const useDeposit = () => {
@@ -32,9 +32,9 @@ export const useDeposit = () => {
     }
 
     if (res.data?.createDeposit?.__typename === "CreateDepositSuccess") {
-      const { transaction } = res.data?.createDeposit;
+      const { transaction } = res.data.createDeposit;
       showToast(
-        `${transaction.user.firstName} har satt inn${transaction.amount}. Ny saldo er ${transaction.user.profile?.balance}.`,
+        `${transaction.user.firstName} har satt inn ${transaction.amount}. Ny saldo er ${transaction.user.profile?.balance}.`,
       );
       reset();
       return;

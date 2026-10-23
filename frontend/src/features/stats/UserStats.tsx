@@ -1,12 +1,11 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { ResponsiveBar } from "@nivo/bar";
-import React from "react";
 
-import { GQLError } from "../../components/GQLError";
-import { UserStatsDocument } from "../../types";
 import styles from "./Stats.module.css";
 import { StatsView } from "./StatsView";
 import { chartTheme } from "./chartTheme";
+import { GQLError } from "../../components/GQLError";
+import { UserStatsDocument } from "../../types";
 
 const UserStats = () => {
   const { data, loading, error } = useQuery(UserStatsDocument);

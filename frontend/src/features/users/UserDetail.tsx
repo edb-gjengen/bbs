@@ -1,13 +1,12 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { ResponsiveLine } from "@nivo/line";
-import React from "react";
 import { useParams } from "react-router-dom";
 
+import styles from "./UserDetail.module.css";
 import { GQLError } from "../../components/GQLError";
 import { SchemaUser as User, UserDetailDocument, SchemaUserProfile as UserProfile } from "../../types";
 import { formatMonth, formatTime } from "../../utils/time";
 import { chartTheme, chartTooltipStyle } from "../stats/chartTheme";
-import styles from "./UserDetail.module.css";
 
 const UserDetail = () => {
   const { userId } = useParams();

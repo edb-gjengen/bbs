@@ -1,10 +1,11 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { defineConfig } from "vite";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
 import svgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [svgr()],
+  plugins: [react(), babel({ presets: [reactCompilerPreset()] }), svgr()],
   define: {
     __DEV__: process.env.NODE_ENV !== "production",
   },

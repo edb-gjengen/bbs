@@ -1,5 +1,5 @@
-import { useQuery } from "@apollo/client";
-import React, { useState } from "react";
+import { useQuery } from "@apollo/client/react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { AllUsersDocument } from "../../types";

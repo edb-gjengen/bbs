@@ -1,11 +1,10 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import clsx from "clsx";
-import React from "react";
 import { useUrlSearchParams } from "use-url-search-params";
 
+import styles from "./Log.module.css";
 import { OrderListDocument, TransactionListDocument } from "../../types";
 import { formatTime } from "../../utils/time";
-import styles from "./Log.module.css";
 
 const PAGE_SIZE = 10;
 

@@ -1,9 +1,8 @@
-import { useMutation } from "@apollo/client";
-import React from "react";
+import { useMutation } from "@apollo/client/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { CreateUserDocument } from "../../types";
 import styles from "./UserCreate.module.css";
+import { CreateUserDocument } from "../../types";
 
 type FormValues = {
   firstName: string;

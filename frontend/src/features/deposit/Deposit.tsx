@@ -1,10 +1,10 @@
 import React from "react";
 
-import { UserCard } from "../users/UserCard";
 import styles from "./Deposit.module.css";
 import { useDeposit } from "./useDeposit";
+import { UserCard } from "../users/UserCard";
 
-const Deposit = (): JSX.Element => {
+const Deposit = (): React.JSX.Element => {
   const {
     loading,
     selectedUser,

@@ -1,7 +1,7 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { useState } from "react";
 
-import { useToast } from "../../components/ToastProvider";
+import { useToast } from "../../hooks/useToast";
 import {
   AllProductsDocument,
   AllProductsQuery,
