@@ -75,32 +75,24 @@ class InventoryQueries:
         inventory_purchases = sum((product["purchase_value"] for product in product_data), Decimal(0))
         product_sales = sum((product["sales_value"] for product in product_data), Decimal(0))
 
-        deposits = (
-            models.Transaction.objects.filter(created__range=(start_time, end_time)).aggregate(total=Sum("amount"))[
-                "total"
-            ]
-            or Decimal(0)
-        )
-        order_purchases = (
-            models.Order.objects.filter(created__range=(start_time, end_time)).aggregate(total=Sum("order_sum"))[
-                "total"
-            ]
-            or Decimal(0)
-        )
-        deposits_start = (
-            models.Transaction.objects.filter(created__lt=start_time).aggregate(total=Sum("amount"))["total"]
-            or Decimal(0)
-        )
-        orders_start = (
-            models.Order.objects.filter(created__lt=start_time).aggregate(total=Sum("order_sum"))["total"] or Decimal(0)
-        )
-        deposits_end = (
-            models.Transaction.objects.filter(created__lte=end_time).aggregate(total=Sum("amount"))["total"]
-            or Decimal(0)
-        )
-        orders_end = (
-            models.Order.objects.filter(created__lte=end_time).aggregate(total=Sum("order_sum"))["total"] or Decimal(0)
-        )
+        deposits = models.Transaction.objects.filter(created__range=(start_time, end_time)).aggregate(
+            total=Sum("amount")
+        )["total"] or Decimal(0)
+        order_purchases = models.Order.objects.filter(created__range=(start_time, end_time)).aggregate(
+            total=Sum("order_sum")
+        )["total"] or Decimal(0)
+        deposits_start = models.Transaction.objects.filter(created__lt=start_time).aggregate(total=Sum("amount"))[
+            "total"
+        ] or Decimal(0)
+        orders_start = models.Order.objects.filter(created__lt=start_time).aggregate(total=Sum("order_sum"))[
+            "total"
+        ] or Decimal(0)
+        deposits_end = models.Transaction.objects.filter(created__lte=end_time).aggregate(total=Sum("amount"))[
+            "total"
+        ] or Decimal(0)
+        orders_end = models.Order.objects.filter(created__lte=end_time).aggregate(total=Sum("order_sum"))[
+            "total"
+        ] or Decimal(0)
 
         return InventoryReport(
             products=[InventoryReportProduct(**product) for product in product_data],
