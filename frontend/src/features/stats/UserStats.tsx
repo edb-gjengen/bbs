@@ -19,7 +19,9 @@ const UserStats = () => {
       total: Number(user.profile?.orderSumTotal || 0),
     }))
     .sort((a, b) => b.total - a.total)
-    .slice(0, 10);
+    .slice(0, 10)
+    // nivo draws the first item of a horizontal chart at the bottom
+    .reverse();
 
   return (
     <StatsView loading={loading}>
@@ -40,7 +42,7 @@ const UserStats = () => {
               legendPosition: "middle",
               legendOffset: 32,
             }}
-            axisLeft={null}
+            axisLeft={{ tickSize: 0, tickPadding: 8 }}
             valueFormat={(value) => `${Number(value).toLocaleString("no")} kr`}
           />
         </div>
