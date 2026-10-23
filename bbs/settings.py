@@ -94,6 +94,10 @@ INSTALLED_APPS += LOCAL_APPS
 
 LOGIN_REDIRECT_URL = "/"
 
+# Where Django's own routes (graphql, admin, accounts) are mounted. Production serves
+# them under api/ beside the frontend; in development Vite proxies them at the root.
+BBS_API_PREFIX = ""
+
 SESSION_COOKIE_AGE = 1209600  # 15 minutes
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 

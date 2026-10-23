@@ -1,0 +1,14 @@
+.git
+.venv
+**/__pycache__
+**/node_modules
+static/assets
+static/index.html
+staticfiles
+media
+db.sqlite3
+.env
+bbs/local_settings.py
+bbs/management/commands/generate_testdata.py
+.coverage
+coverage.xml

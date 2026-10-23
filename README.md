@@ -37,6 +37,10 @@ To create the admin during data seeding instead, set `BBS_SEED_ADMIN_PASSWORD` f
 mise run test
 ```
 
+## Deployment
+
+Every push to main that passes the tests is built into `git.neuf.no/edb/bbs:<sha>` and deployed to amiga by `.gitea/workflows/deploy.yml`, while the repository variable `DEPLOY_AMIGA` is `true`. The image runs with `bbs.settings_prod`: SQLite and uploads in `/data`, Django under `/api/` and the frontend at the root. The stacks on amiga, one per tenant, are the `bbs` role in [edb-infra](https://git.neuf.no/edb/edb-infra).
+
 ## References
 
 - We use JS code generation to work with queries/mutations in our graphql API: <https://github.com/dotansimha/graphql-typed-document-node>
