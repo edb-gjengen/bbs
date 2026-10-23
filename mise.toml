@@ -1,6 +1,40 @@
 [tools]
+node = "20"
+prek = "latest"
 python = "3.11"
 uv = "latest"
 
+[tasks.server]
+run = "uv run manage.py runserver 127.0.0.1:3000"
+
+[tasks.frontend-install]
+run = "npm install"
+dir = "frontend"
+sources = ["package.json", "package-lock.json"]
+outputs = ["node_modules/.package-lock.json"]
+
+[tasks.frontend-run]
+depends = ["frontend-install"]
+run = "npm run start"
+dir = "frontend"
+
+[tasks.frontend-build]
+depends = ["frontend-install"]
+run = "npm run build"
+dir = "frontend"
+
+[tasks.generate-schema]
+depends = ["frontend-install"]
+run = "uv run manage.py export_schema && cd frontend && npm run generate"
+
+[tasks.pre-commit]
+run = "prek run --all-files"
+
 [tasks.test]
 run = "uv run pytest --cov"
+
+[tasks.lint]
+run = "uv run ruff check ."
+
+[tasks.fmt]
+run = "uv run ruff format ."
