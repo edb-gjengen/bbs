@@ -7,6 +7,8 @@ import { GQLError } from "../../components/GQLError";
 import { useToast } from "../../hooks/useToast";
 import { CreateInventoryTransactionDocument, InventoryProductsDocument } from "../../types";
 
+const LOGIN_URL = `${import.meta.env.VITE_API_URL}/accounts/login/?next=/inventory/add`;
+
 const InventoryAdd = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -55,7 +57,7 @@ const InventoryAdd = () => {
     <div>
       <h2>Registrer varetransaksjon</h2>
       <p>
-        Du må være innlogget for å registrere varer. <a href="/accounts/login/">Logg inn</a>.
+        Du må være innlogget for å registrere varer. <a href={LOGIN_URL}>Logg inn</a>.
       </p>
       <form className={styles.form} onSubmit={onSubmit}>
         <label>

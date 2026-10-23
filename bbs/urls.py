@@ -18,7 +18,12 @@ urlpatterns = [
     path("inventory/add/", spa_index),
     path("report", spa_index, name="report"),
     path("report/", spa_index),
-    path("accounts/login/", LoginView.as_view(), name="django.contrib.auth.views.login"),
+    # bbs has no login template of its own; the admin's works for any user
+    path(
+        "accounts/login/",
+        LoginView.as_view(template_name="admin/login.html", extra_context={"site_header": "BBS"}),
+        name="django.contrib.auth.views.login",
+    ),
     path(
         "accounts/logout/",
         LogoutView.as_view(),
