@@ -171,7 +171,9 @@ class OrderLine(models.Model):
         return f"{self.amount} {self.product} ({self.unit_price} kr per)"
 
     class Meta:  # noqa: DJ012
-        unique_together = ("order", "product")
+        constraints = [
+            models.UniqueConstraint(fields=["order", "product"], name="unique_order_product"),
+        ]
 
 
 class Transaction(models.Model):
