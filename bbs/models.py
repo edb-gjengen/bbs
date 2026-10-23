@@ -245,8 +245,8 @@ class UserProfile(models.Model):
 
     def image_url(self) -> str:
         if self.user.email:
-            md5_hash = hashlib.md5(self.user.email.lower().strip().encode()).hexdigest()  # noqa: S324
-            return f"https://www.gravatar.com/avatar/{md5_hash}?d=identicon"
+            sha256_hash = hashlib.sha256(self.user.email.lower().strip().encode()).hexdigest()
+            return f"https://www.gravatar.com/avatar/{sha256_hash}?d=identicon"
 
         return ""
 
