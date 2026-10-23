@@ -65,16 +65,17 @@ def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external
         price = product.sale_price_ext if is_external else product.sale_price_int
         ols.append(models.OrderLine(product=product, amount=ol.amount, unit_price=price))
         order_sum += ol.amount * price
-        product.inventory_amount -= ol.amount
-        product.save()
 
-    if not is_external and user.profile.balance <= order_sum:
+    if not is_external and user.profile.balance < order_sum:
         return InsufficientFunds(
             message="Du har ikke nok penger på bok.",
-            amount_lacking=abs(order_sum - user.profile.balance),
+            amount_lacking=float(abs(order_sum - user.profile.balance)),
         )
 
     # create
+    for ol in ols:
+        ol.product.inventory_amount -= ol.amount
+        ol.product.save()
     order = models.Order.objects.create(customer=user, order_sum=order_sum)
     for ol in ols:
         ol.order = order
@@ -127,7 +128,7 @@ def create_deposit(user_id: ID, amount: int) -> CreateDepositResponse:
         return AboveMaxSaldo(
             message="Du prøver å sette inn for mye penger",
             max_saldo=settings.BBS_SALDO_MAX,
-            above=amount + user.profile.balance - settings.BBS_SALDO_MAX,
+            above=float(amount + user.profile.balance - settings.BBS_SALDO_MAX),
         )
 
     trans = models.Transaction.objects.create(user=user, amount=amount)
