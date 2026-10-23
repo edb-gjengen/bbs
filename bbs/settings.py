@@ -86,7 +86,6 @@ INSTALLED_APPS = [
     "django_extensions",
     "easy_thumbnails",
     "corsheaders",
-    "django_rename_app",
 ]
 LOCAL_APPS = [
     "bbs",

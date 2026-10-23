@@ -8,7 +8,7 @@ from bbs.api.schema import schema as schema_symbol
 
 
 class Command(BaseCommand):
-    help = " Write graphql schema to file or stdout"
+    help = "Write graphql schema to file or stdout"
 
     def add_arguments(self, parser: CommandParser):
         parser.add_argument("--filename", default="schema.graphql", help="`-` prints to stdout")
