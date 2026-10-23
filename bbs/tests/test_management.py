@@ -1,15 +1,7 @@
 import pytest
-from django.contrib.auth import get_user_model
 from django.core.management import call_command
 
 from bbs.models import UserProfile
-
-
-@pytest.fixture
-def user(db):  # noqa: ARG001
-    user = get_user_model().objects.create_user(username="profile-image-user", email="image@example.com")
-    UserProfile.objects.create(user=user)
-    return user
 
 
 def test_profile_images_updates_missing_image(user):

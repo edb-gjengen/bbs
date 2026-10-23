@@ -1,20 +1,51 @@
-import pytest
 from django.contrib.auth import get_user_model
-from django.test import Client
 from django.utils import timezone
-from strawberry.django.test import GraphQLTestClient
 
-from bbs.models import InventoryTransaction, Order, OrderLine, Product, Transaction
+from bbs.models import InventoryTransaction, Order, OrderLine, Transaction, UserProfile
 
+CREATE_ORDER = """
+mutation CreateOrder($customerId: ID!, $isExternal: Boolean!, $orderLines: [OrderLineInput!]!) {
+  createOrder(customerId: $customerId, isExternal: $isExternal, orderLines: $orderLines) {
+    ... on CreateOrderSuccess {
+      order { id orderSum orderlines { id product { id } } }
+    }
+    ... on InsufficientFunds {
+      amountLacking
+      error
+    }
+    ... on FormErrors {
+      message
+    }
+  }
+}
+"""
 
-@pytest.fixture(name="gql_client")
-def gql_client_fixture(client: Client):
-    return GraphQLTestClient(client)
+CREATE_DEPOSIT = """
+mutation CreateDeposit($userId: ID!, $amount: Int!) {
+  createDeposit(userId: $userId, amount: $amount) {
+    ... on CreateDepositSuccess {
+      transaction { id amount }
+    }
+    ... on AboveMaxSaldo {
+      maxSaldo
+      above
+    }
+    ... on FormErrors {
+      message
+    }
+  }
+}
+"""
 
-
-@pytest.fixture(name="product")
-def product_fix(db):  # noqa: ARG001
-    return Product.objects.create(name="borg", sale_price_ext=35, sale_price_int=30)
+CREATE_USER = """
+mutation CreateUser($input: UserInput!) {
+  createUser(input: $input) {
+    id
+    firstName
+    lastName
+  }
+}
+"""
 
 
 def test_user_not_found(db, gql_client):  # noqa: ARG001
@@ -206,3 +237,125 @@ def test_inventory_report_aggregates_period_data(product, gql_client):
     assert not products_result.errors
     assert products_result.data["allProducts"][0]["active"]
     assert products_result.data["inventoryTransactionList"][0]["amount"] == 5
+
+
+def test_create_order_no_customer(product, gql_client):
+    res = gql_client.query(
+        CREATE_ORDER,
+        {
+            "customerId": "999",
+            "isExternal": False,
+            "orderLines": [{"productId": product.id, "amount": 1}],
+        },
+    )
+    assert not res.errors
+    assert res.data["createOrder"]["message"]
+
+
+def test_create_order_empty_lines(product, gql_client):  # noqa: ARG001
+    res = gql_client.query(
+        CREATE_ORDER,
+        {
+            "customerId": "external",
+            "isExternal": True,
+            "orderLines": [],
+        },
+    )
+    assert not res.errors
+    assert res.data["createOrder"]["message"]
+
+
+def test_create_order_insufficient_funds(user, product, gql_client):
+    res = gql_client.query(
+        CREATE_ORDER,
+        {
+            "customerId": str(user.id),
+            "isExternal": False,
+            "orderLines": [{"productId": product.id, "amount": 1}],
+        },
+    )
+    assert not res.errors
+    assert res.data["createOrder"]["amountLacking"] == 20
+    assert res.data["createOrder"]["error"] is True
+    assert Order.objects.count() == 0
+    product.refresh_from_db()
+    assert product.inventory_amount == 0
+
+
+def test_create_order_internal_success(user, product, gql_client):
+    user.profile.balance = 100
+    user.profile.save()
+    res = gql_client.query(
+        CREATE_ORDER,
+        {
+            "customerId": str(user.id),
+            "isExternal": False,
+            "orderLines": [{"productId": product.id, "amount": 1}],
+        },
+    )
+    assert not res.errors
+    assert res.data["createOrder"]["order"]
+    user.profile.refresh_from_db()
+    assert user.profile.balance == 70
+    product.refresh_from_db()
+    assert product.inventory_amount == -1
+
+
+def test_create_order_exact_balance(user, product, gql_client):
+    user.profile.balance = 30
+    user.profile.save()
+    res = gql_client.query(
+        CREATE_ORDER,
+        {
+            "customerId": str(user.id),
+            "isExternal": False,
+            "orderLines": [{"productId": product.id, "amount": 1}],
+        },
+    )
+    assert not res.errors
+    assert res.data["createOrder"]["order"]
+    user.profile.refresh_from_db()
+    assert user.profile.balance == 0
+
+
+def test_create_deposit(user, gql_client):
+    res = gql_client.query(CREATE_DEPOSIT, {"userId": str(user.id), "amount": 100})
+    assert not res.errors
+    assert res.data["createDeposit"]["transaction"]
+    assert Transaction.objects.count() == 1
+    user.profile.refresh_from_db()
+    assert user.profile.balance == 110
+
+
+def test_create_deposit_invalid_user(db, gql_client):  # noqa: ARG001
+    res = gql_client.query(CREATE_DEPOSIT, {"userId": "999", "amount": 100})
+    assert not res.errors
+    assert res.data["createDeposit"]["message"]
+
+
+def test_create_deposit_invalid_amount(user, gql_client):
+    res = gql_client.query(CREATE_DEPOSIT, {"userId": str(user.id), "amount": 0})
+    assert not res.errors
+    assert res.data["createDeposit"]["message"]
+
+
+def test_create_deposit_above_max_saldo(user, gql_client):
+    res = gql_client.query(CREATE_DEPOSIT, {"userId": str(user.id), "amount": 1000})
+    assert not res.errors
+    assert res.data["createDeposit"]["maxSaldo"] is not None
+    assert res.data["createDeposit"]["above"] == 10
+    assert Transaction.objects.count() == 0
+
+
+def test_create_deposit_1337(user, gql_client):
+    # balance=10, so amount=1327 makes balance+amount==1337, bypassing max saldo
+    res = gql_client.query(CREATE_DEPOSIT, {"userId": str(user.id), "amount": 1327})
+    assert not res.errors
+    assert res.data["createDeposit"]["transaction"]
+
+
+def test_create_user(db, gql_client):  # noqa: ARG001
+    res = gql_client.query(CREATE_USER, {"input": {"email": "new@example.com", "firstName": "New", "lastName": "User"}})
+    assert not res.errors
+    assert get_user_model().objects.filter(username="new@example.com").exists()
+    assert UserProfile.objects.count() == 1
