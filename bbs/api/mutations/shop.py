@@ -42,7 +42,7 @@ def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external
     # clean and validate
     try:
         user = UserModel.objects.get(pk=customer_id)
-    except (UserModel.DoesNotExist, ValueError):
+    except UserModel.DoesNotExist, ValueError:
         user = None
 
     if user is None and not is_external:
@@ -111,7 +111,7 @@ def create_deposit(user_id: ID, amount: int) -> CreateDepositResponse:
     # clean and validate
     try:
         user = UserModel.objects.get(pk=user_id)
-    except (UserModel.DoesNotExist, ValueError):
+    except UserModel.DoesNotExist, ValueError:
         message = "Du har ikke valgt hvem som sette inn penger."
         return FormErrors(
             message=message,

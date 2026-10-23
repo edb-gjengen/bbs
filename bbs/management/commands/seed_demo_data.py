@@ -99,7 +99,7 @@ class Command(BaseCommand):
             created_at = self.timestamp(days_ago=days_ago)
             total = sum(
                 (products[name].sale_price_int * amount for name, amount in lines),
-                start=Decimal("0"),
+                start=Decimal(0),
             )
             order, created = Order.objects.get_or_create(
                 customer=user,
@@ -123,8 +123,8 @@ class Command(BaseCommand):
     @staticmethod
     def update_balances(users):
         for user, _ in users:
-            deposits = Transaction.objects.filter(user=user).aggregate(total=Sum("amount"))["total"] or Decimal("0")
-            purchases = Order.objects.filter(customer=user).aggregate(total=Sum("order_sum"))["total"] or Decimal("0")
+            deposits = Transaction.objects.filter(user=user).aggregate(total=Sum("amount"))["total"] or Decimal(0)
+            purchases = Order.objects.filter(customer=user).aggregate(total=Sum("order_sum"))["total"] or Decimal(0)
             profile = user.profile
             profile.balance = deposits - purchases
             profile.save(update_fields=["balance"])

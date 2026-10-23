@@ -42,7 +42,7 @@ def create_inventory_transaction(
 
     try:
         product = models.Product.objects.get(pk=data.product_id, active=True)
-    except (models.Product.DoesNotExist, ValueError):
+    except models.Product.DoesNotExist, ValueError:
         message = "Velg et aktivt produkt."
         return FormErrors(message=message, fields=[FieldError(field="product_id", message=message)])
 
