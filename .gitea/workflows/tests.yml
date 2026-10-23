@@ -22,6 +22,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The SPA tests serve the built static/index.html
+      - name: Build frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
       - name: Run migrations
         run: uv run --locked manage.py migrate
       - name: Run Django checks
