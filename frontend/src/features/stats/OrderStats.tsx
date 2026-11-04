@@ -1,9 +1,10 @@
 import { useQuery } from "@apollo/client/react";
-import { BarDatum, ResponsiveBar } from "@nivo/bar";
+import { Bar, BarChart, CartesianGrid, Rectangle, Tooltip, XAxis, YAxis } from "recharts";
 
+import { ChartTooltip } from "./ChartTooltip";
 import styles from "./Stats.module.css";
 import { StatsView } from "./StatsView";
-import { chartTheme } from "./chartTheme";
+import { axisLabelStyle, axisProps, chartColor, chartStyle, gridStroke, tooltipCursor } from "./chartTheme";
 import { OrderStatsDocument, SchemaOrderStatsByTime } from "../../types";
 
 const days = { 1: "Mandag", 2: "Tirsdag", 3: "Onsdag", 4: "Torsdag", 5: "Fredag", 6: "Lørdag", 7: "Søndag" };
@@ -23,18 +24,39 @@ const months = {
   12: "Desember",
 };
 
-const OrderBar = ({ data }: { data: BarDatum[] }) => (
+type OrderDatum = {
+  id: string | number;
+  label: number;
+  value: number;
+};
+
+const OrderBar = ({ data }: { data: OrderDatum[] }) => (
   <div className={styles.chart}>
-    <ResponsiveBar
+    <BarChart
+      responsive
+      style={chartStyle}
       data={data}
-      theme={chartTheme}
-      margin={{ top: 10, right: 10, bottom: 70, left: 60 }}
-      colorBy="indexValue"
-      enableLabel={false}
-      tooltipLabel={(d) => d.id.toString()}
-      axisLeft={{ legend: "Ordre", legendPosition: "middle", legendOffset: -50 }}
-      axisBottom={{ tickRotation: -35 }}
-    />
+      barCategoryGap="5%"
+      margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+    >
+      <CartesianGrid stroke={gridStroke} vertical={false} />
+      <XAxis {...axisProps} dataKey="id" interval={0} angle={-35} textAnchor="end" height={60} />
+      <YAxis
+        {...axisProps}
+        allowDecimals={false}
+        label={{ value: "Ordre", angle: -90, position: "insideLeft", style: axisLabelStyle }}
+      />
+      <Tooltip
+        cursor={tooltipCursor}
+        content={({ active, payload }) => {
+          const entry = payload[0];
+          if (!active || !entry) return null;
+          const index = data.findIndex((datum) => datum.id === entry.payload.id);
+          return <ChartTooltip rows={[{ name: entry.payload.id, value: entry.value, color: chartColor(index) }]} />;
+        }}
+      />
+      <Bar dataKey="value" shape={(props) => <Rectangle {...props} fill={chartColor(props.index)} />} />
+    </BarChart>
   </div>
 );
 
@@ -48,7 +70,7 @@ const OrderStats = () => {
         data={(data?.orderStats?.hourly || []).map((stat: SchemaOrderStatsByTime) => ({
           id: `${stat.period.toString().padStart(2, "0")}:00`,
           label: stat.period,
-          value: stat.count,
+          value: Number(stat.count),
         }))}
       />
       <h3>Ordre per ukedag</h3>
@@ -57,7 +79,7 @@ const OrderStats = () => {
           /* @ts-expect-error Here, stat.period can only be a key in days range. */
           id: days[stat.period],
           label: stat.period,
-          value: stat.count,
+          value: Number(stat.count),
         }))}
       />
       <h3>Ordre per måned</h3>
@@ -66,7 +88,7 @@ const OrderStats = () => {
           /* @ts-expect-error Here, stat.period can only be a key in months range. */
           id: months[stat.period],
           label: stat.period,
-          value: stat.count,
+          value: Number(stat.count),
         }))}
       />
       <h3>Ordre per år</h3>
@@ -74,7 +96,7 @@ const OrderStats = () => {
         data={(data?.orderStats?.yearly || []).map((stat: SchemaOrderStatsByTime) => ({
           id: stat.period,
           label: stat.period,
-          value: stat.count,
+          value: Number(stat.count),
         }))}
       />
     </StatsView>

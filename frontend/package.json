@@ -17,9 +17,6 @@
   },
   "dependencies": {
     "@apollo/client": "^4.2.0",
-    "@nivo/bar": "^0.99.0",
-    "@nivo/line": "^0.99.0",
-    "@nivo/pie": "^0.99.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.3.0",
     "graphql": "^16.14.0",
@@ -27,6 +24,7 @@
     "react-dom": "^19.2.6",
     "react-hook-form": "^7.76.1",
     "react-router-dom": "^7.18.4",
+    "recharts": "^3.10.1",
     "use-url-search-params": "^2.5.1"
   },
   "devDependencies": {

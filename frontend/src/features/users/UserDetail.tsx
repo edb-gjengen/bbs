@@ -1,12 +1,11 @@
 import { useQuery } from "@apollo/client/react";
-import { ResponsiveLine } from "@nivo/line";
 import { useParams } from "react-router-dom";
 
 import styles from "./UserDetail.module.css";
 import { GQLError } from "../../components/GQLError";
 import { SchemaUser as User, UserDetailDocument, SchemaUserProfile as UserProfile } from "../../types";
 import { formatMonth, formatTime } from "../../utils/time";
-import { chartTheme, chartTooltipStyle } from "../stats/chartTheme";
+import { PurchasesOverTimeChart } from "../stats/PurchasesOverTimeChart";
 
 const UserDetail = () => {
   const { userId } = useParams();
@@ -18,13 +17,6 @@ const UserDetail = () => {
 
   const user = data?.user as User;
   const profile = user?.profile as UserProfile;
-  const series = (profile?.productOrderStats || []).map(({ productName: id, data }) => ({
-    id,
-    data: data.map((point, index, points) => ({
-      x: point.x,
-      y: point.y + (points[index - 1]?.y || 0),
-    })),
-  }));
   return (
     <div className={styles.userDetail}>
       <div>
@@ -61,45 +53,7 @@ const UserDetail = () => {
       <div>
         <h2>Kjøp over tid</h2>
         <div className={styles.chart}>
-          <ResponsiveLine
-            data={series}
-            theme={chartTheme}
-            margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-            xScale={{
-              type: "time",
-              format: "%Y-%m-%d",
-              useUTC: false,
-              precision: "day",
-            }}
-            xFormat="time:%Y-%m-%d"
-            yScale={{
-              type: "linear",
-              stacked: false,
-            }}
-            axisLeft={{
-              legend: "Purchases",
-              legendOffset: 12,
-            }}
-            axisBottom={{
-              format: "%b %Y",
-              legend: "Date",
-              legendPosition: "middle",
-              legendOffset: -20,
-            }}
-            useMesh
-            pointLabelYOffset={0}
-            tooltip={({ point }) => (
-              <div style={chartTooltipStyle}>
-                <div>
-                  <strong>{point.data.xFormatted}</strong>
-                </div>
-                <div>
-                  <span style={{ background: point.seriesColor, width: 13, height: 13, display: "inline-block" }} />{" "}
-                  <strong>{String(point.data.yFormatted)}</strong> {point.seriesId}
-                </div>
-              </div>
-            )}
-          />
+          <PurchasesOverTimeChart stats={profile?.productOrderStats || []} />
         </div>
       </div>
     </div>
