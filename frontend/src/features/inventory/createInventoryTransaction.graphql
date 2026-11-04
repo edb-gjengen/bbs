@@ -4,7 +4,9 @@ mutation createInventoryTransaction($data: InventoryTransactionInput!) {
       inventoryTransaction {
         id
         product {
+          id
           name
+          active
           inventoryAmount
         }
       }

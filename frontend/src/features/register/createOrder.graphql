@@ -22,6 +22,8 @@ mutation CreateOrder($customerId: ID!, $orderLines:[OrderLineInput!]!, $isExtern
             name
             salePriceExt
             salePriceInt
+            active
+            inventoryAmount
           }
         }
         orderSum
