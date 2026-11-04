@@ -247,7 +247,7 @@ class UserProfile(models.Model):
         )
 
     def product_order_stats(self):
-        return OrderLine.objects.filter(order__customer__pk=self.pk).product_order_stats()
+        return OrderLine.objects.filter(order__customer_id=self.user_id).product_order_stats()
 
     def order_sum_total(self) -> Decimal:
         return Order.objects.filter(customer_id=self.user_id).aggregate(sum=Sum("order_sum"))["sum"] or 0

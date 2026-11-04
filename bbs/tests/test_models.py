@@ -289,6 +289,21 @@ def test_userprofile_product_order_stats(user, product):
     assert result[0]["product_name"] == "borg"
 
 
+def test_userprofile_product_order_stats_uses_the_profiles_user(db, product):  # noqa: ARG001
+    # Create the profiles in the opposite order of the users, so profile and user ids differ
+    alice = DjangoUser.objects.create_user(username="alice")
+    bob = DjangoUser.objects.create_user(username="bob")
+    bob_profile = UserProfile.objects.create(user=bob)
+    alice_profile = UserProfile.objects.create(user=alice)
+    assert alice_profile.pk != alice.pk
+
+    o = Order.objects.create(customer=alice, order_sum=30)
+    OrderLine.objects.create(order=o, product=product, amount=1, unit_price=30)
+
+    assert [row["product_name"] for row in alice_profile.product_order_stats()] == ["borg"]
+    assert list(bob_profile.product_order_stats()) == []
+
+
 def test_image_url_with_email(user):
     expected_hash = hashlib.sha256(user.email.lower().strip().encode()).hexdigest()
     assert expected_hash in user.profile.image_url()
