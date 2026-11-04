@@ -74,8 +74,7 @@ def create_order(customer_id: ID, order_lines: list[OrderLineInput], is_external
 
     # create
     for ol in ols:
-        ol.product.inventory_amount -= ol.amount
-        ol.product.save()
+        ol.product.adjust_inventory(-ol.amount)
     order = models.Order.objects.create(customer=user, order_sum=order_sum)
     for ol in ols:
         ol.order = order

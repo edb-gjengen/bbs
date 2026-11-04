@@ -66,7 +66,7 @@ const InventoryAdd = () => {
             <option value="">Velg vare</option>
             {products.map((product) => (
               <option key={product.id} value={product.id}>
-                {product.name} ({product.inventoryAmount} på lager)
+                {product.name} ({product.inventoryAmount} på lager{product.active ? "" : ", inaktiv"})
               </option>
             ))}
           </select>
@@ -96,7 +96,7 @@ const InventoryAdd = () => {
           <Link to="/inventory">Avbryt</Link>
         </div>
       </form>
-      {!products.length && <p>Ingen aktive varer å registrere.</p>}
+      {!products.length && <p>Ingen varer å registrere.</p>}
     </div>
   );
 };

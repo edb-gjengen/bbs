@@ -311,3 +311,30 @@ def test_save_preserves_existing_image(db):  # noqa: ARG001
     u = DjangoUser.objects.create_user(username="img@test.com", email="img@test.com")
     profile = UserProfile.objects.create(user=u, balance=0, image="https://example.com/custom.jpg")
     assert profile.image == "https://example.com/custom.jpg"
+
+
+# Product.adjust_inventory
+# ========================
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    ("start", "amount", "active_before", "expected_amount", "expected_active"),
+    [
+        (2, -1, True, 1, True),  # sale leaving stock
+        (1, -1, True, 0, False),  # sells out
+        (0, -1, True, -1, False),  # oversold
+        (0, 5, False, 5, True),  # restock reactivates
+        (-3, 2, False, -1, False),  # restock still not in stock
+        (5, -1, False, 4, False),  # sale keeps a manually deactivated product inactive
+        (5, 1, False, 6, True),  # restock reactivates a manually deactivated product
+    ],
+)
+def test_adjust_inventory(start, amount, active_before, expected_amount, expected_active):
+    product = Product.objects.create(
+        name="borg", sale_price_int=30, sale_price_ext=35, inventory_amount=start, active=active_before
+    )
+    product.adjust_inventory(amount)
+    product.refresh_from_db()
+    assert product.inventory_amount == expected_amount
+    assert product.active is expected_active

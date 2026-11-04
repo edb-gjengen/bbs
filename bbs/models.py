@@ -75,6 +75,15 @@ class Product(models.Model):
     def wholesale_value(self):
         return self.wholesale_unit_price * self.inventory_amount
 
+    def adjust_inventory(self, amount):
+        """Change the stock by amount, deactivating the product when it sells out and reactivating it on restock."""
+        self.inventory_amount += amount
+        if self.inventory_amount <= 0:
+            self.active = False
+        elif amount > 0:
+            self.active = True
+        self.save()
+
     @property
     def image_url(self):
         return self.image.url if self.image else ""

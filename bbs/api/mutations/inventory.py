@@ -41,13 +41,12 @@ def create_inventory_transaction(
         return FormErrors(message=message, fields=[FieldError(field="user", message=message)])
 
     try:
-        product = models.Product.objects.get(pk=data.product_id, active=True)
+        product = models.Product.objects.get(pk=data.product_id)
     except models.Product.DoesNotExist, ValueError:
-        message = "Velg et aktivt produkt."
+        message = "Velg et produkt."
         return FormErrors(message=message, fields=[FieldError(field="product_id", message=message)])
 
-    product.inventory_amount += data.amount
-    product.save()
+    product.adjust_inventory(data.amount)
     inventory_transaction = models.InventoryTransaction.objects.create(
         user=user,
         product=product,

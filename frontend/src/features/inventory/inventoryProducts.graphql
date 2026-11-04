@@ -1,7 +1,8 @@
 query inventoryProducts {
-  allProducts(filters: { active: true }) {
+  allProducts {
     id
     name
+    active
     inventoryAmount
   }
 }

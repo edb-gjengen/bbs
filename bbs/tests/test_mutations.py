@@ -161,6 +161,31 @@ def test_create_inventory_transaction_updates_stock(product, gql_client, client)
     assert transaction["user"]["id"] == str(user.id)
     product.refresh_from_db()
     assert product.inventory_amount == 5
+    assert product.active
+
+
+def test_create_inventory_transaction_reactivates_inactive_product(product, gql_client, client):
+    product.active = False
+    product.save()
+    client.force_login(get_user_model().objects.create_user(username="stock-manager"))
+
+    result = gql_client.query(
+        """
+        mutation CreateInventoryTransaction($data: InventoryTransactionInput!) {
+          createInventoryTransaction(data: $data) {
+            ... on CreateInventoryTransactionSuccess { inventoryTransaction { product { active inventoryAmount } } }
+            ... on FormErrors { message }
+          }
+        }
+        """,
+        variables={"data": {"productId": str(product.id), "amount": 3, "unitPrice": "12.5"}},
+    )
+
+    assert not result.errors
+    assert result.data["createInventoryTransaction"]["inventoryTransaction"]["product"] == {
+        "active": True,
+        "inventoryAmount": 3,
+    }
 
 
 def test_inventory_report_aggregates_period_data(product, gql_client):
@@ -299,6 +324,33 @@ def test_create_order_internal_success(user, product, gql_client):
     assert user.profile.balance == 70
     product.refresh_from_db()
     assert product.inventory_amount == -1
+    assert not product.active
+
+
+def test_create_order_deactivates_sold_out_product(user, product, gql_client):
+    product.inventory_amount = 2
+    product.save()
+    user.profile.balance = 100
+    user.profile.save()
+
+    def buy():
+        res = gql_client.query(
+            CREATE_ORDER,
+            {
+                "customerId": str(user.id),
+                "isExternal": False,
+                "orderLines": [{"productId": product.id, "amount": 1}],
+            },
+        )
+        assert not res.errors
+        product.refresh_from_db()
+
+    buy()
+    assert product.inventory_amount == 1
+    assert product.active
+    buy()
+    assert product.inventory_amount == 0
+    assert not product.active
 
 
 def test_create_order_exact_balance(user, product, gql_client):
