@@ -12,7 +12,8 @@ from bbs.models import (
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["name", "active", "inventory_amount"]
+    list_filter = ["active"]
 
 
 admin.site.register(InventoryTransaction)
