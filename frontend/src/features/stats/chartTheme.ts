@@ -1,11 +1,40 @@
 import type { CSSProperties } from "react";
 
 export const chartTextColor = "#f7effa";
+const darkLabelColor = "#17121a";
+
+// sRGB relative luminance, as in WCAG's contrast ratio
+const luminance = (hex: string) => {
+  const [r, g, b] = [1, 3, 5].map((i) => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+
+// Dark or white, whichever reads better on text drawn over the given colour
+export const labelColorOn = (fill: string) => {
+  const background = luminance(fill);
+  const contrastWith = (text: string) => {
+    const [hi, lo] = [luminance(text), background].sort((a, b) => b - a);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  return contrastWith(darkLabelColor) >= contrastWith("#ffffff") ? darkLabelColor : "#ffffff";
+};
 const axisColor = "#b9a3c5";
 
-// nivo's default categorical scheme, kept so the charts look the same after moving to Recharts
-export const chartColors = ["#e8c1a0", "#f47560", "#f1e15b", "#e8a838", "#61cdbb", "#97e3d5"];
+// Categorical colours for the dark background. The order matters: each colour stays easy to tell
+// apart from the next one, also with colour blindness, so neighbouring bars, slices and bands work.
+// Colours repeat past the eighth; where that would put two of the same side by side, fold the rest
+// into one otherColor group instead.
+export const chartColors = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300", "#9085e9", "#e66767"];
 export const chartColor = (index: number) => chartColors[index % chartColors.length];
+
+// For a group of "the rest", e.g. "Andre"; distinct from the last colour it follows
+export const otherColor = "#a89cae";
+
+// The darkest background colour, used to separate touching bands
+export const chartSurfaceColor = "#0e0610";
 
 // Recharts draws plain SVG; give it the app font and fill its container
 export const chartStyle: CSSProperties = {

@@ -5,7 +5,8 @@ import { chartTooltipStyle } from "./chartTheme";
 type TooltipRow = {
   name: React.ReactNode;
   value: React.ReactNode;
-  color: string;
+  // The series colour; leave it out for rows like totals that have no mark in the chart
+  color?: string;
 };
 
 export const ChartTooltip = ({ title, rows }: { title?: React.ReactNode; rows: TooltipRow[] }) => (
@@ -17,7 +18,11 @@ export const ChartTooltip = ({ title, rows }: { title?: React.ReactNode; rows: T
     )}
     {rows.map((row, index) => (
       <div key={index}>
-        <span style={{ background: row.color, width: 13, height: 13, display: "inline-block" }} />{" "}
+        {row.color && (
+          <>
+            <span style={{ background: row.color, width: 13, height: 13, display: "inline-block" }} />{" "}
+          </>
+        )}
         <strong>{row.value}</strong> {row.name}
       </div>
     ))}

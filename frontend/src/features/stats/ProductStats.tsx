@@ -4,7 +4,7 @@ import { Pie, PieChart, PieLabelRenderProps, Sector, Tooltip } from "recharts";
 import { ChartTooltip } from "./ChartTooltip";
 import styles from "./Stats.module.css";
 import { StatsView } from "./StatsView";
-import { chartColor, chartStyle, chartTextColor } from "./chartTheme";
+import { chartColor, chartStyle, chartTextColor, labelColorOn } from "./chartTheme";
 import { AllProductStatsDocument } from "../../types";
 
 type UserCount = {
@@ -29,6 +29,7 @@ const renderLabel = ({
   textAnchor,
   name,
   value,
+  index,
 }: PieLabelRenderProps) => {
   const radius = Number(innerRadius) + (Number(outerRadius) - Number(innerRadius)) / 2;
   return (
@@ -42,7 +43,7 @@ const renderLabel = ({
           y={Number(cy) + radius * Math.sin(-midAngle * RADIAN)}
           textAnchor="middle"
           dominantBaseline="central"
-          fill="#17121a"
+          fill={labelColorOn(chartColor(index))}
         >
           {value}
         </text>

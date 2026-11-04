@@ -1,35 +1,71 @@
 import { addMonths, format, parseISO, startOfMonth } from "date-fns";
-import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from "recharts";
 
 import { ChartTooltip } from "./ChartTooltip";
-import { axisLabelStyle, axisProps, chartColor, chartStyle, chartTextColor, gridStroke } from "./chartTheme";
+import {
+  axisLabelStyle,
+  axisProps,
+  chartStyle,
+  chartSurfaceColor,
+  chartTextColor,
+  gridStroke,
+  chartColors,
+  otherColor,
+} from "./chartTheme";
 
 type ProductOrderStat = {
   productName: string;
   data: { x: string; y: number }[];
 };
 
-type Row = {
-  date: number;
-  // Keyed by product name; a product has no value before its first purchase
-  totals: Record<string, number>;
+// One band of the stack: a product, or all the remaining products together
+type Band = {
+  name: string;
+  color: string;
 };
 
-// One row per day with each product's running total. Products without purchases that day are left
-// out of the row, and connectNulls draws their line straight to the next day they have one.
-const toRows = (stats: ProductOrderStat[]): Row[] => {
-  const rows = new Map<number, Row>();
-  for (const { productName, data } of stats) {
-    let total = 0;
-    for (const point of data) {
-      total += point.y;
-      const date = parseISO(point.x).getTime();
-      const row = rows.get(date) ?? { date, totals: {} };
-      row.totals[productName] = total;
-      rows.set(date, row);
-    }
+type Row = {
+  date: number;
+  // Units sold up to and including this day, one entry per band, bottom band first
+  values: number[];
+  total: number;
+};
+
+// The best sellers each get a band, largest at the bottom. The rest are added up in one band on top,
+// since the palette has no more colours that stay distinguishable next to each other.
+const toChart = (stats: ProductOrderStat[]): { bands: Band[]; rows: Row[] } => {
+  const products = stats
+    .map(({ productName, data }) => {
+      let total = 0;
+      const totalByDate = new Map<number, number>();
+      for (const point of data) {
+        total += point.y;
+        totalByDate.set(parseISO(point.x).getTime(), total);
+      }
+      return { productName, totalByDate, total };
+    })
+    .sort((a, b) => b.total - a.total);
+
+  const shown = products.slice(0, chartColors.length);
+  const others = products.slice(shown.length);
+  const bands = shown.map(({ productName }, index) => ({ name: productName, color: chartColors[index] }));
+  if (others.length) {
+    bands.push({ name: `Andre (${others.length} ${others.length === 1 ? "vare" : "varer"})`, color: otherColor });
   }
-  return [...rows.values()].sort((a, b) => a.date - b.date);
+
+  // A product's running total carries over to the days it sold nothing
+  const dates = [...new Set(products.flatMap(({ totalByDate }) => [...totalByDate.keys()]))].sort((a, b) => a - b);
+  const current = products.map(() => 0);
+  const rows = dates.map((date) => {
+    products.forEach(({ totalByDate }, index) => {
+      current[index] = totalByDate.get(date) ?? current[index];
+    });
+    const values = current.slice(0, shown.length);
+    if (others.length) values.push(current.slice(shown.length).reduce((sum, value) => sum + value, 0));
+    return { date, values, total: values.reduce((sum, value) => sum + value, 0) };
+  });
+
+  return { bands, rows };
 };
 
 // A tick on the first of each month, so each month is labelled once. Spans too short to have
@@ -47,11 +83,14 @@ const monthTicks = (rows: Row[]): number[] | undefined => {
   return ticks.length >= 2 ? ticks : undefined;
 };
 
+const percent = (value: number, total: number) => `${total ? Math.round((value / total) * 100) : 0} %`;
+
+// Total units sold over time, stacked by product, so each band's thickness is that product's share
 export const PurchasesOverTimeChart = ({ stats }: { stats: ProductOrderStat[] }) => {
-  const rows = toRows(stats);
+  const { bands, rows } = toChart(stats);
   const ticks = monthTicks(rows);
   return (
-    <LineChart responsive style={chartStyle} data={rows} margin={{ top: 20, right: 30, bottom: 30, left: 10 }}>
+    <AreaChart responsive style={chartStyle} data={rows} margin={{ top: 20, right: 30, bottom: 30, left: 10 }}>
       <CartesianGrid stroke={gridStroke} />
       <XAxis
         {...axisProps}
@@ -70,33 +109,63 @@ export const PurchasesOverTimeChart = ({ stats }: { stats: ProductOrderStat[] })
       />
       <Tooltip
         cursor={{ stroke: chartTextColor, strokeOpacity: 0.4 }}
-        content={({ active, payload, label }) =>
-          active && payload.length ? (
+        content={({ active, payload }) => {
+          const row: Row | undefined = payload[0]?.payload;
+          if (!active || !row) return null;
+          // Top band first, as in the chart
+          const bandRows = bands
+            .map((band, index) => ({
+              name: band.name,
+              value: `${row.values[index]} (${percent(row.values[index], row.total)})`,
+              color: band.color,
+            }))
+            .reverse();
+          return (
             <ChartTooltip
-              title={format(Number(label), "yyyy-MM-dd")}
-              rows={payload
-                .filter((entry) => entry.value !== undefined)
-                .map((entry) => ({ name: entry.name, value: entry.value, color: String(entry.color) }))}
+              title={format(row.date, "yyyy-MM-dd")}
+              rows={[{ name: "totalt", value: row.total }, ...bandRows]}
             />
-          ) : null
-        }
+          );
+        }}
       />
       <Legend
         verticalAlign="top"
-        formatter={(value) => <span style={{ color: chartTextColor }}>{value}</span>}
         wrapperStyle={{ paddingBottom: 8 }}
+        content={() => (
+          <ul
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "4px 16px",
+              margin: 0,
+              padding: 0,
+              listStyle: "none",
+            }}
+          >
+            {bands.map((band) => (
+              <li key={band.name} style={{ color: chartTextColor }}>
+                <span style={{ background: band.color, width: 12, height: 12, display: "inline-block" }} /> {band.name}
+              </li>
+            ))}
+          </ul>
+        )}
       />
-      {stats.map(({ productName }, index) => (
-        <Line
-          key={productName}
-          name={productName}
-          dataKey={(row: Row) => row.totals[productName]}
-          stroke={chartColor(index)}
-          strokeWidth={2}
-          dot={{ r: 3, fill: chartColor(index) }}
-          connectNulls
+      {bands.map((band, index) => (
+        <Area
+          key={band.name}
+          name={band.name}
+          dataKey={(row: Row) => row.values[index]}
+          stackId="units"
+          type="linear"
+          fill={band.color}
+          fillOpacity={1}
+          // A thin line in the background colour keeps touching bands apart
+          stroke={chartSurfaceColor}
+          strokeWidth={1}
+          activeDot={false}
         />
       ))}
-    </LineChart>
+    </AreaChart>
   );
 };
