@@ -15,6 +15,8 @@ const Register = (): React.JSX.Element => {
     loading,
     showAll,
     setShowAll,
+    showAllProducts,
+    setShowAllProducts,
     toggleSelectedUser,
     selectedUser,
     addToOrder,
@@ -65,6 +67,9 @@ const Register = (): React.JSX.Element => {
             />
           ))}
         </div>
+        <button type="button" onClick={() => setShowAllProducts(!showAllProducts)} className={styles.showAll}>
+          {showAllProducts ? "Skjul inaktive varer" : "Vis alle varer"}
+        </button>
       </section>
       <section className={styles.checkout}>
         <span className={styles.total}>

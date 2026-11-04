@@ -27,12 +27,14 @@ const sumTotal = (products: Product[], order: OrderLineInput[], isExternal: bool
 
 export const useRegister = () => {
   const [showAll, setShowAll] = useState(false);
+  const [showAllProducts, setShowAllProducts] = useState(false);
   const [selectedUser, setSelectedUser] = useState("");
   const [order, setOrder] = useState<OrderLineInput[]>([]);
   const { showToast } = useToast();
 
-  const { data, loading } = useQuery(AllProductsDocument, { variables: { active: true } });
-  const products = data?.allProducts || [];
+  const { data, loading } = useQuery(AllProductsDocument);
+  const allProducts = data?.allProducts || [];
+  const products = showAllProducts ? allProducts : allProducts.filter((product) => product.active);
 
   const { data: usersData, loading: usersLoading } = useQuery(AllUsersDocument);
   const allUsers = usersData?.allUsers || [];
@@ -66,7 +68,7 @@ export const useRegister = () => {
     setOrder(newOrder);
   };
 
-  const total = formatCurrency(sumTotal(products, order, selectedUser === USER_EXTERNAL));
+  const total = formatCurrency(sumTotal(allProducts, order, selectedUser === USER_EXTERNAL));
 
   const onSubmit = async () => {
     let res;
@@ -105,6 +107,8 @@ export const useRegister = () => {
     products,
     showAll,
     setShowAll,
+    showAllProducts,
+    setShowAllProducts,
     toggleSelectedUser,
     selectedUser,
     addToOrder,

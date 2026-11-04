@@ -1,9 +1,10 @@
-query allProducts($active: Boolean!) {
-  allProducts(filters: {active: $active}) {
+query allProducts {
+  allProducts {
     id
     name
     imageUrl
     salePriceExt
     salePriceInt
+    active
   }
 }
