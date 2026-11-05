@@ -7,6 +7,7 @@ const Deposit = React.lazy(() => import("./features/deposit/Deposit"));
 const Inventory = React.lazy(() => import("./features/inventory/Inventory"));
 const InventoryAdd = React.lazy(() => import("./features/inventory/InventoryAdd"));
 const InventoryReport = React.lazy(() => import("./features/inventory/InventoryReport"));
+const ProductEdit = React.lazy(() => import("./features/inventory/ProductEdit"));
 const Log = React.lazy(() => import("./features/log/Log"));
 const Register = React.lazy(() => import("./features/register/Register"));
 const OrderStats = React.lazy(() => import("./features/stats/OrderStats"));
@@ -22,6 +23,8 @@ export const Routes = (): React.JSX.Element => (
       <Route path="/deposit" element={<Deposit />} />
       <Route path="/inventory" element={<Inventory />} />
       <Route path="/inventory/add" element={<InventoryAdd />} />
+      <Route path="/inventory/products/new" element={<ProductEdit />} />
+      <Route path="/inventory/products/:productId" element={<ProductEdit />} />
       <Route path="/report" element={<InventoryReport />} />
       <Route path="/log" element={<Log />} />
       <Route path="/stats" element={<Stats />} />

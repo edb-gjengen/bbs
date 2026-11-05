@@ -50,6 +50,12 @@
   min-height: 6rem;
 }
 
+.form label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .summary {
   display: flex;
   flex-wrap: wrap;
@@ -69,4 +75,14 @@
   .tableWrap table {
     min-width: 42rem;
   }
+}
+
+/* Read by screen readers, not shown */
+.visuallyHidden {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

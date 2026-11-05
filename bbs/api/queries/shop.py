@@ -20,6 +20,10 @@ class ShopQueries:
     order_list: list[Order] = strawberry_django.field(pagination=True, ordering=OrderOrdering)
 
     @strawberry.field
+    def product(self, product_id: strawberry.ID) -> Product:
+        return models.Product.objects.get(pk=product_id)
+
+    @strawberry.field
     def order_stats(self) -> OrderStats:
         return OrderStats(
             **{

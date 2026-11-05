@@ -22,6 +22,9 @@ class ProductFilter:
 class Product:
     id: auto
     name: auto
+    description: auto
+    volume_liter: auto
+    alcohol_percent: auto
     image_url: str
     sale_price_int: auto
     sale_price_ext: auto

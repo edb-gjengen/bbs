@@ -1,0 +1,8 @@
+query viewer {
+  me {
+    id
+    firstName
+    canAddProducts
+    canChangeProducts
+  }
+}

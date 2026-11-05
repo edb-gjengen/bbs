@@ -101,6 +101,8 @@ scalar JSON @specifiedBy(url: "https://ecma-international.org/wp-content/uploads
 
 type Mutation {
   createInventoryTransaction(data: InventoryTransactionInput!): CreateInventoryTransactionResponse!
+  createProduct(data: ProductInput!): SaveProductResponse!
+  updateProduct(productId: ID!, data: ProductInput!): SaveProductResponse!
   createOrder(customerId: ID!, orderLines: [OrderLineInput!]!, isExternal: Boolean! = false): CreateOrderResponse!
   createDeposit(userId: ID!, amount: Int!): CreateDepositResponse!
   createUser(input: UserInput!): User!
@@ -166,6 +168,9 @@ type Point {
 type Product {
   id: ID!
   name: String!
+  description: String!
+  volumeLiter: Decimal
+  alcoholPercent: Decimal
   imageUrl: String!
   salePriceInt: Decimal!
   salePriceExt: Decimal!
@@ -186,6 +191,16 @@ input ProductFilter {
   DISTINCT: Boolean
 }
 
+input ProductInput {
+  name: String!
+  salePriceInt: Decimal!
+  salePriceExt: Decimal!
+  volumeLiter: Decimal = null
+  alcoholPercent: Decimal = null
+  description: String! = ""
+  active: Boolean! = true
+}
+
 type ProductOrderStat {
   productName: String!
   data: [Point!]!
@@ -198,10 +213,20 @@ type Query {
   allProducts(filters: ProductFilter): [Product!]!
   allOrders: [Order!]!
   orderList(ordering: [OrderOrdering!]! = [], pagination: OffsetPaginationInput): [Order!]!
+  product(productId: ID!): Product!
   orderStats: OrderStats!
   productStats: [ProductOrderStat!]!
   allUsers: [User!]!
   user(userId: ID!): User!
+
+  """The logged in user, or null when nobody is logged in"""
+  me: Viewer
+}
+
+union SaveProductResponse = SaveProductSuccess | FormErrors
+
+type SaveProductSuccess {
+  product: Product!
 }
 
 type TopMonth {
@@ -242,4 +267,11 @@ type UserProfile {
   orderSumTotal: Decimal!
   topMonths: [TopMonth!]!
   productOrderStats: [ProductOrderStat!]!
+}
+
+type Viewer {
+  id: ID!
+  firstName: String!
+  canAddProducts: Boolean!
+  canChangeProducts: Boolean!
 }

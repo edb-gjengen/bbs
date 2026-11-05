@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import styles from "./Inventory.module.css";
 import { GQLError } from "../../components/GQLError";
-import { InventoryPageDocument } from "../../types";
+import { InventoryPageDocument, ViewerDocument } from "../../types";
 import { formatCurrency } from "../../utils/currency";
 import { formatTime } from "../../utils/time";
 
@@ -15,6 +15,8 @@ const Inventory = () => {
   const { data, loading, error } = useQuery(InventoryPageDocument, {
     variables: { limit: PAGE_SIZE, offset },
   });
+  const { data: viewerData } = useQuery(ViewerDocument);
+  const canChangeProducts = !!viewerData?.me?.canChangeProducts;
 
   if (loading) return <div>Loading...</div>;
   if (error) return <GQLError error={error} />;
@@ -42,6 +44,8 @@ const Inventory = () => {
           <Link className="btn-primary" to="/inventory/add">
             Registrer varetransaksjon
           </Link>
+          {/* Shown to everyone; the page asks for a login, and for admin access, when needed */}
+          <Link to="/inventory/products/new">Ny vare</Link>
           <Link to="/report">Åpne rapport</Link>
         </div>
         <div className={styles.tableWrap}>
@@ -54,6 +58,11 @@ const Inventory = () => {
                 <th scope="col">Verdi</th>
                 <th scope="col">I salg</th>
                 <th scope="col">Sist oppdatert</th>
+                {canChangeProducts && (
+                  <th scope="col">
+                    <span className={styles.visuallyHidden}>Endre</span>
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -65,6 +74,11 @@ const Inventory = () => {
                   <td>{formatCurrency(Number(product.wholesaleValue))} kr</td>
                   <td>{product.active ? "Ja" : "Nei"}</td>
                   <td>{formatTime(product.updated)}</td>
+                  {canChangeProducts && (
+                    <td>
+                      <Link to={`/inventory/products/${product.id}`}>Rediger</Link>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

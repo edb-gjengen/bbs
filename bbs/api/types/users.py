@@ -43,6 +43,14 @@ class UserProfile:
         ]
 
 
+@strawberry.type
+class Viewer:
+    id: strawberry.ID
+    first_name: str
+    can_add_products: bool
+    can_change_products: bool
+
+
 @strawberry_django.type(DjangoUser)
 class User:
     id: auto

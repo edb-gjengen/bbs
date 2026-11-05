@@ -1,0 +1,25 @@
+mutation createProduct($data: ProductInput!) {
+  createProduct(data: $data) {
+    ... on SaveProductSuccess {
+      product {
+        id
+        name
+        salePriceInt
+        salePriceExt
+        volumeLiter
+        alcoholPercent
+        description
+        active
+        inventoryAmount
+        updated
+      }
+    }
+    ... on FormErrors {
+      message
+      fields {
+        field
+        message
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+query productForm($productId: ID!) {
+  product(productId: $productId) {
+    id
+    name
+    salePriceInt
+    salePriceExt
+    volumeLiter
+    alcoholPercent
+    description
+    active
+  }
+}
