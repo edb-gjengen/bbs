@@ -3,8 +3,9 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 import styles from "./Header.module.css";
+import { apiUrl } from "../utils/api";
 
-const ADMIN_URL = `${import.meta.env.VITE_API_URL}/admin/`;
+const ADMIN_URL = apiUrl("/admin/");
 
 const navLinkStyles = ({ isActive }: { isActive: boolean }) => clsx(styles.navLink, { [styles.active]: isActive });
 

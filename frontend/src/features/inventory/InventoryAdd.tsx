@@ -6,8 +6,9 @@ import styles from "./Inventory.module.css";
 import { GQLError } from "../../components/GQLError";
 import { useToast } from "../../hooks/useToast";
 import { CreateInventoryTransactionDocument, InventoryProductsDocument } from "../../types";
+import { loginUrl } from "../../utils/api";
 
-const LOGIN_URL = `${import.meta.env.VITE_API_URL}/accounts/login/?next=/inventory/add`;
+const LOGIN_URL = loginUrl("/inventory/add");
 
 const InventoryAdd = () => {
   const navigate = useNavigate();

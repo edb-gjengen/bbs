@@ -13,9 +13,15 @@ export default defineConfig({
   server: {
     host: "127.0.0.1",
     proxy: Object.fromEntries(
-      ["/admin", "/accounts", "/static", "/media", "/graphql"].map(
-        (path) => [path, process.env.VITE_DEV_API_PROXY || "http://127.0.0.1:3000"],
-      ),
+      ["/admin", "/accounts", "/static", "/media", "/graphql"].map((path) => [
+        path,
+        {
+          target: process.env.VITE_DEV_API_PROXY || "http://127.0.0.1:3000",
+          // Django only accepts a login form posted from the Host it was sent to (CSRF), so keep the
+          // app's own Host for the local backend. A remote backend needs its own Host to be reached.
+          changeOrigin: !!process.env.VITE_DEV_API_PROXY,
+        },
+      ]),
     ),
   },
   build: { outDir: "../static", emptyOutDir: false },
